@@ -17,7 +17,6 @@ apis:
       for on-boarding, KYC and third party due diligence.
     tags: []
     aid: london-stock-exchange-group:lseg-world-check-one-api
-    overlays: []
 maintainers:
   - FN: API Evangelist
     email: info@apievangelist.com
