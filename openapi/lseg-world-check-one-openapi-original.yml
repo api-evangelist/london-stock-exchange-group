@@ -32,39 +32,39 @@ externalDocs:
 host: api-worldcheck.refinitiv.com
 basePath: /v2
 tags:
-  - name: api-info
+  - name: Api-Info
     description: Operations for the API info domain.
-  - name: reference
-    description: Operations for the reference domain.
-  - name: group
-    description: Operations for the group domain.
-  - name: case
-    description: Operations for the case domain.
-  - name: audit
+  - name: Audit
     description: Operations for the audit domain.
-  - name: media-check
-    description: Operations for the Media-Check domain.
-  - name: client-watchlist
-    description: Operations for the Watchlist domain.
-  - name: user
-    description: Operations for the user domain.
-  - name: passport-check
-    description: Operations for the Passport-Check domain.
-  - name: linked-cases
-    description: Operations for the linked cases domain.
-  - name: case-rating
+  - name: Case
+    description: Operations for the case domain.
+  - name: Case-Rating
     description: Operations for the rating domain.
-  - name: smart-filter
-    description: Operations for the smart filter domain.
-  - name: zfs
-    description: Operations for the ZFS domain.
-  - name: reporting
+  - name: Client-Watchlist
+    description: Operations for the Watchlist domain.
+  - name: Group
+    description: Operations for the group domain.
+  - name: Linked-Cases
+    description: Operations for the linked cases domain.
+  - name: Media-Check
+    description: Operations for the Media-Check domain.
+  - name: Passport-Check
+    description: Operations for the Passport-Check domain.
+  - name: Reference
+    description: Operations for the reference domain.
+  - name: Reporting
     description: Operations for the report domain.
-  - name: upcoming
+  - name: Smart-Filter
+    description: Operations for the smart filter domain.
+  - name: Upcoming
     description: |
       Operations for upcoming features and changes.
 
       **Note:** Requests to these endpoints will return an HTTP '404 Not Found' response status code until officially released.
+  - name: User
+    description: Operations for the user domain.
+  - name: Zfs
+    description: Operations for the ZFS domain.
 x-tagGroups:
   - name: Upcoming Features and Changes
     tags:
@@ -144,7 +144,7 @@ paths:
     get:
       operationId: getApiInfo
       tags:
-        - api-info
+        - Api-Info
       summary: London Stock Exchange Group Get information about the Public API.
       description: Get information about the version of the Public API, a link to the documentation, and a date and time that can be used to verify the 'Date' header.
       parameters:
@@ -180,8 +180,8 @@ paths:
     get:
       operationId: getGroups
       tags:
-        - group
-        - zfs
+        - Group
+        - Zfs
       summary: London Stock Exchange Group Get all the top-level groups with their immediate descendants
       description: Get all the top-level groups with their immediate descendants
       parameters:
@@ -219,8 +219,8 @@ paths:
     get:
       operationId: getGroupById
       tags:
-        - group
-        - zfs
+        - Group
+        - Zfs
       summary: London Stock Exchange Group Get a specified group including its immediate descendants
       description: Get a specified group including its immediate descendants
       parameters:
@@ -261,8 +261,8 @@ paths:
     get:
       operationId: getCaseTemplateForGroup
       tags:
-        - group
-        - zfs
+        - Group
+        - Zfs
       summary: London Stock Exchange Group Get the CaseTemplate for the given Group
       description: |
         Get the CaseTemplate for the given Group, used for constructing a Case
@@ -333,7 +333,7 @@ paths:
     get:
       operationId: getResolutionToolkitForGroup
       tags:
-        - group
+        - Group
       summary: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
       description: |
         Get the ResolutionToolkit for the given Group, used to construct a valid resolution request(s) on the results
@@ -376,7 +376,7 @@ paths:
     get:
       operationId: getResolutionToolkitsForGroup
       tags:
-        - group
+        - Group
       summary: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
       description: |
         Get the ResolutionToolkits for the given Group for all enabled provider types, used to construct a valid
@@ -421,7 +421,7 @@ paths:
     get:
       operationId: getResolutionToolkitForGroupWithProviderType
       tags:
-        - group
+        - Group
       summary: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
       description: |
         Get the ResolutionToolkit for a specific provider type the given Group, used to construct a valid resolution request(s) on the results
@@ -472,7 +472,7 @@ paths:
     head:
       operationId: checkCaseIdentifierAvailability
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Check if a given caseId is available for use
       description: |
         caseIds must be unique within each Client. If any Group under a Client has a Case with a particular caseId,
@@ -518,7 +518,7 @@ paths:
     get:
       operationId: getCaseReference
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
       description: |
         Returns the CaseReference containing the caseId and caseSystemId pair for an existing Case with the given caseId.
@@ -562,7 +562,7 @@ paths:
     post:
       operationId: saveCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Create a new case
       description: |
         Creates a new Case for asynchronous screening. Synchronous screening on the dedicated ZFS gateway host
@@ -621,8 +621,8 @@ paths:
     post:
       operationId: screen
       tags:
-        - case
-        - zfs
+        - Case
+        - Zfs
       summary: London Stock Exchange Group Perform synchronous screening for a new case
       description: |
         Perform synchronous screening for a new case.
@@ -727,7 +727,7 @@ paths:
     put:
       operationId: updateExistingCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Update an existing Case by its caseSystemId
       description: |
         Updates an existing Case identified by the given caseSystemId. When the case is updated, all the non-empty fields for the case are required to be sent, including the updated field(s). Non-empty fields that are not sent when calling this endpoint will be overwritten as null.
@@ -790,7 +790,7 @@ paths:
     patch:
       operationId: partialUpdateCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Partial update an existing Case by its caseSystemId
       description: |
         Updates an existing Case identified by the given caseSystemId. When the case is updated, only updated field(s) for the case are required to be sent.
@@ -867,7 +867,7 @@ paths:
     get:
       operationId: getCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Fetch Full Case Details
       description: |
         Returns full details of the Case identified by the given 'caseSystemId'.
@@ -917,7 +917,7 @@ paths:
     delete:
       operationId: deleteCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Delete a Case
       description: |
         Delete a Case identified by the given caseSystemId. The case must be first archived in order to delete it.
@@ -961,7 +961,7 @@ paths:
     post:
       operationId: screenCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Request full or delta screening for an existing Case.
       description: |
         Make a request for screening of the Case identified by the given caseSystemId.
@@ -1039,7 +1039,7 @@ paths:
     put:
       operationId: enableOngoingScreening
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Enable OGS for a Case.
       description: |
         Enable Ongoing Screening for the Case identified by the given caseSystemId. This will schedule the Case
@@ -1097,7 +1097,7 @@ paths:
     delete:
       operationId: disableOngoingScreening
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Disable OGS for a Case.
       description: |
         Disable Ongoing Screening for the Case identified by the given caseSystemId.
@@ -1156,7 +1156,7 @@ paths:
     put:
       operationId: archiveCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Archive a Case.
       description: |
         Archive the Case identified by the given caseSystemId. This will put the case into a state from
@@ -1196,7 +1196,7 @@ paths:
     delete:
       operationId: unarchive
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Unarchive a Case
       description: |
         Unarchive the Case identified by the given caseSystemId.
@@ -1237,7 +1237,7 @@ paths:
     post:
       operationId: archiveCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Update Archive States
       description: |
         Bulk Update Archive States of cases identified by the given `caseSystemIds`. The arhive states are updated 
@@ -1303,7 +1303,7 @@ paths:
     post:
       operationId: assignCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Update Case Assignments
       description: |
         Bulk Update Case Assignments, where `Case`s are identified by the given `caseSystemIds` and assignee `User` 
@@ -1371,7 +1371,7 @@ paths:
     post:
       operationId: deleteCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Delete Cases
       description: |
         Bulk Delete Cases identified by the given `caseSystemIds`. The cases must be first archived in order to delete them.
@@ -1434,7 +1434,7 @@ paths:
     post:
       operationId: updateCasesOwner
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Move Cases Between Groups
       description: |
         Bulk Move Cases identified by the given `caseSystemIds` to the `Group` identified by the given `groupId`.
@@ -1498,7 +1498,7 @@ paths:
     post:
       operationId: toggleOngoingScreeningByProviderTypes
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Update Ongoing Screening States
       description: |
         Bulk Update Ongoing Screening (OGS) States of cases with provided `caseSystemIds` and `ProviderType`s specified in 
@@ -1562,7 +1562,7 @@ paths:
     post:
       operationId: linkCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Bulk Update Case Links
       description: |
         Bulk Update Case Links for `Case`s with provided `caseSystemIds` and `relationshipTypes` specified in 
@@ -1626,7 +1626,7 @@ paths:
     get:
       operationId: getResults
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
       description: |
         Return a collection of Results for the Case identified by the given caseSystemId.
@@ -1690,7 +1690,7 @@ paths:
     put:
       operationId: reviewResults
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
       description: Add a review remark to the specified result IDs for the given case.
       parameters:
@@ -1745,7 +1745,7 @@ paths:
     put:
       operationId: resolveResults
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Resolves a list of results.
       description: |
         Resolves a list of results for the Case identified by the given caseSystemId.
@@ -1809,7 +1809,7 @@ paths:
     post:
       operationId: getCaseAuditEventsByCaseSystemId
       tags:
-        - audit
+        - Audit
       summary: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
       description: |
         Return all audit events related to cases visible to the current user. To get all audit events initial request 
@@ -1894,7 +1894,7 @@ paths:
     get:
       operationId: retrieveCaseAuditEvent
       tags:
-        - audit
+        - Audit
       summary: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
       description: Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
       parameters:
@@ -1940,7 +1940,7 @@ paths:
     post:
       operationId: getOngoingScreeningUpdates
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Get ongoing screening updates.
       description: |
         Get ongoing screening updates for all `Case` objects that are visible to the current user and are flagged for
@@ -2018,7 +2018,7 @@ paths:
     put:
       operationId: assignCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Assign the Case to a User.
       description: |
         Assign the Case to a User. '/users' endpoint provides the active users
@@ -2073,7 +2073,7 @@ paths:
     delete:
       operationId: unassignCase
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Unassign a Case.
       description: Once you have assigned the case to the User, you can now unassign the same case.
       parameters:
@@ -2112,7 +2112,7 @@ paths:
     post:
       operationId: searchCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
       description: |
         Search for Cases based on specified criteria using filter or query parameters.
@@ -2181,7 +2181,7 @@ paths:
     post:
       operationId: retrieveCaseSummaries
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group User activity monitoring. Initial request.
       description: |
         Return a collection of Cases that were modified by users in particular date range.
@@ -2258,7 +2258,7 @@ paths:
     post:
       operationId: scrollCaseSummaries
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group User activity monitoring. Subsequent request.
       description: |
         Continue loading result sets by cursor ID retrieved from POST/cases/summaries.
@@ -2320,7 +2320,7 @@ paths:
     post:
       operationId: getMediaCheckDetails
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve MediaCheck results
       description: |
         Retrieve MediaCheck headlines results by the case ID.
@@ -2570,7 +2570,7 @@ paths:
     post:
       operationId: getMediaCheckArticlesMetadata
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve article metadata by the article IDs
       description: |
         Retrieve Media Check headlines results by the article IDs.
@@ -2645,7 +2645,7 @@ paths:
     get:
       operationId: getMediaCheckSingleArticleMetadata
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve article metadata by the article ID
       description: |
         Retrieve Media Check headlines results by the article ID.
@@ -2697,7 +2697,7 @@ paths:
     post:
       operationId: getMediaCheckResultsContent
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve MediaCheck news articles content
       description: |
         Retrieve MediaCheck news articles content and summary by the given caseSystemId and list of article IDs.
@@ -2777,7 +2777,7 @@ paths:
     get:
       operationId: getSingleArticleMediaCheckContent
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve content of single MediaCheck news article.
       description: Retrieve content of single MediaCheck news article by the given caseSystemId and article ID.
       parameters:
@@ -2833,7 +2833,7 @@ paths:
     put:
       operationId: updateArticlesReviewedDate
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
       description: Marks all news articles as reviewed for the Case identified by the given caseSystemId.
       parameters:
@@ -2874,7 +2874,7 @@ paths:
     put:
       operationId: attachArticles
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Attach articles to a case.
       description: Attach articles to a case identified by the given caseSystemId.
       parameters:
@@ -2929,7 +2929,7 @@ paths:
     get:
       operationId: retrieveArticles
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve all articles attached to the case.
       description: Retrieve Media Check results by the article attached to the case.
       parameters:
@@ -2973,7 +2973,7 @@ paths:
     delete:
       operationId: detachArticles
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Detach articles from a case.
       description: Detach articles from a case identified by the given caseSystemId.
       parameters:
@@ -3030,7 +3030,7 @@ paths:
     delete:
       operationId: detachArticle
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Detach single article from a case.
       description: Detach single article from a case identified by the given caseSystemId.
       parameters:
@@ -3074,7 +3074,7 @@ paths:
     post:
       operationId: saveAndScreenCases
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Save and screen multiple cases.
       description: |
         Save and screen multiple cases for the given group Id. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).
@@ -3170,7 +3170,7 @@ paths:
     post:
       operationId: screeningStatus
       tags:
-        - case
+        - Case
       summary: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
       description: |
         Retrieve case screening statuses and aggregated results. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).
@@ -3325,8 +3325,8 @@ paths:
     get:
       operationId: getCountries
       tags:
-        - reference
-        - zfs
+        - Reference
+        - Zfs
       summary: London Stock Exchange Group Get Map of country codes and country names
       description: Get Map of ISO-3166-1 alpha-3 country codes and country names in English
       parameters:
@@ -3366,7 +3366,7 @@ paths:
     get:
       operationId: getNationalities
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Get Map of nationality codes and nationality names
       description: Get Map of ISO-3166-1 alpha-3 nationality codes and nationality names in English
       parameters:
@@ -3406,7 +3406,7 @@ paths:
     get:
       operationId: getProviders
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Get a list of available providers and their sources.
       description: Get a list of all available providers and their sources.
       parameters:
@@ -3443,7 +3443,7 @@ paths:
   /reference/identityDocumentLocationTypes:
     get:
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Get identity document location types data set definition.
       description: Get each identity document location type log, that refers to a specific country and entity type.
       responses:
@@ -3470,7 +3470,7 @@ paths:
     get:
       operationId: getSearchFilters
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
       description: Retrieves all search filters that are accessible to the User.
       parameters:
@@ -3507,7 +3507,7 @@ paths:
       deprecated: true
       operationId: getProfile
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Get a profile by its ID
       description: |
         Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}`
@@ -3599,8 +3599,8 @@ paths:
     get:
       operationId: getRecord
       tags:
-        - reference
-        - zfs
+        - Reference
+        - Zfs
       summary: London Stock Exchange Group Get a record by its ID
       description: |
         Get a record by its ID.
@@ -3692,7 +3692,7 @@ paths:
       deprecated: true
       operationId: retrieveProfilePepDetails
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Retrieves PEP details by the given profile ID
       description: |
         Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}/pep`
@@ -3754,7 +3754,7 @@ paths:
     post:
       operationId: retrievePepDetails
       tags:
-        - reference
+        - Reference
       summary: London Stock Exchange Group Retrieves PEP details by the given record ID
       description: Retrieves detailed information for "Politically Exposed Person (PEP)" category by given record ID.
       parameters:
@@ -3813,8 +3813,8 @@ paths:
     put:
       operationId: createOrUpdateProviderSource
       tags:
-        - client-watchlist
-        - zfs
+        - Client-Watchlist
+        - Zfs
       summary: London Stock Exchange Group Create or update a provider source
       description: |
         Create or update a provider source for uploading entity records to. An example usage would be for a client watchlist.
@@ -3870,8 +3870,8 @@ paths:
     post:
       operationId: saveWatchlist
       tags:
-        - client-watchlist
-        - zfs
+        - Client-Watchlist
+        - Zfs
       summary: London Stock Exchange Group Maintain your Watchlist data
       description: |
         Maintain your Watchlist data using the following supported entity actions.
@@ -3944,7 +3944,7 @@ paths:
     get:
       operationId: getUsers
       tags:
-        - user
+        - User
       summary: London Stock Exchange Group Get a list of active users in the client's account.
       description: Get a list of active users in the client's account.
       parameters:
@@ -3982,7 +3982,7 @@ paths:
     get:
       operationId: getMediaCheckRisks
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve mediacheck risk definitions
       description: |
         Retrieves a list of mediacheck risk definitions.
@@ -4023,7 +4023,7 @@ paths:
     post:
       operationId: getMrzData
       tags:
-        - passport-check
+        - Passport-Check
       summary: London Stock Exchange Group Generates MRZ data
       description: |
         Performs generation of MRZ data according to provided data
@@ -4076,7 +4076,7 @@ paths:
     post:
       operationId: retrieveMediaCheckDuplicates
       tags:
-        - media-check
+        - Media-Check
       summary: London Stock Exchange Group Retrieve MediaCheck article duplicates.
       description: |
         Retrieve article duplicates by specifying article deduplicationHash.
@@ -4147,7 +4147,7 @@ paths:
     post:
       operationId: getRelationshipIdentifiers
       tags:
-        - linked-cases
+        - Linked-Cases
       summary: London Stock Exchange Group Retrieve the list of case relationships
       description: |
         Retrieve the list of case relationships with cases linked to it.
@@ -4219,7 +4219,7 @@ paths:
     put:
       operationId: linkingCases
       tags:
-        - linked-cases
+        - Linked-Cases
       summary: London Stock Exchange Group Create links between cases
       description: |
         Create links between cases based on relationship type strategy(`relationshipType`).
@@ -4301,7 +4301,7 @@ paths:
     delete:
       operationId: unlinkingCases
       tags:
-        - linked-cases
+        - Linked-Cases
       summary: London Stock Exchange Group Delete links between cases
       description: |
         Unlink cases based on relationship type strategy(`relationshipType`).
@@ -4370,7 +4370,7 @@ paths:
     get:
       operationId: retrieveCaseRating
       tags:
-        - case-rating
+        - Case-Rating
       summary: London Stock Exchange Group Retrieve a case rating
       description: |
         Retrieve the case rating in the case provided in the request path.
@@ -4410,7 +4410,7 @@ paths:
     put:
       operationId: saveCaseRating
       tags:
-        - case-rating
+        - Case-Rating
       summary: London Stock Exchange Group Update a case rating
       description: |
         Update the case rating in the case provided in the request path.
@@ -4477,7 +4477,7 @@ paths:
     get:
       operationId: getMediaCheckSmartFilter
       tags:
-        - smart-filter
+        - Smart-Filter
       summary: London Stock Exchange Group Retrieve smart filter on a case
       description: |
         Retrieve the smart filter state on the case provided in the request path.
@@ -4519,7 +4519,7 @@ paths:
     put:
       operationId: enableSmartFilterOnCase
       tags:
-        - smart-filter
+        - Smart-Filter
       summary: London Stock Exchange Group Enable smart filter on a case
       description: |
         Update the smart filter state on the case provided in the request path.
@@ -4560,7 +4560,7 @@ paths:
     delete:
       operationId: disableSmartFilterOnCase
       tags:
-        - smart-filter
+        - Smart-Filter
       summary: London Stock Exchange Group Disable smart filter on a case
       description: |
         Update the smart filter state on the case provided in the request path.
@@ -4603,7 +4603,7 @@ paths:
     post:
       operationId: submitRequestForAsyncReport
       tags:
-        - reporting
+        - Reporting
       summary: London Stock Exchange Group Submit request for async report based on the given filter conditions and return the 'reportId'.
       description: Submit request for async report based on the given filter conditions and return the 'reportId'.
       parameters:
@@ -4656,7 +4656,7 @@ paths:
     get:
       operationId: getSingleReportStatusByReportId
       tags:
-        - reporting
+        - Reporting
       summary: London Stock Exchange Group Get the report status for the given report ID.
       description: Get the report status for the given report ID.
       parameters:
@@ -4697,7 +4697,7 @@ paths:
     get:
       operationId: getPaginatedMultipleReportStatus
       tags:
-        - upcoming
+        - Upcoming
       summary: London Stock Exchange Group Get the report status for all active reports by pagination params.
       description: Get the report status for all active reports by pagination params.
       parameters:
@@ -4748,7 +4748,7 @@ paths:
     get:
       operationId: getReportErrorDetails
       tags:
-        - upcoming
+        - Upcoming
       summary: London Stock Exchange Group Get the error details for the given 'reportId'.
       description: Get the error details for the given 'reportId'.
       parameters:
@@ -4789,7 +4789,7 @@ paths:
     get:
       operationId: getReportDataByReportId
       tags:
-        - reporting
+        - Reporting
       summary: London Stock Exchange Group Download the report for given report ID.
       description: Download the report for given report ID.
       parameters:
@@ -4833,7 +4833,7 @@ paths:
     delete:
       operationId: cancelReportByReportId
       tags:
-        - upcoming
+        - Upcoming
       summary: London Stock Exchange Group Cancel the report request for the given report ID.
       description: Cancel the report request for the given report ID.
       parameters:
