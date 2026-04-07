@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  title: LSEG World-Check One API
+  title: London Stock Exchange Group LSEG World-Check One API
   description: >
     The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
 
@@ -11,7 +11,7 @@ info:
     - The ability to retrieve results of the screening process from the World-Check database
 
     - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
-    
+
     - The ability to submit request for reports.
 
     - The ability to fetch the status of the report requests and download the completed reports.
@@ -63,7 +63,7 @@ tags:
   - name: upcoming
     description: |
       Operations for upcoming features and changes.
-      
+
       **Note:** Requests to these endpoints will return an HTTP '404 Not Found' response status code until officially released.
 x-tagGroups:
   - name: Upcoming Features and Changes
@@ -145,7 +145,7 @@ paths:
       operationId: getApiInfo
       tags:
         - api-info
-      summary: Get information about the Public API.
+      summary: London Stock Exchange Group Get information about the Public API.
       description: Get information about the version of the Public API, a link to the documentation, and a date and time that can be used to verify the 'Date' header.
       parameters:
         - name: Authorization
@@ -182,7 +182,7 @@ paths:
       tags:
         - group
         - zfs
-      summary: Get all the top-level groups with their immediate descendants
+      summary: London Stock Exchange Group Get all the top-level groups with their immediate descendants
       description: Get all the top-level groups with their immediate descendants
       parameters:
         - name: Authorization
@@ -221,7 +221,7 @@ paths:
       tags:
         - group
         - zfs
-      summary: Get a specified group including its immediate descendants
+      summary: London Stock Exchange Group Get a specified group including its immediate descendants
       description: Get a specified group including its immediate descendants
       parameters:
         - name: Authorization
@@ -263,7 +263,7 @@ paths:
       tags:
         - group
         - zfs
-      summary: Get the CaseTemplate for the given Group
+      summary: London Stock Exchange Group Get the CaseTemplate for the given Group
       description: |
         Get the CaseTemplate for the given Group, used for constructing a Case
 
@@ -334,7 +334,7 @@ paths:
       operationId: getResolutionToolkitForGroup
       tags:
         - group
-      summary: Get the ResolutionToolkit for the given Group.
+      summary: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
       description: |
         Get the ResolutionToolkit for the given Group, used to construct a valid resolution request(s) on the results
         for a Case belonging to the given Group `groupId`.
@@ -377,7 +377,7 @@ paths:
       operationId: getResolutionToolkitsForGroup
       tags:
         - group
-      summary: Get all the ResolutionToolkits for the given Group
+      summary: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
       description: |
         Get the ResolutionToolkits for the given Group for all enabled provider types, used to construct a valid
         resolution request(s) on the results for a Case belonging to the given Group `groupId`.
@@ -422,7 +422,7 @@ paths:
       operationId: getResolutionToolkitForGroupWithProviderType
       tags:
         - group
-      summary: Get the ResolutionToolkit for a specific provider type for the given Group
+      summary: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
       description: |
         Get the ResolutionToolkit for a specific provider type the given Group, used to construct a valid resolution request(s) on the results
         for a Case belonging to the given Group `groupId`.
@@ -473,7 +473,7 @@ paths:
       operationId: checkCaseIdentifierAvailability
       tags:
         - case
-      summary: Check if a given caseId is available for use
+      summary: London Stock Exchange Group Check if a given caseId is available for use
       description: |
         caseIds must be unique within each Client. If any Group under a Client has a Case with a particular caseId,
         that caseId cannot be reused on another Case within the same Client. This endpoint allows the user to check
@@ -519,7 +519,7 @@ paths:
       operationId: getCaseReference
       tags:
         - case
-      summary: Return the CaseReference (caseId, caseSystemId) for a caseId
+      summary: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
       description: |
         Returns the CaseReference containing the caseId and caseSystemId pair for an existing Case with the given caseId.
         This is useful if only the caseId is known but caseSystemId is required by other endpoints such as
@@ -563,7 +563,7 @@ paths:
       operationId: saveCase
       tags:
         - case
-      summary: Create a new case
+      summary: London Stock Exchange Group Create a new case
       description: |
         Creates a new Case for asynchronous screening. Synchronous screening on the dedicated ZFS gateway host
         via `/cases/screeningRequest` should be used instead of this for Zero Footprint Screening (ZFS).
@@ -623,7 +623,7 @@ paths:
       tags:
         - case
         - zfs
-      summary: Perform synchronous screening for a new case
+      summary: London Stock Exchange Group Perform synchronous screening for a new case
       description: |
         Perform synchronous screening for a new case.
 
@@ -728,7 +728,7 @@ paths:
       operationId: updateExistingCase
       tags:
         - case
-      summary: Update an existing Case by its caseSystemId
+      summary: London Stock Exchange Group Update an existing Case by its caseSystemId
       description: |
         Updates an existing Case identified by the given caseSystemId. When the case is updated, all the non-empty fields for the case are required to be sent, including the updated field(s). Non-empty fields that are not sent when calling this endpoint will be overwritten as null.
         For example, if the date of birth for a case need to be updated, existing fields such as nationality, etc. should contain the original values, otherwise it will be updated as null. That is, all the other fields should be included in the body with their existing data. This applies to Custom Fields as well.
@@ -791,7 +791,7 @@ paths:
       operationId: partialUpdateCase
       tags:
         - case
-      summary: Partial update an existing Case by its caseSystemId
+      summary: London Stock Exchange Group Partial update an existing Case by its caseSystemId
       description: |
         Updates an existing Case identified by the given caseSystemId. When the case is updated, only updated field(s) for the case are required to be sent.
         If non-empty fields are not sent they will be left untouched.
@@ -868,7 +868,7 @@ paths:
       operationId: getCase
       tags:
         - case
-      summary: Fetch Full Case Details
+      summary: London Stock Exchange Group Fetch Full Case Details
       description: |
         Returns full details of the Case identified by the given 'caseSystemId'.
 
@@ -918,11 +918,11 @@ paths:
       operationId: deleteCase
       tags:
         - case
-      summary: Delete a Case
+      summary: London Stock Exchange Group Delete a Case
       description: |
         Delete a Case identified by the given caseSystemId. The case must be first archived in order to delete it.
         The user must be active and have delete permissions. The client must have delete functionality enabled.
-        
+
         **Note:** After successful deletion, a corresponding audit with actionType 'DELETE_CASE' will be saved for the case. 
                   All other audits for this case will be deleted within 15 minutes.
       parameters:
@@ -962,20 +962,20 @@ paths:
       operationId: screenCase
       tags:
         - case
-      summary: Request full or delta screening for an existing Case.
+      summary: London Stock Exchange Group Request full or delta screening for an existing Case.
       description: |
         Make a request for screening of the Case identified by the given caseSystemId.
-        
+
         Screening could be synchronous or asynchronous operation. The type of Screening could be full or delta.
-        
+
         In the case of asynchronous Screening result will return immediately. As a result of this call, 
         the screening request will be queued to be processed. When this request has been processed, there will be a new 
         `SCREENED_CASE` audit event that can be queried via `/cases/{caseSystemId}/auditEvents` and then the results 
         can be retrieved via `/cases/{caseSystemId}/results`.
-        
+
         In the case of a synchronous screening as a result of the call will be returned result collection contains 
         the regular case result details plus identity documents and important events.
-        
+
         Delta Screening performs Screening from the time of the last screening date and shows new results that appeared 
         after the last screening.
 
@@ -1040,7 +1040,7 @@ paths:
       operationId: enableOngoingScreening
       tags:
         - case
-      summary: Enable OGS for a Case.
+      summary: London Stock Exchange Group Enable OGS for a Case.
       description: |
         Enable Ongoing Screening for the Case identified by the given caseSystemId. This will schedule the Case
         to be re-screened periodically by the system.
@@ -1098,7 +1098,7 @@ paths:
       operationId: disableOngoingScreening
       tags:
         - case
-      summary: Disable OGS for a Case.
+      summary: London Stock Exchange Group Disable OGS for a Case.
       description: |
         Disable Ongoing Screening for the Case identified by the given caseSystemId.
         In order to disable Ongoing Screening for multiple or specific provider type fill out an optional request body
@@ -1157,7 +1157,7 @@ paths:
       operationId: archiveCase
       tags:
         - case
-      summary: Archive a Case.
+      summary: London Stock Exchange Group Archive a Case.
       description: |
         Archive the Case identified by the given caseSystemId. This will put the case into a state from
         which it can be either unarchived or deleted.
@@ -1197,7 +1197,7 @@ paths:
       operationId: unarchive
       tags:
         - case
-      summary: Unarchive a Case
+      summary: London Stock Exchange Group Unarchive a Case
       description: |
         Unarchive the Case identified by the given caseSystemId.
         The user must be active and have the archive permission.
@@ -1238,7 +1238,7 @@ paths:
       operationId: archiveCases
       tags:
         - case
-      summary: Bulk Update Archive States
+      summary: London Stock Exchange Group Bulk Update Archive States
       description: |
         Bulk Update Archive States of cases identified by the given `caseSystemIds`. The arhive states are updated 
         according to the value specified in the `"archive"` field: if set to `true` then all the cases will be updated 
@@ -1304,7 +1304,7 @@ paths:
       operationId: assignCases
       tags:
         - case
-      summary: Bulk Update Case Assignments
+      summary: London Stock Exchange Group Bulk Update Case Assignments
       description: |
         Bulk Update Case Assignments, where `Case`s are identified by the given `caseSystemIds` and assignee `User` 
         is identified by the given `userId` (in case of assigning action). The case assignements are updated according 
@@ -1372,7 +1372,7 @@ paths:
       operationId: deleteCases
       tags:
         - case
-      summary: Bulk Delete Cases
+      summary: London Stock Exchange Group Bulk Delete Cases
       description: |
         Bulk Delete Cases identified by the given `caseSystemIds`. The cases must be first archived in order to delete them.
         The user must be active and have delete permissions. The client must have delete functionality enabled.
@@ -1435,7 +1435,7 @@ paths:
       operationId: updateCasesOwner
       tags:
         - case
-      summary: Bulk Move Cases Between Groups
+      summary: London Stock Exchange Group Bulk Move Cases Between Groups
       description: |
         Bulk Move Cases identified by the given `caseSystemIds` to the `Group` identified by the given `groupId`.
         The user must be active and have move cases between groups permissions. The client must have move cases functionality enabled.
@@ -1499,7 +1499,7 @@ paths:
       operationId: toggleOngoingScreeningByProviderTypes
       tags:
         - case
-      summary: Bulk Update Ongoing Screening States
+      summary: London Stock Exchange Group Bulk Update Ongoing Screening States
       description: |
         Bulk Update Ongoing Screening (OGS) States of cases with provided `caseSystemIds` and `ProviderType`s specified in 
         `caseScreeningState`. Ongoing screening can be performed for MEDIA_CHECK and WATCHLIST provider types.
@@ -1563,7 +1563,7 @@ paths:
       operationId: linkCases
       tags:
         - case
-      summary: Bulk Update Case Links
+      summary: London Stock Exchange Group Bulk Update Case Links
       description: |
         Bulk Update Case Links for `Case`s with provided `caseSystemIds` and `relationshipTypes` specified in 
         `relationshipType` field. The case links are updated according to the value specified in the "link" field: 
@@ -1627,7 +1627,7 @@ paths:
       operationId: getResults
       tags:
         - case
-      summary: Get collection of Results for a Case by its caseSystemId
+      summary: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
       description: |
         Return a collection of Results for the Case identified by the given caseSystemId.
         The response may contain Special Interest Categories (SIC) records that depends on the user subscription type. This helps in SIC risk analysis:
@@ -1691,7 +1691,7 @@ paths:
       operationId: reviewResults
       tags:
         - case
-      summary: Add a review remark to the specified result IDs for the given case
+      summary: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
       description: Add a review remark to the specified result IDs for the given case.
       parameters:
         - name: Authorization
@@ -1746,7 +1746,7 @@ paths:
       operationId: resolveResults
       tags:
         - case
-      summary: Resolves a list of results.
+      summary: London Stock Exchange Group Resolves a list of results.
       description: |
         Resolves a list of results for the Case identified by the given caseSystemId.
         The endpoint for the resolution toolkit '/groups/{groupId}/resolutionToolkit' provides the resolution rules
@@ -1783,7 +1783,7 @@ paths:
           in: body
           description: |
             Represents the request details required for resolving Results.
-            
+
             **Note:** Fields 'reasonId' and 'resolutionRemark' are required **ONLY** if they are specified accordingly
             in the configuration settings.
           required: true
@@ -1810,35 +1810,35 @@ paths:
       operationId: getCaseAuditEventsByCaseSystemId
       tags:
         - audit
-      summary: Get a filtered list of AuditEvents for a Case by its caseSystemId
+      summary: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
       description: |
-                Return all audit events related to cases visible to the current user. To get all audit events initial request 
-                with no payload should be provided. However, please note that when audit is requested without any date range for eventDate in the query, 
-                it returns audit data for the last 168 hours by default. Also, caller may filter and sort the response by:
+        Return all audit events related to cases visible to the current user. To get all audit events initial request 
+        with no payload should be provided. However, please note that when audit is requested without any date range for eventDate in the query, 
+        it returns audit data for the last 168 hours by default. Also, caller may filter and sort the response by:
 
-                **eventDate**: The time when the Audit Event was created (ISO 8601 format excluding Week and Ordinal dates)
+        **eventDate**: The time when the Audit Event was created (ISO 8601 format excluding Week and Ordinal dates)
 
-                       e.g. eventDate>=2010-07-28T22:25:51Z;eventDate<2015-07-28T22:25:51Z
+               e.g. eventDate>=2010-07-28T22:25:51Z;eventDate<2015-07-28T22:25:51Z
 
-                **actionType**: Signifies the event links to a Case object.
-                          Please refer to ``ActionType`` object for detailed description.
+        **actionType**: Signifies the event links to a Case object.
+                  Please refer to ``ActionType`` object for detailed description.
 
-                       e.g. actionType=='ASSIGN_CASE'
-                            actionType=in=('ASSIGN_CASE', 'NEW_MATCH')
-
-
-                **actionedByUserId**: Identifier of the User who created this audit event.
-                           Please refer to ``AuditEvent/properties/actionedByUserId`` for detailed description.
-
-                       e.g. actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5
+               e.g. actionType=='ASSIGN_CASE'
+                    actionType=in=('ASSIGN_CASE', 'NEW_MATCH')
 
 
-                **The above criteria can also be combined**
+        **actionedByUserId**: Identifier of the User who created this audit event.
+                   Please refer to ``AuditEvent/properties/actionedByUserId`` for detailed description.
 
-                       e.g. eventDate>=20120915T155300;eventDate<=2015-07-28T22:25:51Z;actionType=='NEW_MATCH'
-                            actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5;eventDate>=2010-07-28T22:25:51Z
+               e.g. actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5
 
-                **Please note that the above examples are only for the ``query`` part of the Filter**
+
+        **The above criteria can also be combined**
+
+               e.g. eventDate>=20120915T155300;eventDate<=2015-07-28T22:25:51Z;actionType=='NEW_MATCH'
+                    actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5;eventDate>=2010-07-28T22:25:51Z
+
+        **Please note that the above examples are only for the ``query`` part of the Filter**
 
       parameters:
         - name: Authorization
@@ -1895,7 +1895,7 @@ paths:
       operationId: retrieveCaseAuditEvent
       tags:
         - audit
-      summary: Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
+      summary: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
       description: Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
       parameters:
         - name: Authorization
@@ -1941,7 +1941,7 @@ paths:
       operationId: getOngoingScreeningUpdates
       tags:
         - case
-      summary: Get ongoing screening updates.
+      summary: London Stock Exchange Group Get ongoing screening updates.
       description: |
         Get ongoing screening updates for all `Case` objects that are visible to the current user and are flagged for
         ongoing screening.
@@ -2019,7 +2019,7 @@ paths:
       operationId: assignCase
       tags:
         - case
-      summary: Assign the Case to a User.
+      summary: London Stock Exchange Group Assign the Case to a User.
       description: |
         Assign the Case to a User. '/users' endpoint provides the active users
         that a Case can be assigned to.
@@ -2074,7 +2074,7 @@ paths:
       operationId: unassignCase
       tags:
         - case
-      summary: Unassign a Case.
+      summary: London Stock Exchange Group Unassign a Case.
       description: Once you have assigned the case to the User, you can now unassign the same case.
       parameters:
         - name: Authorization
@@ -2113,7 +2113,7 @@ paths:
       operationId: searchCases
       tags:
         - case
-      summary: Search for Cases based on specified criteria using filter or query parameters.
+      summary: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
       description: |
         Search for Cases based on specified criteria using filter or query parameters.
 
@@ -2182,7 +2182,7 @@ paths:
       operationId: retrieveCaseSummaries
       tags:
         - case
-      summary: User activity monitoring. Initial request.
+      summary: London Stock Exchange Group User activity monitoring. Initial request.
       description: |
         Return a collection of Cases that were modified by users in particular date range.
         Endpoint allow to initiate search and retrieve the first page of result set.
@@ -2199,7 +2199,7 @@ paths:
         'modifierUserId' - Identifier of the recent changes author;
 
         'creationDate' - Time when the case has been created.
-        
+
         To retrieve the next set of results please use '/cases/summaries/cursor' endpoint.
 
         **Note:** Cursor lifespan keeps extending if the cursor is accessed within its current lifespan.
@@ -2232,10 +2232,7 @@ paths:
           required: true
         - name: filter
           in: body
-          description: The "query" is a FIQL expression which allows specifying comparison expression
-            on case fields and it also allows specifying boolean operators AND/OR.
-            The "sort" allows specifying items order in the response.
-            The "cursorOptions" allows specifying count of items in the first response.
+          description: The "query" is a FIQL expression which allows specifying comparison expression on case fields and it also allows specifying boolean operators AND/OR. The "sort" allows specifying items order in the response. The "cursorOptions" allows specifying count of items in the first response.
           required: true
           schema:
             $ref: '#/definitions/CaseSummaryFilter'
@@ -2262,7 +2259,7 @@ paths:
       operationId: scrollCaseSummaries
       tags:
         - case
-      summary: User activity monitoring. Subsequent request.
+      summary: London Stock Exchange Group User activity monitoring. Subsequent request.
       description: |
         Continue loading result sets by cursor ID retrieved from POST/cases/summaries.
 
@@ -2324,7 +2321,7 @@ paths:
       operationId: getMediaCheckDetails
       tags:
         - media-check
-      summary: Retrieve MediaCheck results
+      summary: London Stock Exchange Group Retrieve MediaCheck results
       description: |
         Retrieve MediaCheck headlines results by the case ID.
 
@@ -2574,7 +2571,7 @@ paths:
       operationId: getMediaCheckArticlesMetadata
       tags:
         - media-check
-      summary: Retrieve article metadata by the article IDs
+      summary: London Stock Exchange Group Retrieve article metadata by the article IDs
       description: |
         Retrieve Media Check headlines results by the article IDs.
 
@@ -2649,7 +2646,7 @@ paths:
       operationId: getMediaCheckSingleArticleMetadata
       tags:
         - media-check
-      summary: Retrieve article metadata by the article ID
+      summary: London Stock Exchange Group Retrieve article metadata by the article ID
       description: |
         Retrieve Media Check headlines results by the article ID.
       parameters:
@@ -2701,7 +2698,7 @@ paths:
       operationId: getMediaCheckResultsContent
       tags:
         - media-check
-      summary: Retrieve MediaCheck news articles content
+      summary: London Stock Exchange Group Retrieve MediaCheck news articles content
       description: |
         Retrieve MediaCheck news articles content and summary by the given caseSystemId and list of article IDs.
 
@@ -2781,7 +2778,7 @@ paths:
       operationId: getSingleArticleMediaCheckContent
       tags:
         - media-check
-      summary: Retrieve content of single MediaCheck news article.
+      summary: London Stock Exchange Group Retrieve content of single MediaCheck news article.
       description: Retrieve content of single MediaCheck news article by the given caseSystemId and article ID.
       parameters:
         - name: Authorization
@@ -2837,7 +2834,7 @@ paths:
       operationId: updateArticlesReviewedDate
       tags:
         - media-check
-      summary: Mark all MediaCheck news articles as reviewed for a case.
+      summary: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
       description: Marks all news articles as reviewed for the Case identified by the given caseSystemId.
       parameters:
         - name: Authorization
@@ -2878,7 +2875,7 @@ paths:
       operationId: attachArticles
       tags:
         - media-check
-      summary: Attach articles to a case.
+      summary: London Stock Exchange Group Attach articles to a case.
       description: Attach articles to a case identified by the given caseSystemId.
       parameters:
         - name: Authorization
@@ -2933,7 +2930,7 @@ paths:
       operationId: retrieveArticles
       tags:
         - media-check
-      summary: Retrieve all articles attached to the case.
+      summary: London Stock Exchange Group Retrieve all articles attached to the case.
       description: Retrieve Media Check results by the article attached to the case.
       parameters:
         - name: Authorization
@@ -2977,7 +2974,7 @@ paths:
       operationId: detachArticles
       tags:
         - media-check
-      summary: Detach articles from a case.
+      summary: London Stock Exchange Group Detach articles from a case.
       description: Detach articles from a case identified by the given caseSystemId.
       parameters:
         - name: Authorization
@@ -3034,7 +3031,7 @@ paths:
       operationId: detachArticle
       tags:
         - media-check
-      summary: Detach single article from a case.
+      summary: London Stock Exchange Group Detach single article from a case.
       description: Detach single article from a case identified by the given caseSystemId.
       parameters:
         - name: Authorization
@@ -3078,7 +3075,7 @@ paths:
       operationId: saveAndScreenCases
       tags:
         - case
-      summary: Save and screen multiple cases.
+      summary: London Stock Exchange Group Save and screen multiple cases.
       description: |
         Save and screen multiple cases for the given group Id. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).
         In response, the caller receives a summary of the creation operation for each case.
@@ -3174,7 +3171,7 @@ paths:
       operationId: screeningStatus
       tags:
         - case
-      summary: Retrieve case screening status and aggregated result for multiple cases.
+      summary: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
       description: |
         Retrieve case screening statuses and aggregated results. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).
         In response, the caller receives a status and aggregated screening results for each case.
@@ -3330,7 +3327,7 @@ paths:
       tags:
         - reference
         - zfs
-      summary: Get Map of country codes and country names
+      summary: London Stock Exchange Group Get Map of country codes and country names
       description: Get Map of ISO-3166-1 alpha-3 country codes and country names in English
       parameters:
         - name: Authorization
@@ -3351,7 +3348,7 @@ paths:
           schema:
             type: object
             additionalProperties:
-                type: string
+              type: string
         400:
           $ref: '#/responses/BadRequest'
         401:
@@ -3370,7 +3367,7 @@ paths:
       operationId: getNationalities
       tags:
         - reference
-      summary: Get Map of nationality codes and nationality names
+      summary: London Stock Exchange Group Get Map of nationality codes and nationality names
       description: Get Map of ISO-3166-1 alpha-3 nationality codes and nationality names in English
       parameters:
         - name: Authorization
@@ -3410,7 +3407,7 @@ paths:
       operationId: getProviders
       tags:
         - reference
-      summary: Get a list of available providers and their sources.
+      summary: London Stock Exchange Group Get a list of available providers and their sources.
       description: Get a list of all available providers and their sources.
       parameters:
         - name: Authorization
@@ -3447,7 +3444,7 @@ paths:
     get:
       tags:
         - reference
-      summary: Get identity document location types data set definition.
+      summary: London Stock Exchange Group Get identity document location types data set definition.
       description: Get each identity document location type log, that refers to a specific country and entity type.
       responses:
         200:
@@ -3474,7 +3471,7 @@ paths:
       operationId: getSearchFilters
       tags:
         - reference
-      summary: Retrieves all search filters that are accessible to the User.
+      summary: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
       description: Retrieves all search filters that are accessible to the User.
       parameters:
         - name: Authorization
@@ -3511,10 +3508,10 @@ paths:
       operationId: getProfile
       tags:
         - reference
-      summary: Get a profile by its ID
+      summary: London Stock Exchange Group Get a profile by its ID
       description: |
         Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}`
-        
+
         Get a profile by its ID.
 
         This service returns a specific subclass of 'Entity', depending on its particular 'ProfileEntityType' discriminator
@@ -3533,7 +3530,7 @@ paths:
         If a User has subscription type is Premium or Premium Plus, the SIC details are returned for that entity in the 'sources' field.
 
         The response will contain translated details of the 'details' section when 'Accept-Language' header is specified.
-        
+
         The example response body:
 
         ```
@@ -3604,29 +3601,29 @@ paths:
       tags:
         - reference
         - zfs
-      summary: Get a record by its ID
+      summary: London Stock Exchange Group Get a record by its ID
       description: |
         Get a record by its ID.
-        
+
         This service returns a specific subclass of 'Entity', depending on its particular 'RecordEntityType' discriminator
         field. Please note in the context of World-Check One, 'Record' and 'Entity' are synonymous concepts.
-        
+
         For 'Zero Footprint Screening (ZFS)', this endpoint should be called on the dedicated 'ZFS' gateway host.
-        
+
         The 'Entity' subclasses corresponding to each type of entity are:
-        
+
         * 'COUNTRY' : 'CountryEntity'
         * 'INDIVIDUAL' : 'IndividualEntity'
         * 'ORGANISATION' : 'OrganisationEntity'
         * 'VESSEL' : 'VesselEntity'
-        
+
         The response may contain Special Interest Categories (SIC) record that depends on User subscription type to be able to analyze SIC risk:
         If a User has subscription type is Premium or Premium Plus, the SIC details are returned for that entity in the 'sources' field.
-        
+
         The response will contain translated details of the 'details' section when Accept-Language header is specified.
-        
+
         The example response body:
-        
+
         ```
             {
               "sources": [
@@ -3696,10 +3693,10 @@ paths:
       operationId: retrieveProfilePepDetails
       tags:
         - reference
-      summary: Retrieves PEP details by the given profile ID
+      summary: London Stock Exchange Group Retrieves PEP details by the given profile ID
       description: |
         Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}/pep`
-        
+
         Retrieves detailed information for "Politically Exposed Person (PEP)" category by given profile ID.
       parameters:
         - name: Authorization
@@ -3758,7 +3755,7 @@ paths:
       operationId: retrievePepDetails
       tags:
         - reference
-      summary: Retrieves PEP details by the given record ID
+      summary: London Stock Exchange Group Retrieves PEP details by the given record ID
       description: Retrieves detailed information for "Politically Exposed Person (PEP)" category by given record ID.
       parameters:
         - name: Authorization
@@ -3818,7 +3815,7 @@ paths:
       tags:
         - client-watchlist
         - zfs
-      summary: Create or update a provider source
+      summary: London Stock Exchange Group Create or update a provider source
       description: |
         Create or update a provider source for uploading entity records to. An example usage would be for a client watchlist.
       parameters:
@@ -3875,7 +3872,7 @@ paths:
       tags:
         - client-watchlist
         - zfs
-      summary: Maintain your Watchlist data
+      summary: London Stock Exchange Group Maintain your Watchlist data
       description: |
         Maintain your Watchlist data using the following supported entity actions.
 
@@ -3895,7 +3892,7 @@ paths:
 
 
         The response consists of a list of any entities which were not successfully processed and a reason for failure.
-        
+
         **Note:** The client watchlist record may not be considered for re-screening if the 'modificationDate' field 
                   has not been specified while modifying the record.
       parameters:
@@ -3927,8 +3924,7 @@ paths:
             $ref: '#/definitions/WatchlistDataSet'
       responses:
         201:
-          description: Request to maintain Watchlist data has succeeded. Please review the contents of
-           WatchlistResponse errors for details on any individual entity actions which were not successful.
+          description: Request to maintain Watchlist data has succeeded. Please review the contents of WatchlistResponse errors for details on any individual entity actions which were not successful.
           schema:
             $ref: '#/definitions/WatchlistResponse'
         400:
@@ -3949,7 +3945,7 @@ paths:
       operationId: getUsers
       tags:
         - user
-      summary: Get a list of active users in the client's account.
+      summary: London Stock Exchange Group Get a list of active users in the client's account.
       description: Get a list of active users in the client's account.
       parameters:
         - name: Authorization
@@ -3987,7 +3983,7 @@ paths:
       operationId: getMediaCheckRisks
       tags:
         - media-check
-      summary: Retrieve mediacheck risk definitions
+      summary: London Stock Exchange Group Retrieve mediacheck risk definitions
       description: |
         Retrieves a list of mediacheck risk definitions.
 
@@ -4028,7 +4024,7 @@ paths:
       operationId: getMrzData
       tags:
         - passport-check
-      summary: Generates MRZ data
+      summary: London Stock Exchange Group Generates MRZ data
       description: |
         Performs generation of MRZ data according to provided data
       parameters:
@@ -4081,7 +4077,7 @@ paths:
       operationId: retrieveMediaCheckDuplicates
       tags:
         - media-check
-      summary: Retrieve MediaCheck article duplicates.
+      summary: London Stock Exchange Group Retrieve MediaCheck article duplicates.
       description: |
         Retrieve article duplicates by specifying article deduplicationHash.
       parameters:
@@ -4122,22 +4118,22 @@ paths:
           schema:
             $ref: '#/definitions/MediaCheckDuplicatesRequest'
       responses:
-          200:
-            description: Response containing duplicated articles summary.
-            schema:
-              $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
-          400:
-            $ref: '#/responses/BadRequest'
-          401:
-            $ref: '#/responses/Unauthorized'
-          404:
-            $ref: '#/responses/CannotReturnResponse'
-          415:
-            $ref: '#/responses/UnsupportedMediaType'
-          429:
-            $ref: '#/responses/TooManyRequests'
-          500:
-            $ref: '#/responses/UnexpectedError'
+        200:
+          description: Response containing duplicated articles summary.
+          schema:
+            $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
 
   /cases/{caseSystemId}/relationship/{relationshipType}:
     # ====================================================================
@@ -4152,7 +4148,7 @@ paths:
       operationId: getRelationshipIdentifiers
       tags:
         - linked-cases
-      summary: Retrieve the list of case relationships
+      summary: London Stock Exchange Group Retrieve the list of case relationships
       description: |
         Retrieve the list of case relationships with cases linked to it.
 
@@ -4224,10 +4220,10 @@ paths:
       operationId: linkingCases
       tags:
         - linked-cases
-      summary: Create links between cases
+      summary: London Stock Exchange Group Create links between cases
       description: |
         Create links between cases based on relationship type strategy(`relationshipType`).
-        
+
         **Note:** There is a maximum number of World-Check One relationships between cases:
         * Maximum 500 primary cases are allowed per a subcase. 
         * Maximum 50 subcases are allowed per a primary case.
@@ -4306,7 +4302,7 @@ paths:
       operationId: unlinkingCases
       tags:
         - linked-cases
-      summary: Delete links between cases
+      summary: London Stock Exchange Group Delete links between cases
       description: |
         Unlink cases based on relationship type strategy(`relationshipType`).
 
@@ -4375,7 +4371,7 @@ paths:
       operationId: retrieveCaseRating
       tags:
         - case-rating
-      summary: Retrieve a case rating
+      summary: London Stock Exchange Group Retrieve a case rating
       description: |
         Retrieve the case rating in the case provided in the request path.
       parameters:
@@ -4415,7 +4411,7 @@ paths:
       operationId: saveCaseRating
       tags:
         - case-rating
-      summary: Update a case rating
+      summary: London Stock Exchange Group Update a case rating
       description: |
         Update the case rating in the case provided in the request path.
         The request contains a detailed reason to make it easier to resolve a case based on screening results.
@@ -4482,7 +4478,7 @@ paths:
       operationId: getMediaCheckSmartFilter
       tags:
         - smart-filter
-      summary: Retrieve smart filter on a case
+      summary: London Stock Exchange Group Retrieve smart filter on a case
       description: |
         Retrieve the smart filter state on the case provided in the request path.
         The request body should be empty for the case provided in the request path ('caseSystemId').
@@ -4524,7 +4520,7 @@ paths:
       operationId: enableSmartFilterOnCase
       tags:
         - smart-filter
-      summary: Enable smart filter on a case
+      summary: London Stock Exchange Group Enable smart filter on a case
       description: |
         Update the smart filter state on the case provided in the request path.
         The group setting "Allow users to enable/disable the Smart Filter" should be equal to true to have the ability to update the smart filter state on the case.
@@ -4565,7 +4561,7 @@ paths:
       operationId: disableSmartFilterOnCase
       tags:
         - smart-filter
-      summary: Disable smart filter on a case
+      summary: London Stock Exchange Group Disable smart filter on a case
       description: |
         Update the smart filter state on the case provided in the request path.
         The group setting "Allow users to enable/disable the Smart Filter" should be equal to true to have the ability to update the smart filter state on the case.
@@ -4608,7 +4604,7 @@ paths:
       operationId: submitRequestForAsyncReport
       tags:
         - reporting
-      summary: Submit request for async report based on the given filter conditions and return the 'reportId'.
+      summary: London Stock Exchange Group Submit request for async report based on the given filter conditions and return the 'reportId'.
       description: Submit request for async report based on the given filter conditions and return the 'reportId'.
       parameters:
         - name: Authorization
@@ -4661,7 +4657,7 @@ paths:
       operationId: getSingleReportStatusByReportId
       tags:
         - reporting
-      summary: Get the report status for the given report ID.
+      summary: London Stock Exchange Group Get the report status for the given report ID.
       description: Get the report status for the given report ID.
       parameters:
         - name: Authorization
@@ -4702,7 +4698,7 @@ paths:
       operationId: getPaginatedMultipleReportStatus
       tags:
         - upcoming
-      summary: Get the report status for all active reports by pagination params.
+      summary: London Stock Exchange Group Get the report status for all active reports by pagination params.
       description: Get the report status for all active reports by pagination params.
       parameters:
         - name: Authorization
@@ -4753,7 +4749,7 @@ paths:
       operationId: getReportErrorDetails
       tags:
         - upcoming
-      summary: Get the error details for the given 'reportId'.
+      summary: London Stock Exchange Group Get the error details for the given 'reportId'.
       description: Get the error details for the given 'reportId'.
       parameters:
         - name: Authorization
@@ -4794,7 +4790,7 @@ paths:
       operationId: getReportDataByReportId
       tags:
         - reporting
-      summary: Download the report for given report ID.
+      summary: London Stock Exchange Group Download the report for given report ID.
       description: Download the report for given report ID.
       parameters:
         - name: Authorization
@@ -4838,7 +4834,7 @@ paths:
       operationId: cancelReportByReportId
       tags:
         - upcoming
-      summary: Cancel the report request for the given report ID.
+      summary: London Stock Exchange Group Cancel the report request for the given report ID.
       description: Cancel the report request for the given report ID.
       parameters:
         - name: Authorization
@@ -4894,7 +4890,7 @@ definitions:
         description: Link to the API Documentation.
     example:
       version: 2.53.0
-      systemDateTime: 2023-02-20T11:46:28.131Z
+      systemDateTime: 2023-02-20T11:46:28.131000Z
       apiDocumentationLink: wc1-api.documentation.com
 
   #
@@ -4974,12 +4970,12 @@ definitions:
       entityType: CASE
       actionType: CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
       sourceType: API
-      auditEventToDate: null
+      auditEventToDate:
       details:
         - detailsType: ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
           casePreferenceType: MEDIA_CHECK_SMART_FILTER
           status: false
-          dateTimeModification: 2022-05-15T15:03:24.984Z
+          dateTimeModification: 2022-05-15T15:03:24.984000Z
       matchEvents:
         - providerType: WATCHLIST
           referenceId: e_tr_wc_1234567
@@ -4988,9 +4984,9 @@ definitions:
               type: PRIMARY
           categories:
             - PEP
-          matchedDate: 2022-05-15T15:03:24.984Z
-          alertDate: null
-          actionTypes: null
+          matchedDate: 2022-05-15T15:03:24.984000Z
+          alertDate:
+          actionTypes:
           score: 0.8979323846
           matchEventType: UNRESOLVED
           matchStatus: UNRESOLVED
@@ -5308,7 +5304,7 @@ definitions:
             description: Number of results have been auto resolved as False set due to auto resolution rules
           providerTypes:
             type: array
-            description:  Array of provider types used in screening
+            description: Array of provider types used in screening
             uniqueItems: true
             minItems: 1
             items:
@@ -5921,7 +5917,7 @@ definitions:
 
   ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails:
     type: object
-    description:  Audit details which contains details of changing the state of MediaCheck smart filter. Extends [AbstractAuditDetails](#AbstractAuditDetails).
+    description: Audit details which contains details of changing the state of MediaCheck smart filter. Extends [AbstractAuditDetails](#AbstractAuditDetails).
     allOf:
       - $ref: '#/definitions/AbstractAuditDetails'
       - type: object
@@ -6410,44 +6406,44 @@ definitions:
     type: object
     description: Defines Case data that can be sent when creating a new Case. Extends [AbstractCase](#AbstractCase).
     allOf:
-    - $ref: '#/definitions/AbstractCase'
-    - type: object
-      required:
-        - name
-        - groupId
-        - entityType
-      properties:
-        groupId:
-          type: string
-          maxLength: 255
-          description: |
-            Group identifier owning this case.
-            The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
-        entityType:
-          type: string
-          description: Case Entity Type Enumeration
-          enum:
-            - INDIVIDUAL
-            - ORGANISATION
-            - VESSEL
-            - UNSPECIFIED
-      example:
-        name: John Smith
-        caseId: Client Case Id
-        groupId: Client Group Id
-        entityType: INDIVIDUAL
-        providerTypes:
-          - WATCHLIST
-        customFields:
-          - typeId: Custom Field Id 1
-            value: Reference ID 1234567
-          - typeId: Custom Field Id 2
-            value: Deal Id 1234567
-        secondaryFields:
-          - typeId: SFCT_1
-            value: MALE
-          - typeId: SFCT_2
-            dateTimeValue: '1990-11-20'
+      - $ref: '#/definitions/AbstractCase'
+      - type: object
+        required:
+          - name
+          - groupId
+          - entityType
+        properties:
+          groupId:
+            type: string
+            maxLength: 255
+            description: |
+              Group identifier owning this case.
+              The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
+          entityType:
+            type: string
+            description: Case Entity Type Enumeration
+            enum:
+              - INDIVIDUAL
+              - ORGANISATION
+              - VESSEL
+              - UNSPECIFIED
+        example:
+          name: John Smith
+          caseId: Client Case Id
+          groupId: Client Group Id
+          entityType: INDIVIDUAL
+          providerTypes:
+            - WATCHLIST
+          customFields:
+            - typeId: Custom Field Id 1
+              value: Reference ID 1234567
+            - typeId: Custom Field Id 2
+              value: Deal Id 1234567
+          secondaryFields:
+            - typeId: SFCT_1
+              value: MALE
+            - typeId: SFCT_2
+              dateTimeValue: '1990-11-20'
 
   ScreeningRequest:
     type: object
@@ -6479,8 +6475,8 @@ definitions:
           caseScreeningState:
             WATCHLIST: INITIAL
             MEDIA_CHECK: ONGOING
-          startScreeningDate: 2020-08-01T15:00:00.003Z
-          endScreeningDate: 2021-08-02T15:00:00.003Z
+          startScreeningDate: 2020-08-01T15:00:00.003000Z
+          endScreeningDate: 2021-08-02T15:00:00.003000Z
           customFields:
             - typeId: Custom Field Id 1
               value: Reference ID 1234567
@@ -6604,84 +6600,84 @@ definitions:
     type: object
     description: Defines full Case data returned when retrieving a Case. Extends [NewCase](#NewCase).
     allOf:
-    - $ref: '#/definitions/NewCase'
-    - type: object
-      properties:
-        caseSystemId:
-          type: string
-          maxLength: 192
-          description: System generated ID for the Case
-        lifecycleState:
-          type: string
-          description: Case Lifecycle State Enumeration
-          enum:
-            - ARCHIVED
-            - UNARCHIVED
-        assignee:
-          $ref: '#/definitions/UserSummary'
-        creator:
-          $ref: '#/definitions/UserSummary'
-        modifier:
-          $ref: '#/definitions/UserSummary'
-        creationDate:
-          type: string
-          format: date-time
-          description: Case creation date and time
-        modificationDate:
-          type: string
-          format: date-time
-          description: Case modification date and time
-        outstandingActions:
-          type: boolean
-          description: Flag indicating outstanding actions on a Case
-        lastScreenedDatesByProviderType:
-          type: object
-          description: Case screenings date and time by provider type
-          additionalProperties:
+      - $ref: '#/definitions/NewCase'
+      - type: object
+        properties:
+          caseSystemId:
+            type: string
+            maxLength: 192
+            description: System generated ID for the Case
+          lifecycleState:
+            type: string
+            description: Case Lifecycle State Enumeration
+            enum:
+              - ARCHIVED
+              - UNARCHIVED
+          assignee:
+            $ref: '#/definitions/UserSummary'
+          creator:
+            $ref: '#/definitions/UserSummary'
+          modifier:
+            $ref: '#/definitions/UserSummary'
+          creationDate:
             type: string
             format: date-time
-            maxLength: 255
-            description: Date and time by Provider Type
-        providerTypeDetails:
-          $ref: '#/definitions/ProviderTypeDetails'
-        aggregatedResultSummaries:
-          $ref: '#/definitions/CaseResultSummaries'
-      example:
-        name: John Smith
-        caseId: Client Case Id
-        groupId: Client Group Id
-        entityType: INDIVIDUAL
-        providerTypes:
-          - WATCHLIST
-        customFields:
-          - typeId: Custom Field Id 1
-            value: Reference ID 1234567
-          - typeId: Custom Field Id 2
-            value: Deal Id 1234567
-        secondaryFields:
-          - typeId: SFCT_1
-            value: MALE
-          - typeId: SFCT_2
-            dateTimeValue: '1990-11-20'
-        caseScreeningState:
-          WATCHLIST: INITIAL
-        lifecycleState: ARCHIVED
-        creator:
-          userId: Creator ID
-          fullName: Creator Name
-          status: ACTIVE
-        modifier:
-          userId: Modifier ID
-          fullName: Modifier Name
-          status: ACTIVE
-        creationDate: '2016-02-18T14:00:00Z'
-        modificationDate: '2016-02-18T14:00:00Z'
-        outstandingActions: false
-        lastScreenedDatesByProviderType:
-          WATCHLIST: '2016-02-18T14:00:00Z'
-        providerTypeDetails:
-          mediaCheck:
-            smartFilter: true
+            description: Case creation date and time
+          modificationDate:
+            type: string
+            format: date-time
+            description: Case modification date and time
+          outstandingActions:
+            type: boolean
+            description: Flag indicating outstanding actions on a Case
+          lastScreenedDatesByProviderType:
+            type: object
+            description: Case screenings date and time by provider type
+            additionalProperties:
+              type: string
+              format: date-time
+              maxLength: 255
+              description: Date and time by Provider Type
+          providerTypeDetails:
+            $ref: '#/definitions/ProviderTypeDetails'
+          aggregatedResultSummaries:
+            $ref: '#/definitions/CaseResultSummaries'
+        example:
+          name: John Smith
+          caseId: Client Case Id
+          groupId: Client Group Id
+          entityType: INDIVIDUAL
+          providerTypes:
+            - WATCHLIST
+          customFields:
+            - typeId: Custom Field Id 1
+              value: Reference ID 1234567
+            - typeId: Custom Field Id 2
+              value: Deal Id 1234567
+          secondaryFields:
+            - typeId: SFCT_1
+              value: MALE
+            - typeId: SFCT_2
+              dateTimeValue: '1990-11-20'
+          caseScreeningState:
+            WATCHLIST: INITIAL
+          lifecycleState: ARCHIVED
+          creator:
+            userId: Creator ID
+            fullName: Creator Name
+            status: ACTIVE
+          modifier:
+            userId: Modifier ID
+            fullName: Modifier Name
+            status: ACTIVE
+          creationDate: '2016-02-18T14:00:00Z'
+          modificationDate: '2016-02-18T14:00:00Z'
+          outstandingActions: false
+          lastScreenedDatesByProviderType:
+            WATCHLIST: '2016-02-18T14:00:00Z'
+          providerTypeDetails:
+            mediaCheck:
+              smartFilter: true
 
   AbstractField:
     type: object
@@ -7000,7 +6996,7 @@ definitions:
           - DOCUMENT_ID
       isPartOfUpdatedResults:
         type: boolean
-        description: | 
+        description: |
           The flag indicating whether the matched term is still relevant to the case after changes to either 
           case details or admin settings or record details. Please note this field must not be used for filtering 
           ongoing screening updates.
@@ -7177,12 +7173,12 @@ definitions:
       status:
         $ref: '#/definitions/StatusType'
     example:
-        id: Group Id
-        parentId: Parent Group ID
-        name: John Smith
-        hasChildren: true
-        children: []
-        status: ACTIVE
+      id: Group Id
+      parentId: Parent Group ID
+      name: John Smith
+      hasChildren: true
+      children: []
+      status: ACTIVE
 
   CaseTemplateResponse:
     type: object
@@ -7233,7 +7229,7 @@ definitions:
             organisation:
               - typeId: REGISTERED_COUNTRY_TYPE_ID
                 fieldFormat: COUNTRY
-              - typeId:  REGISTERED_TEXT_TYPE_ID
+              - typeId: REGISTERED_TEXT_TYPE_ID
                 fieldFormat: DOCUMENT_ID
               - typeId: REGISTERED_COUNTRY_TYPE_ID
                 fieldFormat: DOCUMENT_ID_COUNTRY
@@ -7312,38 +7308,38 @@ definitions:
       providerType: WATCHLIST
       resolutionFields:
         statuses:
-        - id: STATUS_ID_1
-          label: 'FALSE'
-          type: 'FALSE'
-        - id: STATUS_ID_2
-          label: POSSIBLE
-          type: POSSIBLE
-        - id: STATUS_ID_3
-          label: POSITIVE
-          type: POSITIVE
-        - id: STATUS_ID_4
-          label: UNSPECIFIED
-          type: UNSPECIFIED
+          - id: STATUS_ID_1
+            label: 'FALSE'
+            type: 'FALSE'
+          - id: STATUS_ID_2
+            label: POSSIBLE
+            type: POSSIBLE
+          - id: STATUS_ID_3
+            label: POSITIVE
+            type: POSITIVE
+          - id: STATUS_ID_4
+            label: UNSPECIFIED
+            type: UNSPECIFIED
         risks:
-        - id: RISK_ID_1
-          label: MEDIUM
-          type: "null"
-        - id: RISK_ID_2
-          label: LOW
-          type: "null"
-        - id: RISK_ID_3
-          label: HIGH
-          type: "null"
-        - id: RISK_ID_4
-          label: UNKNOWN
-          type: "null"
+          - id: RISK_ID_1
+            label: MEDIUM
+            type: "null"
+          - id: RISK_ID_2
+            label: LOW
+            type: "null"
+          - id: RISK_ID_3
+            label: HIGH
+            type: "null"
+          - id: RISK_ID_4
+            label: UNKNOWN
+            type: "null"
         reasons:
-        - id: REASON_ID_1
-          label: unreasonable
-          type: "null"
-        - id: REASON_ID_2
-          label: reason
-          type: "null"
+          - id: REASON_ID_1
+            label: unreasonable
+            type: "null"
+          - id: REASON_ID_2
+            label: reason
+            type: "null"
       resolutionRules:
         STATUS_ID_1:
           reasons:
@@ -7447,7 +7443,7 @@ definitions:
 
   ResolutionStatusType:
     type: string
-    description:  Enumeration of resolution Status types.
+    description: Enumeration of resolution Status types.
     enum:
       - "POSITIVE"
       - "POSSIBLE"
@@ -7521,8 +7517,7 @@ definitions:
       caseId:
         type: string
         maxLength: 512
-        description: Case ID provided by the client or else generated by the system for the client.
-          This field is not applicable for Zero Footprint Screening (ZFS).
+        description: Case ID provided by the client or else generated by the system for the client. This field is not applicable for Zero Footprint Screening (ZFS).
       groupId:
         type: string
         maxLength: 255
@@ -8194,9 +8189,9 @@ definitions:
             - 'caseSystemId4'
         - caseSystemId: 'caseSystemId5'
         - relatedCaseSystemIds:
-              - 'caseSystemId6'
-              - 'caseSystemId7'
-              - 'caseSystemId8'
+            - 'caseSystemId6'
+            - 'caseSystemId7'
+            - 'caseSystemId8'
       note: 'Audit note'
 
   CaseBulkLinkRequest:
@@ -8298,8 +8293,8 @@ definitions:
     type: string
     description: Relationship type between cases.
     enum:
-        - SUBCASE_TO_PRIMARY
-        - PRIMARY_TO_SUBCASE
+      - SUBCASE_TO_PRIMARY
+      - PRIMARY_TO_SUBCASE
 
   OngoingScreeningProviderType:
     type: string
@@ -8624,22 +8619,22 @@ definitions:
   Entity:
     type: object
     description: |
-        Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
-        as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
+      Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
+      as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
 
-        The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
+      The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
 
-        * `COUNTRY` : `CountryEntity`
-        * `INDIVIDUAL` : `IndividualEntity`
-        * `ORGANISATION` : `OrganisationEntity`
-        * `VESSEL` : `VesselEntity`
+      * `COUNTRY` : `CountryEntity`
+      * `INDIVIDUAL` : `IndividualEntity`
+      * `ORGANISATION` : `OrganisationEntity`
+      * `VESSEL` : `VesselEntity`
 
-        Notes for Client Watchlist usage:
+      Notes for Client Watchlist usage:
 
-        * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
-        * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
-        * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
-        * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
+      * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
+      * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
+      * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
+      * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
 
     discriminator: entityType
     required:
@@ -9043,46 +9038,46 @@ definitions:
     required:
       - entityType
     allOf:
-    - $ref: '#/definitions/Entity'
-    - properties:
-        age:
-          type: string
-        ageAsOfDate:
-          type: string
-          format: date-time
-        events:
-          type: array
-          items:
-            $ref: '#/definitions/Event'
-        gender:
-          $ref: '#/definitions/Gender'
-        isDeceased:
-          type: boolean
-          default: false
-        previousRoles:
-          type: array
-          items:
-            $ref: '#/definitions/Role'
-        roles:
-          type: array
-          items:
-            $ref: '#/definitions/Role'
-        entityType:
-          type: string
-          description: |
-            Profile Entity Type Enumeration.
+      - $ref: '#/definitions/Entity'
+      - properties:
+          age:
+            type: string
+          ageAsOfDate:
+            type: string
+            format: date-time
+          events:
+            type: array
+            items:
+              $ref: '#/definitions/Event'
+          gender:
+            $ref: '#/definitions/Gender'
+          isDeceased:
+            type: boolean
+            default: false
+          previousRoles:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+          roles:
+            type: array
+            items:
+              $ref: '#/definitions/Role'
+          entityType:
+            type: string
+            description: |
+              Profile Entity Type Enumeration.
 
-            The `Entity` subclasses corresponding to each type of entity are:
+              The `Entity` subclasses corresponding to each type of entity are:
 
-            * `COUNTRY` : `CountryEntity`
-            * `INDIVIDUAL` : `IndividualEntity`
-            * `ORGANISATION` : `OrganisationEntity`
-            * `VESSEL` : `VesselEntity`
-          enum:
-            - COUNTRY
-            - INDIVIDUAL
-            - ORGANISATION
-            - VESSEL
+              * `COUNTRY` : `CountryEntity`
+              * `INDIVIDUAL` : `IndividualEntity`
+              * `ORGANISATION` : `OrganisationEntity`
+              * `VESSEL` : `VesselEntity`
+            enum:
+              - COUNTRY
+              - INDIVIDUAL
+              - ORGANISATION
+              - VESSEL
 
   LanguageCode:
     type: object
@@ -9460,7 +9455,7 @@ definitions:
           'modifierUserId' - Identifier of the recent changes author
 
           'creationDate' - Time when the case has been created
-          
+
           RSQL/FIQL parser contains some reserved characters:
 
           `'"' | "'" | "(" | ")" | ";" | "," | "=" | "!" | "~" | "<" | ">"`
@@ -9532,7 +9527,7 @@ definitions:
     required:
       - entityType
     allOf:
-    - $ref: '#/definitions/Entity'
+      - $ref: '#/definitions/Entity'
     properties:
       entityType:
         type: string
@@ -9688,7 +9683,7 @@ definitions:
   VesselEntity:
     type: object
     allOf:
-    - $ref: '#/definitions/Entity'
+      - $ref: '#/definitions/Entity'
     required:
       - imo
       - entityType
@@ -9825,29 +9820,29 @@ definitions:
           A query filter expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).
           The FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,
           and the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.
-          
+
           RSQL/FIQL parser contains some reserved characters:
-          
+
           `'"' | "'" | "(" | ")" | ";" | "," | "=" | "!" | "~" | "<" | ">"`
-          
+
           If there are reserved characters or white spaces in the query expression, they must be escaped by enclosing 
           them in single or double quotes. If you need to use both single and double quotes inside an argument, then
           you must escape one of them using `\` (backslash). If you want to use `\` literally, then double it as `\\`.
           Backslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved 
           characters or white spaces without escaping can lead to parsing and execution errors.
-          
+
           The query examples:
-          
+
           * "query": "example=='TE!ST'"
           * "query": "example==\\"TE'ST\\""
           * "query": "example=='TE\\\\'ST'"
-          
+
           Argument can be a single value, or multiple values in parenthesis separated by comma. Value that does not
           contain any reserved character or a white space can be unquoted, other arguments must be enclosed in single 
           or double quotes.
-          
+
           Example:
-          
+
           * "query": "example1=='TE\\\\'ST', example2==TEST"
       sort:
         type: array
@@ -9861,15 +9856,15 @@ definitions:
     type: object
     description: Sort specification
     properties:
-        columnName:
-          type: string
-          description: The field to sort on
-        order:
-          type: string
-          description: The sort order
-          enum:
-            - ASCENDING
-            - DESCENDING
+      columnName:
+        type: string
+        description: The field to sort on
+      order:
+        type: string
+        description: The sort order
+        enum:
+          - ASCENDING
+          - DESCENDING
 
   SearchResponse:
     type: object
@@ -9908,11 +9903,11 @@ definitions:
     type: object
     description: Outbound - used to describe paginated partial result sets
     allOf:
-    - $ref: '#/definitions/Pagination'
-    - properties:
-        totalItems:
-          type: integer
-          format: int64
+      - $ref: '#/definitions/Pagination'
+      - properties:
+          totalItems:
+            type: integer
+            format: int64
 
   Error:
     type: object
@@ -10171,14 +10166,14 @@ definitions:
             publication:
               code: "DEUEUR"
               name: "Publication name"
-              status: null
-              description: null
+              status:
+              description:
               languages: []
               regions:
                 - "Europe"
               publicationTypes: []
               sectors: []
-            author: null
+            author:
             topics:
               - "Article Topic"
             countries:
@@ -10416,7 +10411,7 @@ definitions:
         format: date-time
         description: Case modification date and time.
     example:
-      dateReviewed: 2019-05-14T11:55:19.038Z
+      dateReviewed: 2019-05-14T11:55:19.038000Z
 
   MediaCheckDuplicatesRequest:
     type: object
@@ -10492,7 +10487,7 @@ definitions:
           biography: Biography_2
           status: FORMER
           roleTermStartDate: '2021-01-04'
-          roleTermEndDate: null
+          roleTermEndDate:
 
   PepUpdatedDates:
     type: object
@@ -10661,7 +10656,7 @@ definitions:
     type: object
     description: |
       Represents filter configuration and values available for filtering cases with specific values.
-      
+
       **Note:** The 'availableValues', and 'availableItems' fields in this model are optional and are populated based on the set of 'fields'.
     allOf:
       - $ref: '#/definitions/AbstractSearchParameter'
@@ -10725,7 +10720,7 @@ definitions:
     properties:
       query:
         type: string
-        description: | 
+        description: |
           A string containing the search query.
           **Note:** To find the available search fields, check for fields with 'QUERY' type in the `GET /reference/searchFilters` endpoint.
       filter:
@@ -10740,7 +10735,7 @@ definitions:
         type: array
         description: |
           An array of sorting criteria.
-          
+
           The list of available sort parameter names:
           - 'primaryName' - sort by the primary name for the Case;
           - 'caseId' - sort by the unique identifier for the Case;
@@ -11131,10 +11126,10 @@ definitions:
     type: object
     description: |
       A model contains 'query', 'filter', 'reportFilter', 'customAttributes' expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).
-      
+
       The FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,
       and the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.
-      
+
       RSQL/FIQL parser contains some reserved characters:
 
       `'"' | "'" | "(" | ")" | ";" | "," | "=" | "!" | "~" | "<" | ">"`
@@ -11144,7 +11139,7 @@ definitions:
       you must escape one of them using `\` (backslash). If you want to use `\` literally, then double it as `\\`.
       Backslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved
       characters or white spaces without escaping can lead to parsing and execution errors.
-      
+
       Argument can be a single value, or multiple values in parenthesis separated by comma. Value that does not
       contain any reserved character or a white space can be unquoted, other arguments must be enclosed in single
       or double quotes.
@@ -11162,10 +11157,10 @@ definitions:
         type: string
         description: |
           The query string used for fetching the source data for the report.
-          
+
           The query supports next field to specify searching criteria:
           - 'caseId' - Case ID provided by the client;
-          
+
           The query examples:
             * "query": "example=='TE!ST'"
             * "query": "example==\\"TE'ST\\""
@@ -11175,10 +11170,10 @@ definitions:
         type: string
         description: |
           The filters to be applied on the dataset returned by using the query. 
-          
+
           The filter supports next field to specify searching criteria:
           - 'caseSystemId': Case System ID generated by the system for the client;
-          
+
           The filter examples:
             * "filter": "example=='TE!ST'"
             * "filter": "example==\\"TE'ST\\""
@@ -11194,7 +11189,7 @@ definitions:
         type: string
         description: |
           The filters to be applied on the record level dataset.
-          
+
           The reportFilter supports next field to specify searching criteria:
           * 'providerType': Array of provider types used in record level filtration and does not have default providerType value.
           * 'includeUnresolvedMatches': represents the boolean value for the record level filtration and default value is false.
@@ -11206,19 +11201,19 @@ definitions:
           * 'includePassportCheck': represents the boolean value for the record level filtration and default value is false.
           * 'includeMediaCheckFullArticles': represents the boolean value for the record level filtration and default value is false.
           * 'includeMediaCheckHeadlines': represents the boolean value for the record level filtration and default value is false.
-          
+
           **Note:** The record filters – 'includeUnresolvedMatches', 'includePositiveMatches', 'includePossibleMatches', 'includeFalseMatches' &
                     'includeUnspecifiedMatches', allow for the export of the full matched records in addition to the Case Dossier Report.
                     This selection does not affect the summary of all matched records included in the Case Dossier Report. 
                     The other filters 'includeMediacheckHeadlines', 'includeMediacheckArticles', 'includePassportCheck' & 'includeAudit' are applicable
                     for the inclusion or exclusion of these sections in the Case Dossier report.
-          
+
           The report Level Filter examples:
-          
+
           example 1: To generate a case dossier PDF report for the matched World-Check records with multiple record filters along with the
                        additional filter sections namingly 'includePassportCheck', 'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines',
                        'includeAudit'.
-          
+
           ```      
            {
               "reportFilter": 
@@ -11237,7 +11232,7 @@ definitions:
           example 2: To generate a case dossier PDF report for the matched World-Check or Client-Watchlist records
                        with multiple record filters along with the additional filter sections namingly 'includePassportCheck',
                        'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines'.
-          
+
           ```
            {
               "reportFilter": 
@@ -11256,7 +11251,7 @@ definitions:
           example 3:  To generate a case dossier PDF report which includes only filter sections like 'includePassportCheck',
                         'includeAudit', 'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines' without the matched 
                         World-Check or Client-Watchlist records.
-          
+
           ```           
            {
              "reportFilter": 
@@ -11270,7 +11265,7 @@ definitions:
         type: string
         description: |
           Custom attributes for the reports (specific to the type of the report). E.g. notes for case dossier report.
-          
+
           The Custom attributes examples: 
             * "customAttributes": "note==data".
             * "customAttributes": "note=='note is custom attribute'".
@@ -11362,8 +11357,8 @@ definitions:
       progressStatus: COMPLETED
       reportType: CASE_DOSSIER
       startDate: 2019-08-28T10:05:15Z
-      completionDate: null
-      deletionDate: null
+      completionDate:
+      deletionDate:
       summary:
         processedCount: 13.0
         progressPercentage: 50.0
@@ -11372,7 +11367,7 @@ definitions:
     type: string
     description: |
       The real-time progress status of report during download.
-      
+
       - COMPLETED - Report is successfully generated.
       - IN_PROGRESS - Report generation is in progress.
       - FAILED - Report failed to generate. Contact helpdesk for more details.
@@ -11425,8 +11420,8 @@ definitions:
           progressStatus: COMPLETED
           reportType: CASE_DOSSIER
           startDate: 2019-08-28T10:05:15Z
-          completionDate: null
-          deletionDate: null
+          completionDate:
+          deletionDate:
           summary:
             processedCount: 13.0
             progressPercentage: 50.0
