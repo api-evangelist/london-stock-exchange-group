@@ -1,0 +1,3539 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities
+    into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding,
+    KYC and third party due diligence. The API provides, among other features: - The ability to screen entity names, with
+    or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check
+    One system. - The ability to retrieve results of the screening process from the World-Check database - The ability to
+    flag cases for On'
+  tags:
+  - London
+  - Stock
+  - Exchange
+  - Group
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: london-stock-exchange-group
+    baseUri: https://api.example.com
+    description: London Stock Exchange Group LSEG World-Check One API HTTP API.
+    resources:
+    - name: apiinfo
+      path: /apiInfo
+      operations:
+      - name: getapiinfo
+        method: GET
+        description: London Stock Exchange Group Get information about the Public API.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups
+      path: /groups
+      operations:
+      - name: getgroups
+        method: GET
+        description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups-groupid
+      path: /groups/{groupId}
+      operations:
+      - name: getgroupbyid
+        method: GET
+        description: London Stock Exchange Group Get a specified group including its immediate descendants
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: groupId
+          in: path
+          type: string
+          required: true
+          description: Group ID under which we wish to retrieve children groups
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups-groupid-casetemplate
+      path: /groups/{groupId}/caseTemplate
+      operations:
+      - name: getcasetemplateforgroup
+        method: GET
+        description: London Stock Exchange Group Get the CaseTemplate for the given Group
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: groupId
+          in: path
+          type: string
+          required: true
+          description: Group ID under which we wish to manage Cases and perform screening
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups-groupid-resolutiontoolkit
+      path: /groups/{groupId}/resolutionToolkit
+      operations:
+      - name: getresolutiontoolkitforgroup
+        method: GET
+        description: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: groupId
+          in: path
+          type: string
+          required: true
+          description: ID of the Group to which the resolution toolkit belongs.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups-groupid-resolutiontoolkits
+      path: /groups/{groupId}/resolutionToolkits
+      operations:
+      - name: getresolutiontoolkitsforgroup
+        method: GET
+        description: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: groupId
+          in: path
+          type: string
+          required: true
+          description: ID of the Group to which the resolution toolkits belong.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: groups-groupid-resolutiontoolkits-providertype
+      path: /groups/{groupId}/resolutionToolkits/{providerType}
+      operations:
+      - name: getresolutiontoolkitforgroupwithprovidertype
+        method: GET
+        description: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: groupId
+          in: path
+          type: string
+          required: true
+          description: ID of the Group to which the resolution toolkit belongs.
+        - name: providerType
+          in: path
+          type: string
+          required: true
+          description: Provider type for which the resolution toolkit applies.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: casereferences
+      path: /caseReferences
+      operations:
+      - name: getcasereference
+        method: GET
+        description: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseId
+          in: query
+          type: string
+          required: true
+          description: Case ID provided by the client or else generated by the system for the client
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases
+      path: /cases
+      operations:
+      - name: savecase
+        method: POST
+        description: London Stock Exchange Group Create a new case
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-screeningrequest
+      path: /cases/screeningRequest
+      operations:
+      - name: screen
+        method: POST
+        description: London Stock Exchange Group Perform synchronous screening for a new case
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid
+      path: /cases/{caseSystemId}
+      operations:
+      - name: updateexistingcase
+        method: PUT
+        description: London Stock Exchange Group Update an existing Case by its caseSystemId
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: partialupdatecase
+        method: PATCH
+        description: London Stock Exchange Group Partial update an existing Case by its caseSystemId
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        - name: screen
+          in: query
+          type: string
+          description: Screen mode
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getcase
+        method: GET
+        description: London Stock Exchange Group Fetch Full Case Details
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        - name: aggregatedSummary
+          in: query
+          type: string
+          description: Flag to enable aggregated summary for case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletecase
+        method: DELETE
+        description: London Stock Exchange Group Delete a Case
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-screeningrequest
+      path: /cases/{caseSystemId}/screeningRequest
+      operations:
+      - name: screencase
+        method: POST
+        description: London Stock Exchange Group Request full or delta screening for an existing Case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json').
+        - name: Content-Length
+          in: header
+          type: string
+          description: The length of the request body in octets (8-bit bytes).
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-ongoingscreening
+      path: /cases/{caseSystemId}/ongoingScreening
+      operations:
+      - name: enableongoingscreening
+        method: PUT
+        description: London Stock Exchange Group Enable OGS for a Case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json').
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes).
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: disableongoingscreening
+        method: DELETE
+        description: London Stock Exchange Group Disable OGS for a Case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json').
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes).
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-archive
+      path: /cases/{caseSystemId}/archive
+      operations:
+      - name: archivecase
+        method: PUT
+        description: London Stock Exchange Group Archive a Case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: unarchive
+        method: DELETE
+        description: London Stock Exchange Group Unarchive a Case
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-archive
+      path: /cases/bulk/archive
+      operations:
+      - name: archivecases
+        method: POST
+        description: London Stock Exchange Group Bulk Update Archive States
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-assign
+      path: /cases/bulk/assign
+      operations:
+      - name: assigncases
+        method: POST
+        description: London Stock Exchange Group Bulk Update Case Assignments
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-delete
+      path: /cases/bulk/delete
+      operations:
+      - name: deletecases
+        method: POST
+        description: London Stock Exchange Group Bulk Delete Cases
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-move
+      path: /cases/bulk/move
+      operations:
+      - name: updatecasesowner
+        method: POST
+        description: London Stock Exchange Group Bulk Move Cases Between Groups
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-ongoingscreening
+      path: /cases/bulk/ongoingScreening
+      operations:
+      - name: toggleongoingscreeningbyprovidertypes
+        method: POST
+        description: London Stock Exchange Group Bulk Update Ongoing Screening States
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-bulk-link
+      path: /cases/bulk/link
+      operations:
+      - name: linkcases
+        method: POST
+        description: London Stock Exchange Group Bulk Update Case Links
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-results
+      path: /cases/{caseSystemId}/results
+      operations:
+      - name: getresults
+        method: GET
+        description: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for a Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-results-review
+      path: /cases/{caseSystemId}/results/review
+      operations:
+      - name: reviewresults
+        method: PUT
+        description: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-results-resolution
+      path: /cases/{caseSystemId}/results/resolution
+      operations:
+      - name: resolveresults
+        method: PUT
+        description: London Stock Exchange Group Resolves a list of results.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json').
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes).
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-auditevents
+      path: /cases/{caseSystemId}/auditEvents
+      operations:
+      - name: getcaseauditeventsbycasesystemid
+        method: POST
+        description: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-auditevents-auditeventid
+      path: /cases/{caseSystemId}/auditEvents/{auditEventId}
+      operations:
+      - name: retrievecaseauditevent
+        method: GET
+        description: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the
+          case identified by the given 'caseSystemId'.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        - name: auditEventId
+          in: path
+          type: string
+          required: true
+          description: ID of the audit event.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-ongoingscreeningupdates
+      path: /cases/ongoingScreeningUpdates
+      operations:
+      - name: getongoingscreeningupdates
+        method: POST
+        description: London Stock Exchange Group Get ongoing screening updates.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-assignee
+      path: /cases/{caseSystemId}/assignee
+      operations:
+      - name: assigncase
+        method: PUT
+        description: London Stock Exchange Group Assign the Case to a User.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: unassigncase
+        method: DELETE
+        description: London Stock Exchange Group Unassign a Case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-search
+      path: /cases/search
+      operations:
+      - name: searchcases
+        method: POST
+        description: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json').
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes).
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-summaries
+      path: /cases/summaries
+      operations:
+      - name: retrievecasesummaries
+        method: POST
+        description: London Stock Exchange Group User activity monitoring. Initial request.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-summaries-cursor
+      path: /cases/summaries/cursor
+      operations:
+      - name: scrollcasesummaries
+        method: POST
+        description: London Stock Exchange Group User activity monitoring. Subsequent request.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results
+      path: /cases/{caseSystemId}/mediacheck/results
+      operations:
+      - name: getmediacheckdetails
+        method: POST
+        description: London Stock Exchange Group Retrieve MediaCheck results
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: Accept-Language
+          in: header
+          type: string
+          description: 'A value that identifies GUI language for the request. The response will be provided in the selected
+            GUI language where available, otherwise it will be returned '
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for a Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-metadata
+      path: /cases/{caseSystemId}/mediacheck/results/metadata
+      operations:
+      - name: getmediacheckarticlesmetadata
+        method: POST
+        description: London Stock Exchange Group Retrieve article metadata by the article IDs
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-articleid-
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/metadata
+      operations:
+      - name: getmediachecksinglearticlemetadata
+        method: GET
+        description: London Stock Exchange Group Retrieve article metadata by the article ID
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        - name: articleId
+          in: path
+          type: string
+          required: true
+          description: MediaCheck news article ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-content
+      path: /cases/{caseSystemId}/mediacheck/results/content
+      operations:
+      - name: getmediacheckresultscontent
+        method: POST
+        description: London Stock Exchange Group Retrieve MediaCheck news articles content
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        - name: enableHighlight
+          in: query
+          type: string
+          description: Flag to enable terms highlight
+        - name: context
+          in: query
+          type: string
+          description: Terms to highlight
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-articleid-
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/content
+      operations:
+      - name: getsinglearticlemediacheckcontent
+        method: GET
+        description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case
+        - name: articleId
+          in: path
+          type: string
+          required: true
+          description: MediaCheck news article ID
+        - name: enableHighlight
+          in: query
+          type: string
+          description: Flag to enable terms highlight
+        - name: context
+          in: query
+          type: string
+          description: Terms to highlight
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-review
+      path: /cases/{caseSystemId}/mediacheck/results/review
+      operations:
+      - name: updatearticlesrevieweddate
+        method: PUT
+        description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-attach
+      path: /cases/{caseSystemId}/mediacheck/results/attach
+      operations:
+      - name: attacharticles
+        method: PUT
+        description: London Stock Exchange Group Attach articles to a case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: retrievearticles
+        method: GET
+        description: London Stock Exchange Group Retrieve all articles attached to the case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: detacharticles
+        method: DELETE
+        description: London Stock Exchange Group Detach articles from a case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-casesystemid-mediacheck-results-articleid-
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/attach
+      operations:
+      - name: detacharticle
+        method: DELETE
+        description: London Stock Exchange Group Detach single article from a case.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: caseSystemId
+          in: path
+          type: string
+          required: true
+          description: System generated ID for the Case.
+        - name: articleId
+          in: path
+          type: string
+          required: true
+          description: MediaCheck news article ID.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-saveandscreen
+      path: /cases/saveAndScreen
+      operations:
+      - name: saveandscreencases
+        method: POST
+        description: London Stock Exchange Group Save and screen multiple cases.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cases-screeningstatus
+      path: /cases/screeningStatus
+      operations:
+      - name: screeningstatus
+        method: POST
+        description: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-countries
+      path: /reference/countries
+      operations:
+      - name: getcountries
+        method: GET
+        description: London Stock Exchange Group Get Map of country codes and country names
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-nationalities
+      path: /reference/nationalities
+      operations:
+      - name: getnationalities
+        method: GET
+        description: London Stock Exchange Group Get Map of nationality codes and nationality names
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-providers
+      path: /reference/providers
+      operations:
+      - name: getproviders
+        method: GET
+        description: London Stock Exchange Group Get a list of available providers and their sources.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-identitydocumentlocationtypes
+      path: /reference/identityDocumentLocationTypes
+      operations:
+      - name: get-reference-identitydocumentlocationtypes
+        method: GET
+        description: London Stock Exchange Group Get identity document location types data set definition.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-searchfilters
+      path: /reference/searchFilters
+      operations:
+      - name: getsearchfilters
+        method: GET
+        description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-profile-id
+      path: /reference/profile/{id}
+      operations:
+      - name: getprofile
+        method: GET
+        description: London Stock Exchange Group Get a profile by its ID
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: id
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-records-id
+      path: /reference/records/{id}
+      operations:
+      - name: getrecord
+        method: GET
+        description: London Stock Exchange Group Get a record by its ID
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Record identifier.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-profile-id-pep
+      path: /reference/profile/{id}/pep
+      operations:
+      - name: retrieveprofilepepdetails
+        method: POST
+        description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Profile identifier.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-records-id-pep
+      path: /reference/records/{id}/pep
+      operations:
+      - name: retrievepepdetails
+        method: POST
+        description: London Stock Exchange Group Retrieves PEP details by the given record ID
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: id
+          in: path
+          type: string
+          required: true
+          description: Record identifier.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-providers-sources-identifier
+      path: /reference/providers/sources/{identifier}
+      operations:
+      - name: createorupdateprovidersource
+        method: PUT
+        description: London Stock Exchange Group Create or update a provider source
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        - name: identifier
+          in: path
+          type: string
+          required: true
+          description: Unique identifier for this provider source. Has to be alphanumeric.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-watchlist
+      path: /reference/watchlist
+      operations:
+      - name: savewatchlist
+        method: POST
+        description: London Stock Exchange Group Maintain your Watchlist data
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        - name: Content-Type
+          in: header
+          type: string
+          required: true
+          description: The media type of the request (e.g., 'application/json')
+        - name: Content-Length
+          in: header
+          type: string
+          required: true
+          description: The length of the request body in octets (8-bit bytes)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users
+      path: /users
+      operations:
+      - name: getusers
+        method: GET
+        description: London Stock Exchange Group Get a list of active users in the client's account.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+        - name: Date
+          in: header
+          type: string
+          required: true
+          description: The date and time at which the message was originated in 'RFC 1123' format
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: london-stock-exchange-group-rest
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API.
+    resources:
+    - path: /apiInfo
+      name: getapiinfo
+      operations:
+      - method: GET
+        name: getapiinfo
+        description: London Stock Exchange Group Get information about the Public API.
+        call: london-stock-exchange-group.getapiinfo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups
+      name: getgroups
+      operations:
+      - method: GET
+        name: getgroups
+        description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+        call: london-stock-exchange-group.getgroups
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups/{groupId}
+      name: getgroupbyid
+      operations:
+      - method: GET
+        name: getgroupbyid
+        description: London Stock Exchange Group Get a specified group including its immediate descendants
+        call: london-stock-exchange-group.getgroupbyid
+        with:
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups/{groupId}/caseTemplate
+      name: getcasetemplateforgroup
+      operations:
+      - method: GET
+        name: getcasetemplateforgroup
+        description: London Stock Exchange Group Get the CaseTemplate for the given Group
+        call: london-stock-exchange-group.getcasetemplateforgroup
+        with:
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups/{groupId}/resolutionToolkit
+      name: getresolutiontoolkitforgroup
+      operations:
+      - method: GET
+        name: getresolutiontoolkitforgroup
+        description: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
+        call: london-stock-exchange-group.getresolutiontoolkitforgroup
+        with:
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups/{groupId}/resolutionToolkits
+      name: getresolutiontoolkitsforgroup
+      operations:
+      - method: GET
+        name: getresolutiontoolkitsforgroup
+        description: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
+        call: london-stock-exchange-group.getresolutiontoolkitsforgroup
+        with:
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /groups/{groupId}/resolutionToolkits/{providerType}
+      name: getresolutiontoolkitforgroupwithprovidertype
+      operations:
+      - method: GET
+        name: getresolutiontoolkitforgroupwithprovidertype
+        description: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
+        call: london-stock-exchange-group.getresolutiontoolkitforgroupwithprovidertype
+        with:
+          groupId: rest.groupId
+          providerType: rest.providerType
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /caseReferences
+      name: getcasereference
+      operations:
+      - method: GET
+        name: getcasereference
+        description: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
+        call: london-stock-exchange-group.getcasereference
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases
+      name: savecase
+      operations:
+      - method: POST
+        name: savecase
+        description: London Stock Exchange Group Create a new case
+        call: london-stock-exchange-group.savecase
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/screeningRequest
+      name: screen
+      operations:
+      - method: POST
+        name: screen
+        description: London Stock Exchange Group Perform synchronous screening for a new case
+        call: london-stock-exchange-group.screen
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}
+      name: updateexistingcase
+      operations:
+      - method: PUT
+        name: updateexistingcase
+        description: London Stock Exchange Group Update an existing Case by its caseSystemId
+        call: london-stock-exchange-group.updateexistingcase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}
+      name: partialupdatecase
+      operations:
+      - method: PATCH
+        name: partialupdatecase
+        description: London Stock Exchange Group Partial update an existing Case by its caseSystemId
+        call: london-stock-exchange-group.partialupdatecase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}
+      name: getcase
+      operations:
+      - method: GET
+        name: getcase
+        description: London Stock Exchange Group Fetch Full Case Details
+        call: london-stock-exchange-group.getcase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}
+      name: deletecase
+      operations:
+      - method: DELETE
+        name: deletecase
+        description: London Stock Exchange Group Delete a Case
+        call: london-stock-exchange-group.deletecase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/screeningRequest
+      name: screencase
+      operations:
+      - method: POST
+        name: screencase
+        description: London Stock Exchange Group Request full or delta screening for an existing Case.
+        call: london-stock-exchange-group.screencase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/ongoingScreening
+      name: enableongoingscreening
+      operations:
+      - method: PUT
+        name: enableongoingscreening
+        description: London Stock Exchange Group Enable OGS for a Case.
+        call: london-stock-exchange-group.enableongoingscreening
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/ongoingScreening
+      name: disableongoingscreening
+      operations:
+      - method: DELETE
+        name: disableongoingscreening
+        description: London Stock Exchange Group Disable OGS for a Case.
+        call: london-stock-exchange-group.disableongoingscreening
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/archive
+      name: archivecase
+      operations:
+      - method: PUT
+        name: archivecase
+        description: London Stock Exchange Group Archive a Case.
+        call: london-stock-exchange-group.archivecase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/archive
+      name: unarchive
+      operations:
+      - method: DELETE
+        name: unarchive
+        description: London Stock Exchange Group Unarchive a Case
+        call: london-stock-exchange-group.unarchive
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/archive
+      name: archivecases
+      operations:
+      - method: POST
+        name: archivecases
+        description: London Stock Exchange Group Bulk Update Archive States
+        call: london-stock-exchange-group.archivecases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/assign
+      name: assigncases
+      operations:
+      - method: POST
+        name: assigncases
+        description: London Stock Exchange Group Bulk Update Case Assignments
+        call: london-stock-exchange-group.assigncases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/delete
+      name: deletecases
+      operations:
+      - method: POST
+        name: deletecases
+        description: London Stock Exchange Group Bulk Delete Cases
+        call: london-stock-exchange-group.deletecases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/move
+      name: updatecasesowner
+      operations:
+      - method: POST
+        name: updatecasesowner
+        description: London Stock Exchange Group Bulk Move Cases Between Groups
+        call: london-stock-exchange-group.updatecasesowner
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/ongoingScreening
+      name: toggleongoingscreeningbyprovidertypes
+      operations:
+      - method: POST
+        name: toggleongoingscreeningbyprovidertypes
+        description: London Stock Exchange Group Bulk Update Ongoing Screening States
+        call: london-stock-exchange-group.toggleongoingscreeningbyprovidertypes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/bulk/link
+      name: linkcases
+      operations:
+      - method: POST
+        name: linkcases
+        description: London Stock Exchange Group Bulk Update Case Links
+        call: london-stock-exchange-group.linkcases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/results
+      name: getresults
+      operations:
+      - method: GET
+        name: getresults
+        description: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
+        call: london-stock-exchange-group.getresults
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/results/review
+      name: reviewresults
+      operations:
+      - method: PUT
+        name: reviewresults
+        description: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
+        call: london-stock-exchange-group.reviewresults
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/results/resolution
+      name: resolveresults
+      operations:
+      - method: PUT
+        name: resolveresults
+        description: London Stock Exchange Group Resolves a list of results.
+        call: london-stock-exchange-group.resolveresults
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/auditEvents
+      name: getcaseauditeventsbycasesystemid
+      operations:
+      - method: POST
+        name: getcaseauditeventsbycasesystemid
+        description: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
+        call: london-stock-exchange-group.getcaseauditeventsbycasesystemid
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/auditEvents/{auditEventId}
+      name: retrievecaseauditevent
+      operations:
+      - method: GET
+        name: retrievecaseauditevent
+        description: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the
+          case identified by the given 'caseSystemId'.
+        call: london-stock-exchange-group.retrievecaseauditevent
+        with:
+          caseSystemId: rest.caseSystemId
+          auditEventId: rest.auditEventId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/ongoingScreeningUpdates
+      name: getongoingscreeningupdates
+      operations:
+      - method: POST
+        name: getongoingscreeningupdates
+        description: London Stock Exchange Group Get ongoing screening updates.
+        call: london-stock-exchange-group.getongoingscreeningupdates
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/assignee
+      name: assigncase
+      operations:
+      - method: PUT
+        name: assigncase
+        description: London Stock Exchange Group Assign the Case to a User.
+        call: london-stock-exchange-group.assigncase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/assignee
+      name: unassigncase
+      operations:
+      - method: DELETE
+        name: unassigncase
+        description: London Stock Exchange Group Unassign a Case.
+        call: london-stock-exchange-group.unassigncase
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/search
+      name: searchcases
+      operations:
+      - method: POST
+        name: searchcases
+        description: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
+        call: london-stock-exchange-group.searchcases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/summaries
+      name: retrievecasesummaries
+      operations:
+      - method: POST
+        name: retrievecasesummaries
+        description: London Stock Exchange Group User activity monitoring. Initial request.
+        call: london-stock-exchange-group.retrievecasesummaries
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/summaries/cursor
+      name: scrollcasesummaries
+      operations:
+      - method: POST
+        name: scrollcasesummaries
+        description: London Stock Exchange Group User activity monitoring. Subsequent request.
+        call: london-stock-exchange-group.scrollcasesummaries
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results
+      name: getmediacheckdetails
+      operations:
+      - method: POST
+        name: getmediacheckdetails
+        description: London Stock Exchange Group Retrieve MediaCheck results
+        call: london-stock-exchange-group.getmediacheckdetails
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/metadata
+      name: getmediacheckarticlesmetadata
+      operations:
+      - method: POST
+        name: getmediacheckarticlesmetadata
+        description: London Stock Exchange Group Retrieve article metadata by the article IDs
+        call: london-stock-exchange-group.getmediacheckarticlesmetadata
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/{articleId}/metadata
+      name: getmediachecksinglearticlemetadata
+      operations:
+      - method: GET
+        name: getmediachecksinglearticlemetadata
+        description: London Stock Exchange Group Retrieve article metadata by the article ID
+        call: london-stock-exchange-group.getmediachecksinglearticlemetadata
+        with:
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/content
+      name: getmediacheckresultscontent
+      operations:
+      - method: POST
+        name: getmediacheckresultscontent
+        description: London Stock Exchange Group Retrieve MediaCheck news articles content
+        call: london-stock-exchange-group.getmediacheckresultscontent
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/{articleId}/content
+      name: getsinglearticlemediacheckcontent
+      operations:
+      - method: GET
+        name: getsinglearticlemediacheckcontent
+        description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+        call: london-stock-exchange-group.getsinglearticlemediacheckcontent
+        with:
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/review
+      name: updatearticlesrevieweddate
+      operations:
+      - method: PUT
+        name: updatearticlesrevieweddate
+        description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+        call: london-stock-exchange-group.updatearticlesrevieweddate
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/attach
+      name: attacharticles
+      operations:
+      - method: PUT
+        name: attacharticles
+        description: London Stock Exchange Group Attach articles to a case.
+        call: london-stock-exchange-group.attacharticles
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/attach
+      name: retrievearticles
+      operations:
+      - method: GET
+        name: retrievearticles
+        description: London Stock Exchange Group Retrieve all articles attached to the case.
+        call: london-stock-exchange-group.retrievearticles
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/attach
+      name: detacharticles
+      operations:
+      - method: DELETE
+        name: detacharticles
+        description: London Stock Exchange Group Detach articles from a case.
+        call: london-stock-exchange-group.detacharticles
+        with:
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/{caseSystemId}/mediacheck/results/{articleId}/attach
+      name: detacharticle
+      operations:
+      - method: DELETE
+        name: detacharticle
+        description: London Stock Exchange Group Detach single article from a case.
+        call: london-stock-exchange-group.detacharticle
+        with:
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/saveAndScreen
+      name: saveandscreencases
+      operations:
+      - method: POST
+        name: saveandscreencases
+        description: London Stock Exchange Group Save and screen multiple cases.
+        call: london-stock-exchange-group.saveandscreencases
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /cases/screeningStatus
+      name: screeningstatus
+      operations:
+      - method: POST
+        name: screeningstatus
+        description: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
+        call: london-stock-exchange-group.screeningstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/countries
+      name: getcountries
+      operations:
+      - method: GET
+        name: getcountries
+        description: London Stock Exchange Group Get Map of country codes and country names
+        call: london-stock-exchange-group.getcountries
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/nationalities
+      name: getnationalities
+      operations:
+      - method: GET
+        name: getnationalities
+        description: London Stock Exchange Group Get Map of nationality codes and nationality names
+        call: london-stock-exchange-group.getnationalities
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/providers
+      name: getproviders
+      operations:
+      - method: GET
+        name: getproviders
+        description: London Stock Exchange Group Get a list of available providers and their sources.
+        call: london-stock-exchange-group.getproviders
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/identityDocumentLocationTypes
+      name: get-reference-identitydocumentlocationtypes
+      operations:
+      - method: GET
+        name: get-reference-identitydocumentlocationtypes
+        description: London Stock Exchange Group Get identity document location types data set definition.
+        call: london-stock-exchange-group.get-reference-identitydocumentlocationtypes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/searchFilters
+      name: getsearchfilters
+      operations:
+      - method: GET
+        name: getsearchfilters
+        description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+        call: london-stock-exchange-group.getsearchfilters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/profile/{id}
+      name: getprofile
+      operations:
+      - method: GET
+        name: getprofile
+        description: London Stock Exchange Group Get a profile by its ID
+        call: london-stock-exchange-group.getprofile
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/records/{id}
+      name: getrecord
+      operations:
+      - method: GET
+        name: getrecord
+        description: London Stock Exchange Group Get a record by its ID
+        call: london-stock-exchange-group.getrecord
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/profile/{id}/pep
+      name: retrieveprofilepepdetails
+      operations:
+      - method: POST
+        name: retrieveprofilepepdetails
+        description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+        call: london-stock-exchange-group.retrieveprofilepepdetails
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/records/{id}/pep
+      name: retrievepepdetails
+      operations:
+      - method: POST
+        name: retrievepepdetails
+        description: London Stock Exchange Group Retrieves PEP details by the given record ID
+        call: london-stock-exchange-group.retrievepepdetails
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/providers/sources/{identifier}
+      name: createorupdateprovidersource
+      operations:
+      - method: PUT
+        name: createorupdateprovidersource
+        description: London Stock Exchange Group Create or update a provider source
+        call: london-stock-exchange-group.createorupdateprovidersource
+        with:
+          identifier: rest.identifier
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reference/watchlist
+      name: savewatchlist
+      operations:
+      - method: POST
+        name: savewatchlist
+        description: London Stock Exchange Group Maintain your Watchlist data
+        call: london-stock-exchange-group.savewatchlist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /users
+      name: getusers
+      operations:
+      - method: GET
+        name: getusers
+        description: London Stock Exchange Group Get a list of active users in the client's account.
+        call: london-stock-exchange-group.getusers
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: london-stock-exchange-group-mcp
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API for AI agent use.
+    tools:
+    - name: getapiinfo
+      description: London Stock Exchange Group Get information about the Public API.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getapiinfo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getgroups
+      description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getgroups
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getgroupbyid
+      description: London Stock Exchange Group Get a specified group including its immediate descendants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getgroupbyid
+      with:
+        groupId: tools.groupId
+      inputParameters:
+      - name: groupId
+        type: string
+        description: Group ID under which we wish to retrieve children groups
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcasetemplateforgroup
+      description: London Stock Exchange Group Get the CaseTemplate for the given Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getcasetemplateforgroup
+      with:
+        groupId: tools.groupId
+      inputParameters:
+      - name: groupId
+        type: string
+        description: Group ID under which we wish to manage Cases and perform screening
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getresolutiontoolkitforgroup
+      description: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getresolutiontoolkitforgroup
+      with:
+        groupId: tools.groupId
+      inputParameters:
+      - name: groupId
+        type: string
+        description: ID of the Group to which the resolution toolkit belongs.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getresolutiontoolkitsforgroup
+      description: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getresolutiontoolkitsforgroup
+      with:
+        groupId: tools.groupId
+      inputParameters:
+      - name: groupId
+        type: string
+        description: ID of the Group to which the resolution toolkits belong.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getresolutiontoolkitforgroupwithprovidertype
+      description: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getresolutiontoolkitforgroupwithprovidertype
+      with:
+        groupId: tools.groupId
+        providerType: tools.providerType
+      inputParameters:
+      - name: groupId
+        type: string
+        description: ID of the Group to which the resolution toolkit belongs.
+        required: true
+      - name: providerType
+        type: string
+        description: Provider type for which the resolution toolkit applies.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcasereference
+      description: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getcasereference
+      with:
+        caseId: tools.caseId
+      inputParameters:
+      - name: caseId
+        type: string
+        description: Case ID provided by the client or else generated by the system for the client
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: savecase
+      description: London Stock Exchange Group Create a new case
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.savecase
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: screen
+      description: London Stock Exchange Group Perform synchronous screening for a new case
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.screen
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updateexistingcase
+      description: London Stock Exchange Group Update an existing Case by its caseSystemId
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.updateexistingcase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: partialupdatecase
+      description: London Stock Exchange Group Partial update an existing Case by its caseSystemId
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.partialupdatecase
+      with:
+        caseSystemId: tools.caseSystemId
+        screen: tools.screen
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      - name: screen
+        type: string
+        description: Screen mode
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcase
+      description: London Stock Exchange Group Fetch Full Case Details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getcase
+      with:
+        caseSystemId: tools.caseSystemId
+        aggregatedSummary: tools.aggregatedSummary
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      - name: aggregatedSummary
+        type: string
+        description: Flag to enable aggregated summary for case
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletecase
+      description: London Stock Exchange Group Delete a Case
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.deletecase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: screencase
+      description: London Stock Exchange Group Request full or delta screening for an existing Case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.screencase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: enableongoingscreening
+      description: London Stock Exchange Group Enable OGS for a Case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.enableongoingscreening
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: disableongoingscreening
+      description: London Stock Exchange Group Disable OGS for a Case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.disableongoingscreening
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: archivecase
+      description: London Stock Exchange Group Archive a Case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.archivecase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: unarchive
+      description: London Stock Exchange Group Unarchive a Case
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.unarchive
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: archivecases
+      description: London Stock Exchange Group Bulk Update Archive States
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.archivecases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: assigncases
+      description: London Stock Exchange Group Bulk Update Case Assignments
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.assigncases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletecases
+      description: London Stock Exchange Group Bulk Delete Cases
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.deletecases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updatecasesowner
+      description: London Stock Exchange Group Bulk Move Cases Between Groups
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.updatecasesowner
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: toggleongoingscreeningbyprovidertypes
+      description: London Stock Exchange Group Bulk Update Ongoing Screening States
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.toggleongoingscreeningbyprovidertypes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: linkcases
+      description: London Stock Exchange Group Bulk Update Case Links
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.linkcases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getresults
+      description: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getresults
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for a Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: reviewresults
+      description: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.reviewresults
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resolveresults
+      description: London Stock Exchange Group Resolves a list of results.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.resolveresults
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcaseauditeventsbycasesystemid
+      description: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.getcaseauditeventsbycasesystemid
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrievecaseauditevent
+      description: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case
+        identified by the given 'caseSystemId'.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.retrievecaseauditevent
+      with:
+        caseSystemId: tools.caseSystemId
+        auditEventId: tools.auditEventId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      - name: auditEventId
+        type: string
+        description: ID of the audit event.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getongoingscreeningupdates
+      description: London Stock Exchange Group Get ongoing screening updates.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.getongoingscreeningupdates
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: assigncase
+      description: London Stock Exchange Group Assign the Case to a User.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.assigncase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: unassigncase
+      description: London Stock Exchange Group Unassign a Case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.unassigncase
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: searchcases
+      description: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.searchcases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrievecasesummaries
+      description: London Stock Exchange Group User activity monitoring. Initial request.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.retrievecasesummaries
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: scrollcasesummaries
+      description: London Stock Exchange Group User activity monitoring. Subsequent request.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.scrollcasesummaries
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getmediacheckdetails
+      description: London Stock Exchange Group Retrieve MediaCheck results
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.getmediacheckdetails
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for a Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getmediacheckarticlesmetadata
+      description: London Stock Exchange Group Retrieve article metadata by the article IDs
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.getmediacheckarticlesmetadata
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getmediachecksinglearticlemetadata
+      description: London Stock Exchange Group Retrieve article metadata by the article ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getmediachecksinglearticlemetadata
+      with:
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      - name: articleId
+        type: string
+        description: MediaCheck news article ID
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getmediacheckresultscontent
+      description: London Stock Exchange Group Retrieve MediaCheck news articles content
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.getmediacheckresultscontent
+      with:
+        caseSystemId: tools.caseSystemId
+        enableHighlight: tools.enableHighlight
+        context: tools.context
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      - name: enableHighlight
+        type: string
+        description: Flag to enable terms highlight
+      - name: context
+        type: string
+        description: Terms to highlight
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getsinglearticlemediacheckcontent
+      description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getsinglearticlemediacheckcontent
+      with:
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+        enableHighlight: tools.enableHighlight
+        context: tools.context
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case
+        required: true
+      - name: articleId
+        type: string
+        description: MediaCheck news article ID
+        required: true
+      - name: enableHighlight
+        type: string
+        description: Flag to enable terms highlight
+      - name: context
+        type: string
+        description: Terms to highlight
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: updatearticlesrevieweddate
+      description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.updatearticlesrevieweddate
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: attacharticles
+      description: London Stock Exchange Group Attach articles to a case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.attacharticles
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrievearticles
+      description: London Stock Exchange Group Retrieve all articles attached to the case.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.retrievearticles
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: detacharticles
+      description: London Stock Exchange Group Detach articles from a case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.detacharticles
+      with:
+        caseSystemId: tools.caseSystemId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: detacharticle
+      description: London Stock Exchange Group Detach single article from a case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: london-stock-exchange-group.detacharticle
+      with:
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+      inputParameters:
+      - name: caseSystemId
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      - name: articleId
+        type: string
+        description: MediaCheck news article ID.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: saveandscreencases
+      description: London Stock Exchange Group Save and screen multiple cases.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.saveandscreencases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: screeningstatus
+      description: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.screeningstatus
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcountries
+      description: London Stock Exchange Group Get Map of country codes and country names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getcountries
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getnationalities
+      description: London Stock Exchange Group Get Map of nationality codes and nationality names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getnationalities
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getproviders
+      description: London Stock Exchange Group Get a list of available providers and their sources.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getproviders
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-reference-identitydocumentlocationtypes
+      description: London Stock Exchange Group Get identity document location types data set definition.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.get-reference-identitydocumentlocationtypes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getsearchfilters
+      description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getsearchfilters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getprofile
+      description: London Stock Exchange Group Get a profile by its ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getprofile
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: id
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getrecord
+      description: London Stock Exchange Group Get a record by its ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getrecord
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Record identifier.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieveprofilepepdetails
+      description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.retrieveprofilepepdetails
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Profile identifier.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrievepepdetails
+      description: London Stock Exchange Group Retrieves PEP details by the given record ID
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.retrievepepdetails
+      with:
+        id: tools.id
+      inputParameters:
+      - name: id
+        type: string
+        description: Record identifier.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: createorupdateprovidersource
+      description: London Stock Exchange Group Create or update a provider source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.createorupdateprovidersource
+      with:
+        identifier: tools.identifier
+      inputParameters:
+      - name: identifier
+        type: string
+        description: Unique identifier for this provider source. Has to be alphanumeric.
+        required: true
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: savewatchlist
+      description: London Stock Exchange Group Maintain your Watchlist data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: london-stock-exchange-group.savewatchlist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getusers
+      description: London Stock Exchange Group Get a list of active users in the client's account.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: london-stock-exchange-group.getusers
+      outputParameters:
+      - type: object
+        mapping: $.
