@@ -1,0 +1,224 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Reporting
+  description: 'London Stock Exchange Group LSEG World-Check One API — Reporting. 3 operations. Lead operation: London Stock
+    Exchange Group Submit request for async report based on the given filter conditions and return the ''reportId''.. Self-contained
+    Naftiko capability covering one London Stock Exchange Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Reporting
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-reporting
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Reporting business capability. Self-contained, no
+      shared references.
+    resources:
+    - name: reports
+      path: /reports
+      operations:
+      - name: submitrequestforasyncreport
+        method: POST
+        description: London Stock Exchange Group Submit request for async report based on the given filter conditions and
+          return the 'reportId'.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json').
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes).
+          required: true
+        - name: asyncReportRequest
+          in: body
+          type: string
+          description: The payload for async report request.
+    - name: reports-reportId
+      path: /reports/{reportId}
+      operations:
+      - name: getreportdatabyreportid
+        method: GET
+        description: London Stock Exchange Group Download the report for given report ID.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+        - name: reportId
+          in: path
+          type: string
+          description: Report ID for which the report needs to be fetched.
+          required: true
+    - name: reports-reportId-status
+      path: /reports/{reportId}/status
+      operations:
+      - name: getsinglereportstatusbyreportid
+        method: GET
+        description: London Stock Exchange Group Get the report status for the given report ID.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+        - name: reportId
+          in: path
+          type: string
+          description: Report ID for which the status needs to be fetched.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-reporting-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Reporting. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/reports
+      name: reports
+      description: REST surface for reports.
+      operations:
+      - method: POST
+        name: submitrequestforasyncreport
+        description: London Stock Exchange Group Submit request for async report based on the given filter conditions and
+          return the 'reportId'.
+        call: lseg-world-check-one-reporting.submitrequestforasyncreport
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          asyncReportRequest: rest.asyncReportRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reports/{reportid}
+      name: reports-reportid
+      description: REST surface for reports-reportId.
+      operations:
+      - method: GET
+        name: getreportdatabyreportid
+        description: London Stock Exchange Group Download the report for given report ID.
+        call: lseg-world-check-one-reporting.getreportdatabyreportid
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          reportId: rest.reportId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reports/{reportid}/status
+      name: reports-reportid-status
+      description: REST surface for reports-reportId-status.
+      operations:
+      - method: GET
+        name: getsinglereportstatusbyreportid
+        description: London Stock Exchange Group Get the report status for the given report ID.
+        call: lseg-world-check-one-reporting.getsinglereportstatusbyreportid
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          reportId: rest.reportId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-reporting-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Reporting. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-submit
+      description: London Stock Exchange Group Submit request for async report based on the given filter conditions and return
+        the 'reportId'.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-reporting.submitrequestforasyncreport
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        asyncReportRequest: tools.asyncReportRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-download
+      description: London Stock Exchange Group Download the report for given report ID.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reporting.getreportdatabyreportid
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        reportId: tools.reportId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get
+      description: London Stock Exchange Group Get the report status for the given report ID.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reporting.getsinglereportstatusbyreportid
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        reportId: tools.reportId
+      outputParameters:
+      - type: object
+        mapping: $.

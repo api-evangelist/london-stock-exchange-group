@@ -1,0 +1,278 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Linked-Cases
+  description: 'London Stock Exchange Group LSEG World-Check One API — Linked-Cases. 3 operations. Lead operation: London
+    Stock Exchange Group Retrieve the list of case relationships. Self-contained Naftiko capability covering one London Stock
+    Exchange Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Linked-Cases
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-linked-cases
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Linked-Cases business capability. Self-contained,
+      no shared references.
+    resources:
+    - name: cases-caseSystemId-relationship-relationshipType
+      path: /cases/{caseSystemId}/relationship/{relationshipType}
+      operations:
+      - name: getrelationshipidentifiers
+        method: POST
+        description: London Stock Exchange Group Retrieve the list of case relationships
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for a Case
+          required: true
+        - name: relationshipType
+          in: path
+          type: array
+          description: Relationship type between cases. Multiple comma separated values allowed
+          required: true
+        - name: caseRelationshipRequest
+          in: body
+          type: string
+          description: Request containing pagination to list case relationships.
+          required: true
+      - name: linkingcases
+        method: PUT
+        description: London Stock Exchange Group Create links between cases
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for a case.
+          required: true
+        - name: relationshipType
+          in: path
+          type: string
+          description: Relationship type between cases.
+          required: true
+        - name: linkedCasesRequest
+          in: body
+          type: string
+          description: Related case system IDs.
+          required: true
+      - name: unlinkingcases
+        method: DELETE
+        description: London Stock Exchange Group Delete links between cases
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for a Case.
+          required: true
+        - name: relationshipType
+          in: path
+          type: string
+          description: Relationship type between cases.
+          required: true
+        - name: linkedCasesRequest
+          in: body
+          type: string
+          description: Related case system IDs.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-linked-cases-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Linked-Cases. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/cases/{casesystemid}/relationship/{relationshiptype}
+      name: cases-casesystemid-relationship-relationshiptype
+      description: REST surface for cases-caseSystemId-relationship-relationshipType.
+      operations:
+      - method: POST
+        name: getrelationshipidentifiers
+        description: London Stock Exchange Group Retrieve the list of case relationships
+        call: lseg-world-check-one-linked-cases.getrelationshipidentifiers
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          relationshipType: rest.relationshipType
+          caseRelationshipRequest: rest.caseRelationshipRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: linkingcases
+        description: London Stock Exchange Group Create links between cases
+        call: lseg-world-check-one-linked-cases.linkingcases
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          relationshipType: rest.relationshipType
+          linkedCasesRequest: rest.linkedCasesRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: unlinkingcases
+        description: London Stock Exchange Group Delete links between cases
+        call: lseg-world-check-one-linked-cases.unlinkingcases
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          relationshipType: rest.relationshipType
+          linkedCasesRequest: rest.linkedCasesRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-linked-cases-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Linked-Cases. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-retrieve
+      description: London Stock Exchange Group Retrieve the list of case relationships
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-linked-cases.getrelationshipidentifiers
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        relationshipType: tools.relationshipType
+        caseRelationshipRequest: tools.caseRelationshipRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-create
+      description: London Stock Exchange Group Create links between cases
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-linked-cases.linkingcases
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        relationshipType: tools.relationshipType
+        linkedCasesRequest: tools.linkedCasesRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-delete
+      description: London Stock Exchange Group Delete links between cases
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: lseg-world-check-one-linked-cases.unlinkingcases
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        relationshipType: tools.relationshipType
+        linkedCasesRequest: tools.linkedCasesRequest
+      outputParameters:
+      - type: object
+        mapping: $.

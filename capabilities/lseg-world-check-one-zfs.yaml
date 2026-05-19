@@ -1,0 +1,528 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Zfs
+  description: 'London Stock Exchange Group LSEG World-Check One API — Zfs. 8 operations. Lead operation: London Stock Exchange
+    Group Perform synchronous screening for a new case. Self-contained Naftiko capability covering one London Stock Exchange
+    Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Zfs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-zfs
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Zfs business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: cases-screeningRequest
+      path: /cases/screeningRequest
+      operations:
+      - name: screen
+        method: POST
+        description: London Stock Exchange Group Perform synchronous screening for a new case
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: screeningRequest
+          in: body
+          type: string
+          description: Screening Request
+          required: true
+    - name: groups
+      path: /groups
+      operations:
+      - name: getgroups
+        method: GET
+        description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+    - name: groups-groupId
+      path: /groups/{groupId}
+      operations:
+      - name: getgroupbyid
+        method: GET
+        description: London Stock Exchange Group Get a specified group including its immediate descendants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: groupId
+          in: path
+          type: string
+          description: Group ID under which we wish to retrieve children groups
+          required: true
+    - name: groups-groupId-caseTemplate
+      path: /groups/{groupId}/caseTemplate
+      operations:
+      - name: getcasetemplateforgroup
+        method: GET
+        description: London Stock Exchange Group Get the CaseTemplate for the given Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: groupId
+          in: path
+          type: string
+          description: Group ID under which we wish to manage Cases and perform screening
+          required: true
+    - name: reference-countries
+      path: /reference/countries
+      operations:
+      - name: getcountries
+        method: GET
+        description: London Stock Exchange Group Get Map of country codes and country names
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+    - name: reference-providers-sources-identifier
+      path: /reference/providers/sources/{identifier}
+      operations:
+      - name: createorupdateprovidersource
+        method: PUT
+        description: London Stock Exchange Group Create or update a provider source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: identifier
+          in: path
+          type: string
+          description: Unique identifier for this provider source. Has to be alphanumeric.
+          required: true
+        - name: providerSource
+          in: body
+          type: string
+          description: Provider source details
+          required: true
+    - name: reference-records-id
+      path: /reference/records/{id}
+      operations:
+      - name: getrecord
+        method: GET
+        description: London Stock Exchange Group Get a record by its ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Record identifier.
+          required: true
+    - name: reference-watchlist
+      path: /reference/watchlist
+      operations:
+      - name: savewatchlist
+        method: POST
+        description: London Stock Exchange Group Maintain your Watchlist data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: watchlistDataSet
+          in: body
+          type: string
+          description: A collection of maintenance actions to be performed on your Watchlist.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-zfs-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Zfs. One Spectral-compliant resource
+      per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/cases/screeningrequest
+      name: cases-screeningrequest
+      description: REST surface for cases-screeningRequest.
+      operations:
+      - method: POST
+        name: screen
+        description: London Stock Exchange Group Perform synchronous screening for a new case
+        call: lseg-world-check-one-zfs.screen
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          screeningRequest: rest.screeningRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/groups
+      name: groups
+      description: REST surface for groups.
+      operations:
+      - method: GET
+        name: getgroups
+        description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+        call: lseg-world-check-one-zfs.getgroups
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/groups/{groupid}
+      name: groups-groupid
+      description: REST surface for groups-groupId.
+      operations:
+      - method: GET
+        name: getgroupbyid
+        description: London Stock Exchange Group Get a specified group including its immediate descendants
+        call: lseg-world-check-one-zfs.getgroupbyid
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/groups/{groupid}/casetemplate
+      name: groups-groupid-casetemplate
+      description: REST surface for groups-groupId-caseTemplate.
+      operations:
+      - method: GET
+        name: getcasetemplateforgroup
+        description: London Stock Exchange Group Get the CaseTemplate for the given Group
+        call: lseg-world-check-one-zfs.getcasetemplateforgroup
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          groupId: rest.groupId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/countries
+      name: reference-countries
+      description: REST surface for reference-countries.
+      operations:
+      - method: GET
+        name: getcountries
+        description: London Stock Exchange Group Get Map of country codes and country names
+        call: lseg-world-check-one-zfs.getcountries
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/providers/sources/{identifier}
+      name: reference-providers-sources-identifier
+      description: REST surface for reference-providers-sources-identifier.
+      operations:
+      - method: PUT
+        name: createorupdateprovidersource
+        description: London Stock Exchange Group Create or update a provider source
+        call: lseg-world-check-one-zfs.createorupdateprovidersource
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          identifier: rest.identifier
+          providerSource: rest.providerSource
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/records/{id}
+      name: reference-records-id
+      description: REST surface for reference-records-id.
+      operations:
+      - method: GET
+        name: getrecord
+        description: London Stock Exchange Group Get a record by its ID
+        call: lseg-world-check-one-zfs.getrecord
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/watchlist
+      name: reference-watchlist
+      description: REST surface for reference-watchlist.
+      operations:
+      - method: POST
+        name: savewatchlist
+        description: London Stock Exchange Group Maintain your Watchlist data
+        call: lseg-world-check-one-zfs.savewatchlist
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          watchlistDataSet: rest.watchlistDataSet
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-zfs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Zfs. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-perform
+      description: London Stock Exchange Group Perform synchronous screening for a new case
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-zfs.screen
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        screeningRequest: tools.screeningRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get
+      description: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.getgroups
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-2
+      description: London Stock Exchange Group Get a specified group including its immediate descendants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.getgroupbyid
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        groupId: tools.groupId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-3
+      description: London Stock Exchange Group Get the CaseTemplate for the given Group
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.getcasetemplateforgroup
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        groupId: tools.groupId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-4
+      description: London Stock Exchange Group Get Map of country codes and country names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.getcountries
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-create
+      description: London Stock Exchange Group Create or update a provider source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.createorupdateprovidersource
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        identifier: tools.identifier
+        providerSource: tools.providerSource
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-5
+      description: London Stock Exchange Group Get a record by its ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-zfs.getrecord
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-maintain
+      description: London Stock Exchange Group Maintain your Watchlist data
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-zfs.savewatchlist
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        watchlistDataSet: tools.watchlistDataSet
+      outputParameters:
+      - type: object
+        mapping: $.

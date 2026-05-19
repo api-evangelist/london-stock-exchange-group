@@ -1,0 +1,906 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Media-Check
+  description: 'London Stock Exchange Group LSEG World-Check One API — Media-Check. 12 operations. Lead operation: London
+    Stock Exchange Group Retrieve MediaCheck results. Self-contained Naftiko capability covering one London Stock Exchange
+    Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Media-Check
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-media-check
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Media-Check business capability. Self-contained, no
+      shared references.
+    resources:
+    - name: cases-caseSystemId-mediacheck-results
+      path: /cases/{caseSystemId}/mediacheck/results
+      operations:
+      - name: getmediacheckdetails
+        method: POST
+        description: London Stock Exchange Group Retrieve MediaCheck results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: Accept-Language
+          in: header
+          type: string
+          description: 'A value that identifies GUI language for the request. The response will be provided in the selected
+            GUI language where available, otherwise it will be returned '
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for a Case.
+          required: true
+        - name: request
+          in: body
+          type: string
+          description: A request to retrieve the news results.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-attach
+      path: /cases/{caseSystemId}/mediacheck/results/attach
+      operations:
+      - name: attacharticles
+        method: PUT
+        description: London Stock Exchange Group Attach articles to a case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case.
+          required: true
+        - name: articleAttachment
+          in: body
+          type: string
+          description: Articles attachment.
+          required: true
+      - name: retrievearticles
+        method: GET
+        description: London Stock Exchange Group Retrieve all articles attached to the case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case.
+          required: true
+      - name: detacharticles
+        method: DELETE
+        description: London Stock Exchange Group Detach articles from a case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case.
+          required: true
+        - name: articleDetachment
+          in: body
+          type: string
+          description: Articles detachment.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-content
+      path: /cases/{caseSystemId}/mediacheck/results/content
+      operations:
+      - name: getmediacheckresultscontent
+        method: POST
+        description: London Stock Exchange Group Retrieve MediaCheck news articles content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case
+          required: true
+        - name: request
+          in: body
+          type: string
+          description: Request to retrieve MediaCheck new articles content.
+          required: true
+        - name: enableHighlight
+          in: query
+          type: boolean
+          description: Flag to enable terms highlight
+        - name: context
+          in: query
+          type: string
+          description: Terms to highlight
+    - name: cases-caseSystemId-mediacheck-results-duplicates
+      path: /cases/{caseSystemId}/mediacheck/results/duplicates
+      operations:
+      - name: retrievemediacheckduplicates
+        method: POST
+        description: London Stock Exchange Group Retrieve MediaCheck article duplicates.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: Accept-Language
+          in: header
+          type: string
+          description: 'A value that identifies GUI language for the request. The response will be provided in the selected
+            GUI language where available, otherwise it will be returned '
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for a Case.
+          required: true
+        - name: deduplicationRequest
+          in: body
+          type: string
+          description: Request containing data to retrieve article duplicates.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-metadata
+      path: /cases/{caseSystemId}/mediacheck/results/metadata
+      operations:
+      - name: getmediacheckarticlesmetadata
+        method: POST
+        description: London Stock Exchange Group Retrieve article metadata by the article IDs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case
+          required: true
+        - name: metadataRequest
+          in: body
+          type: string
+          description: Collection of Article IDs.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-review
+      path: /cases/{caseSystemId}/mediacheck/results/review
+      operations:
+      - name: updatearticlesrevieweddate
+        method: PUT
+        description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-articleId-attach
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/attach
+      operations:
+      - name: detacharticle
+        method: DELETE
+        description: London Stock Exchange Group Detach single article from a case.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case.
+          required: true
+        - name: articleId
+          in: path
+          type: string
+          description: MediaCheck news article ID.
+          required: true
+    - name: cases-caseSystemId-mediacheck-results-articleId-content
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/content
+      operations:
+      - name: getsinglearticlemediacheckcontent
+        method: GET
+        description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case
+          required: true
+        - name: articleId
+          in: path
+          type: string
+          description: MediaCheck news article ID
+          required: true
+        - name: enableHighlight
+          in: query
+          type: boolean
+          description: Flag to enable terms highlight
+        - name: context
+          in: query
+          type: string
+          description: Terms to highlight
+    - name: cases-caseSystemId-mediacheck-results-articleId-metadata
+      path: /cases/{caseSystemId}/mediacheck/results/{articleId}/metadata
+      operations:
+      - name: getmediachecksinglearticlemetadata
+        method: GET
+        description: London Stock Exchange Group Retrieve article metadata by the article ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Accept-Language
+          in: header
+          type: string
+          description: A value that identifies UI language for request. The response will be provided in the selected UI language
+            where available, otherwise it will be returned in Eng
+        - name: caseSystemId
+          in: path
+          type: string
+          description: System generated ID for the Case
+          required: true
+        - name: articleId
+          in: path
+          type: string
+          description: MediaCheck news article ID
+          required: true
+    - name: mediacheck-risks
+      path: /mediacheck/risks
+      operations:
+      - name: getmediacheckrisks
+        method: GET
+        description: London Stock Exchange Group Retrieve mediacheck risk definitions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-media-check-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Media-Check. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/cases/{casesystemid}/mediacheck/results
+      name: cases-casesystemid-mediacheck-results
+      description: REST surface for cases-caseSystemId-mediacheck-results.
+      operations:
+      - method: POST
+        name: getmediacheckdetails
+        description: London Stock Exchange Group Retrieve MediaCheck results
+        call: lseg-world-check-one-media-check.getmediacheckdetails
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          Accept-Language: rest.Accept-Language
+          caseSystemId: rest.caseSystemId
+          request: rest.request
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/attach
+      name: cases-casesystemid-mediacheck-results-attach
+      description: REST surface for cases-caseSystemId-mediacheck-results-attach.
+      operations:
+      - method: PUT
+        name: attacharticles
+        description: London Stock Exchange Group Attach articles to a case.
+        call: lseg-world-check-one-media-check.attacharticles
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          articleAttachment: rest.articleAttachment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: retrievearticles
+        description: London Stock Exchange Group Retrieve all articles attached to the case.
+        call: lseg-world-check-one-media-check.retrievearticles
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Accept-Language: rest.Accept-Language
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: detacharticles
+        description: London Stock Exchange Group Detach articles from a case.
+        call: lseg-world-check-one-media-check.detacharticles
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          articleDetachment: rest.articleDetachment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/content
+      name: cases-casesystemid-mediacheck-results-content
+      description: REST surface for cases-caseSystemId-mediacheck-results-content.
+      operations:
+      - method: POST
+        name: getmediacheckresultscontent
+        description: London Stock Exchange Group Retrieve MediaCheck news articles content
+        call: lseg-world-check-one-media-check.getmediacheckresultscontent
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          caseSystemId: rest.caseSystemId
+          request: rest.request
+          enableHighlight: rest.enableHighlight
+          context: rest.context
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/duplicates
+      name: cases-casesystemid-mediacheck-results-duplicates
+      description: REST surface for cases-caseSystemId-mediacheck-results-duplicates.
+      operations:
+      - method: POST
+        name: retrievemediacheckduplicates
+        description: London Stock Exchange Group Retrieve MediaCheck article duplicates.
+        call: lseg-world-check-one-media-check.retrievemediacheckduplicates
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          Accept-Language: rest.Accept-Language
+          caseSystemId: rest.caseSystemId
+          deduplicationRequest: rest.deduplicationRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/metadata
+      name: cases-casesystemid-mediacheck-results-metadata
+      description: REST surface for cases-caseSystemId-mediacheck-results-metadata.
+      operations:
+      - method: POST
+        name: getmediacheckarticlesmetadata
+        description: London Stock Exchange Group Retrieve article metadata by the article IDs
+        call: lseg-world-check-one-media-check.getmediacheckarticlesmetadata
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          Accept-Language: rest.Accept-Language
+          caseSystemId: rest.caseSystemId
+          metadataRequest: rest.metadataRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/review
+      name: cases-casesystemid-mediacheck-results-review
+      description: REST surface for cases-caseSystemId-mediacheck-results-review.
+      operations:
+      - method: PUT
+        name: updatearticlesrevieweddate
+        description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+        call: lseg-world-check-one-media-check.updatearticlesrevieweddate
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          caseSystemId: rest.caseSystemId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/{articleid}/attach
+      name: cases-casesystemid-mediacheck-results-articleid-attach
+      description: REST surface for cases-caseSystemId-mediacheck-results-articleId-attach.
+      operations:
+      - method: DELETE
+        name: detacharticle
+        description: London Stock Exchange Group Detach single article from a case.
+        call: lseg-world-check-one-media-check.detacharticle
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/{articleid}/content
+      name: cases-casesystemid-mediacheck-results-articleid-content
+      description: REST surface for cases-caseSystemId-mediacheck-results-articleId-content.
+      operations:
+      - method: GET
+        name: getsinglearticlemediacheckcontent
+        description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+        call: lseg-world-check-one-media-check.getsinglearticlemediacheckcontent
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+          enableHighlight: rest.enableHighlight
+          context: rest.context
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/cases/{casesystemid}/mediacheck/results/{articleid}/metadata
+      name: cases-casesystemid-mediacheck-results-articleid-metadata
+      description: REST surface for cases-caseSystemId-mediacheck-results-articleId-metadata.
+      operations:
+      - method: GET
+        name: getmediachecksinglearticlemetadata
+        description: London Stock Exchange Group Retrieve article metadata by the article ID
+        call: lseg-world-check-one-media-check.getmediachecksinglearticlemetadata
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Accept-Language: rest.Accept-Language
+          caseSystemId: rest.caseSystemId
+          articleId: rest.articleId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/mediacheck/risks
+      name: mediacheck-risks
+      description: REST surface for mediacheck-risks.
+      operations:
+      - method: GET
+        name: getmediacheckrisks
+        description: London Stock Exchange Group Retrieve mediacheck risk definitions
+        call: lseg-world-check-one-media-check.getmediacheckrisks
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-media-check-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Media-Check. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-retrieve
+      description: London Stock Exchange Group Retrieve MediaCheck results
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-media-check.getmediacheckdetails
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        Accept-Language: tools.Accept-Language
+        caseSystemId: tools.caseSystemId
+        request: tools.request
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-attach
+      description: London Stock Exchange Group Attach articles to a case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.attacharticles
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        articleAttachment: tools.articleAttachment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-2
+      description: London Stock Exchange Group Retrieve all articles attached to the case.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.retrievearticles
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Accept-Language: tools.Accept-Language
+        caseSystemId: tools.caseSystemId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-detach
+      description: London Stock Exchange Group Detach articles from a case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: lseg-world-check-one-media-check.detacharticles
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        articleDetachment: tools.articleDetachment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-3
+      description: London Stock Exchange Group Retrieve MediaCheck news articles content
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-media-check.getmediacheckresultscontent
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        caseSystemId: tools.caseSystemId
+        request: tools.request
+        enableHighlight: tools.enableHighlight
+        context: tools.context
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-4
+      description: London Stock Exchange Group Retrieve MediaCheck article duplicates.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-media-check.retrievemediacheckduplicates
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        Accept-Language: tools.Accept-Language
+        caseSystemId: tools.caseSystemId
+        deduplicationRequest: tools.deduplicationRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-5
+      description: London Stock Exchange Group Retrieve article metadata by the article IDs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-media-check.getmediacheckarticlesmetadata
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        Accept-Language: tools.Accept-Language
+        caseSystemId: tools.caseSystemId
+        metadataRequest: tools.metadataRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-mark
+      description: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.updatearticlesrevieweddate
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        caseSystemId: tools.caseSystemId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-detach-2
+      description: London Stock Exchange Group Detach single article from a case.
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: lseg-world-check-one-media-check.detacharticle
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-6
+      description: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.getsinglearticlemediacheckcontent
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+        enableHighlight: tools.enableHighlight
+        context: tools.context
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-7
+      description: London Stock Exchange Group Retrieve article metadata by the article ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.getmediachecksinglearticlemetadata
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Accept-Language: tools.Accept-Language
+        caseSystemId: tools.caseSystemId
+        articleId: tools.articleId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieve-8
+      description: London Stock Exchange Group Retrieve mediacheck risk definitions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-media-check.getmediacheckrisks
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.

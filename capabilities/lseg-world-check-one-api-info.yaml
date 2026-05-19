@@ -1,0 +1,87 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Api-Info
+  description: 'London Stock Exchange Group LSEG World-Check One API — Api-Info. 1 operations. Lead operation: London Stock
+    Exchange Group Get information about the Public API.. Self-contained Naftiko capability covering one London Stock Exchange
+    Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Api-Info
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-api-info
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Api-Info business capability. Self-contained, no shared
+      references.
+    resources:
+    - name: apiInfo
+      path: /apiInfo
+      operations:
+      - name: getapiinfo
+        method: GET
+        description: London Stock Exchange Group Get information about the Public API.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-api-info-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Api-Info. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/apiinfo
+      name: apiinfo
+      description: REST surface for apiInfo.
+      operations:
+      - method: GET
+        name: getapiinfo
+        description: London Stock Exchange Group Get information about the Public API.
+        call: lseg-world-check-one-api-info.getapiinfo
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-api-info-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Api-Info. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-get
+      description: London Stock Exchange Group Get information about the Public API.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-api-info.getapiinfo
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,108 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Passport-Check
+  description: 'London Stock Exchange Group LSEG World-Check One API — Passport-Check. 1 operations. Lead operation: London
+    Stock Exchange Group Generates MRZ data. Self-contained Naftiko capability covering one London Stock Exchange Group business
+    surface.'
+  tags:
+  - London Stock Exchange Group
+  - Passport-Check
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-passport-check
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Passport-Check business capability. Self-contained,
+      no shared references.
+    resources:
+    - name: passportcheck-mrz
+      path: /passportcheck/mrz
+      operations:
+      - name: getmrzdata
+        method: POST
+        description: London Stock Exchange Group Generates MRZ data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: mrzGenerationRequest
+          in: body
+          type: string
+          description: Object containing data for generation of MRZ
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-passport-check-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Passport-Check. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/passportcheck/mrz
+      name: passportcheck-mrz
+      description: REST surface for passportcheck-mrz.
+      operations:
+      - method: POST
+        name: getmrzdata
+        description: London Stock Exchange Group Generates MRZ data
+        call: lseg-world-check-one-passport-check.getmrzdata
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          mrzGenerationRequest: rest.mrzGenerationRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-passport-check-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Passport-Check. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-generates
+      description: London Stock Exchange Group Generates MRZ data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-passport-check.getmrzdata
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        mrzGenerationRequest: tools.mrzGenerationRequest
+      outputParameters:
+      - type: object
+        mapping: $.

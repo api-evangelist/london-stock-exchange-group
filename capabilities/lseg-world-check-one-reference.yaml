@@ -1,0 +1,536 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Reference
+  description: 'London Stock Exchange Group LSEG World-Check One API — Reference. 9 operations. Lead operation: London Stock
+    Exchange Group Get Map of country codes and country names. Self-contained Naftiko capability covering one London Stock
+    Exchange Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Reference
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-reference
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Reference business capability. Self-contained, no
+      shared references.
+    resources:
+    - name: reference-countries
+      path: /reference/countries
+      operations:
+      - name: getcountries
+        method: GET
+        description: London Stock Exchange Group Get Map of country codes and country names
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+    - name: reference-identityDocumentLocationTypes
+      path: /reference/identityDocumentLocationTypes
+      operations:
+      - name: get
+        method: GET
+        description: London Stock Exchange Group Get identity document location types data set definition.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reference-nationalities
+      path: /reference/nationalities
+      operations:
+      - name: getnationalities
+        method: GET
+        description: London Stock Exchange Group Get Map of nationality codes and nationality names
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+    - name: reference-profile-id
+      path: /reference/profile/{id}
+      operations:
+      - name: getprofile
+        method: GET
+        description: London Stock Exchange Group Get a profile by its ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+    - name: reference-profile-id-pep
+      path: /reference/profile/{id}/pep
+      operations:
+      - name: retrieveprofilepepdetails
+        method: POST
+        description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Profile identifier.
+          required: true
+        - name: pepDetailsRequest
+          in: body
+          type: string
+          description: Defines the sort order for retrieved PEP roles details.
+    - name: reference-providers
+      path: /reference/providers
+      operations:
+      - name: getproviders
+        method: GET
+        description: London Stock Exchange Group Get a list of available providers and their sources.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+    - name: reference-records-id
+      path: /reference/records/{id}
+      operations:
+      - name: getrecord
+        method: GET
+        description: London Stock Exchange Group Get a record by its ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Record identifier.
+          required: true
+    - name: reference-records-id-pep
+      path: /reference/records/{id}/pep
+      operations:
+      - name: retrievepepdetails
+        method: POST
+        description: London Stock Exchange Group Retrieves PEP details by the given record ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Record identifier.
+          required: true
+        - name: pepDetailsRequest
+          in: body
+          type: string
+          description: Defines the sort order for retrieved PEP roles details.
+    - name: reference-searchFilters
+      path: /reference/searchFilters
+      operations:
+      - name: getsearchfilters
+        method: GET
+        description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-reference-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Reference. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/reference/countries
+      name: reference-countries
+      description: REST surface for reference-countries.
+      operations:
+      - method: GET
+        name: getcountries
+        description: London Stock Exchange Group Get Map of country codes and country names
+        call: lseg-world-check-one-reference.getcountries
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/identitydocumentlocationtypes
+      name: reference-identitydocumentlocationtypes
+      description: REST surface for reference-identityDocumentLocationTypes.
+      operations:
+      - method: GET
+        name: get
+        description: London Stock Exchange Group Get identity document location types data set definition.
+        call: lseg-world-check-one-reference.get
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/nationalities
+      name: reference-nationalities
+      description: REST surface for reference-nationalities.
+      operations:
+      - method: GET
+        name: getnationalities
+        description: London Stock Exchange Group Get Map of nationality codes and nationality names
+        call: lseg-world-check-one-reference.getnationalities
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/profile/{id}
+      name: reference-profile-id
+      description: REST surface for reference-profile-id.
+      operations:
+      - method: GET
+        name: getprofile
+        description: London Stock Exchange Group Get a profile by its ID
+        call: lseg-world-check-one-reference.getprofile
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/profile/{id}/pep
+      name: reference-profile-id-pep
+      description: REST surface for reference-profile-id-pep.
+      operations:
+      - method: POST
+        name: retrieveprofilepepdetails
+        description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+        call: lseg-world-check-one-reference.retrieveprofilepepdetails
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          id: rest.id
+          pepDetailsRequest: rest.pepDetailsRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/providers
+      name: reference-providers
+      description: REST surface for reference-providers.
+      operations:
+      - method: GET
+        name: getproviders
+        description: London Stock Exchange Group Get a list of available providers and their sources.
+        call: lseg-world-check-one-reference.getproviders
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/records/{id}
+      name: reference-records-id
+      description: REST surface for reference-records-id.
+      operations:
+      - method: GET
+        name: getrecord
+        description: London Stock Exchange Group Get a record by its ID
+        call: lseg-world-check-one-reference.getrecord
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/records/{id}/pep
+      name: reference-records-id-pep
+      description: REST surface for reference-records-id-pep.
+      operations:
+      - method: POST
+        name: retrievepepdetails
+        description: London Stock Exchange Group Retrieves PEP details by the given record ID
+        call: lseg-world-check-one-reference.retrievepepdetails
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          id: rest.id
+          pepDetailsRequest: rest.pepDetailsRequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/searchfilters
+      name: reference-searchfilters
+      description: REST surface for reference-searchFilters.
+      operations:
+      - method: GET
+        name: getsearchfilters
+        description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+        call: lseg-world-check-one-reference.getsearchfilters
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-reference-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Reference. One tool per consumed operation,
+      routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-get
+      description: London Stock Exchange Group Get Map of country codes and country names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getcountries
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-2
+      description: London Stock Exchange Group Get identity document location types data set definition.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.get
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-3
+      description: London Stock Exchange Group Get Map of nationality codes and nationality names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getnationalities
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-4
+      description: London Stock Exchange Group Get a profile by its ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getprofile
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieves
+      description: London Stock Exchange Group Retrieves PEP details by the given profile ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-reference.retrieveprofilepepdetails
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        id: tools.id
+        pepDetailsRequest: tools.pepDetailsRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-5
+      description: London Stock Exchange Group Get a list of available providers and their sources.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getproviders
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-get-6
+      description: London Stock Exchange Group Get a record by its ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getrecord
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieves-2
+      description: London Stock Exchange Group Retrieves PEP details by the given record ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-reference.retrievepepdetails
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        id: tools.id
+        pepDetailsRequest: tools.pepDetailsRequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-retrieves-3
+      description: London Stock Exchange Group Retrieves all search filters that are accessible to the User.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-reference.getsearchfilters
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+      outputParameters:
+      - type: object
+        mapping: $.

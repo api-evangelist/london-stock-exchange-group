@@ -1,0 +1,186 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: London Stock Exchange Group LSEG World-Check One API — Client-Watchlist
+  description: 'London Stock Exchange Group LSEG World-Check One API — Client-Watchlist. 2 operations. Lead operation: London
+    Stock Exchange Group Create or update a provider source. Self-contained Naftiko capability covering one London Stock Exchange
+    Group business surface.'
+  tags:
+  - London Stock Exchange Group
+  - Client-Watchlist
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    LONDON_STOCK_EXCHANGE_GROUP_API_KEY: LONDON_STOCK_EXCHANGE_GROUP_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: lseg-world-check-one-client-watchlist
+    baseUri: https://api-worldcheck.refinitiv.com/v2
+    description: London Stock Exchange Group LSEG World-Check One API — Client-Watchlist business capability. Self-contained,
+      no shared references.
+    resources:
+    - name: reference-providers-sources-identifier
+      path: /reference/providers/sources/{identifier}
+      operations:
+      - name: createorupdateprovidersource
+        method: PUT
+        description: London Stock Exchange Group Create or update a provider source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: identifier
+          in: path
+          type: string
+          description: Unique identifier for this provider source. Has to be alphanumeric.
+          required: true
+        - name: providerSource
+          in: body
+          type: string
+          description: Provider source details
+          required: true
+    - name: reference-watchlist
+      path: /reference/watchlist
+      operations:
+      - name: savewatchlist
+        method: POST
+        description: London Stock Exchange Group Maintain your Watchlist data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security
+            and Authentication details' documentation section for more d
+          required: true
+        - name: Date
+          in: header
+          type: string
+          description: The date and time at which the message was originated in 'RFC 1123' format
+          required: true
+        - name: Content-Type
+          in: header
+          type: string
+          description: The media type of the request (e.g., 'application/json')
+          required: true
+        - name: Content-Length
+          in: header
+          type: integer
+          description: The length of the request body in octets (8-bit bytes)
+          required: true
+        - name: watchlistDataSet
+          in: body
+          type: string
+          description: A collection of maintenance actions to be performed on your Watchlist.
+          required: true
+  exposes:
+  - type: rest
+    namespace: lseg-world-check-one-client-watchlist-rest
+    port: 8080
+    description: REST adapter for London Stock Exchange Group LSEG World-Check One API — Client-Watchlist. One Spectral-compliant
+      resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/reference/providers/sources/{identifier}
+      name: reference-providers-sources-identifier
+      description: REST surface for reference-providers-sources-identifier.
+      operations:
+      - method: PUT
+        name: createorupdateprovidersource
+        description: London Stock Exchange Group Create or update a provider source
+        call: lseg-world-check-one-client-watchlist.createorupdateprovidersource
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          identifier: rest.identifier
+          providerSource: rest.providerSource
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reference/watchlist
+      name: reference-watchlist
+      description: REST surface for reference-watchlist.
+      operations:
+      - method: POST
+        name: savewatchlist
+        description: London Stock Exchange Group Maintain your Watchlist data
+        call: lseg-world-check-one-client-watchlist.savewatchlist
+        with:
+          Authorization: rest.Authorization
+          Date: rest.Date
+          Content-Type: rest.Content-Type
+          Content-Length: rest.Content-Length
+          watchlistDataSet: rest.watchlistDataSet
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: lseg-world-check-one-client-watchlist-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for London Stock Exchange Group LSEG World-Check One API — Client-Watchlist. One tool per consumed
+      operation, routed inline through this capability's consumes block.
+    tools:
+    - name: london-stock-exchange-group-create
+      description: London Stock Exchange Group Create or update a provider source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: lseg-world-check-one-client-watchlist.createorupdateprovidersource
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        identifier: tools.identifier
+        providerSource: tools.providerSource
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: london-stock-exchange-group-maintain
+      description: London Stock Exchange Group Maintain your Watchlist data
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: lseg-world-check-one-client-watchlist.savewatchlist
+      with:
+        Authorization: tools.Authorization
+        Date: tools.Date
+        Content-Type: tools.Content-Type
+        Content-Length: tools.Content-Length
+        watchlistDataSet: tools.watchlistDataSet
+      outputParameters:
+      - type: object
+        mapping: $.
