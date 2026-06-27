@@ -31,35 +31,35 @@ apis:
       url: https://developers.lseg.com/en/api-catalog/world-check-one/world-check-one-api
     - type: OpenAPI
       url: openapi/lseg-world-check-one-openapi-original.yml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-api-info.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-audit.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-case.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-case-rating.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-client-watchlist.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-group.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-linked-cases.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-media-check.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-passport-check.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-reference.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-reporting.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-smart-filter.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-upcoming.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-user.yaml
-    - type: NaftikoCapability
+    - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-zfs.yaml
 common:
   - type: GitHubOrganization
@@ -68,7 +68,7 @@ common:
     url: https://www.linkedin.com/company/london-stock-exchange-group
   - type: Website
     url: https://www.lseg.com/
-  - type: Developer Portal
+  - type: DeveloperPortal
     url: https://developers.lseg.com/
   - type: Documentation
     url: https://developers.lseg.com/en/api-catalog
