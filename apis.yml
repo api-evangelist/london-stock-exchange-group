@@ -62,6 +62,8 @@ apis:
     - type: X-NaftikoCapability
       url: capabilities/lseg-world-check-one-zfs.yaml
 common:
+  - type: DomainSecurity
+    url: security/london-stock-exchange-group-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/LSEG
   - type: LinkedIn
