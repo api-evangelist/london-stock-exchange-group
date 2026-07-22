@@ -1,0 +1,15 @@
+generated: '2026-06-20'
+method: generated
+skills:
+  - file: london-stock-exchange-group-screen-and-resolve.md
+    name: Screen an entity and resolve the results
+    api: openapi/london-stock-exchange-group-case-api-openapi.yml
+    operations: [getGroups, getCaseTemplateForGroup, getResolutionToolkitForGroup, saveCase, screenCase, getCase, getResults, reviewResults, resolveResults]
+  - file: london-stock-exchange-group-ongoing-screening.md
+    name: Enable ongoing screening and poll for updates
+    api: openapi/london-stock-exchange-group-case-api-openapi.yml
+    operations: [enableOngoingScreening, disableOngoingScreening, toggleOngoingScreeningByProviderTypes, getOngoingScreeningUpdates, getResults]
+  - file: london-stock-exchange-group-case-reports.md
+    name: Generate and download case reports
+    api: openapi/london-stock-exchange-group-reporting-api-openapi.yml
+    operations: [submitRequestForAsyncReport, getSingleReportStatusByReportId, getPaginatedMultipleReportStatus, getReportDataByReportId, getReportErrorDetails, cancelReportByReportId]

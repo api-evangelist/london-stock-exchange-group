@@ -1,0 +1,47 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/_original/lseg-world-check-one-openapi-original.yml + developers.lseg.com quick start
+description: >-
+  Cross-cutting request/response semantics of the LSEG World-Check One API.
+authentication:
+  style: HMAC-SHA256 signed requests (v2) or OAuth 2.0 service accounts (v3)
+  headers: [Authorization, Date]
+  detail: authentication/london-stock-exchange-group-authentication.yml
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header or documented idempotency contract; bulk endpoints are not idempotent
+pagination:
+  styles:
+    - style: request-body pagination object
+      params: [pagination.itemsPerPage, pagination.currentPage, pagination.pageReference, sort]
+      used_by: case search, MediaCheck results, audit events
+      notes: Search-style POST endpoints take a pagination object in the request body and echo it in responses
+    - style: cursor scroll
+      endpoints: [POST /cases/summaries, POST /cases/summaries/cursor]
+      notes: >-
+        Initial request returns a cursor-id; subsequent scrolling uses the
+        cursor endpoint. Cursor lifespan is 60 seconds, extended on each
+        access; expired cursors return 410 Gone.
+filtering:
+  language: FIQL
+  notes: Case search and audit-event filters accept FIQL comparison expressions with AND/OR boolean operators
+request_tracing:
+  request_id_header: null
+  notes: No documented request-id/correlation header
+versioning:
+  scheme: uri-path (v1/v2/v3)
+  detail: lifecycle/london-stock-exchange-group-lifecycle.yml
+error_envelope:
+  schema: Error (error, cause, objectId)
+  detail: errors/london-stock-exchange-group-problem-types.yml
+rate_limiting:
+  signaling: HTTP 429 declared on every operation
+  headers: []
+  notes: No documented rate-limit response headers or Retry-After; see rate-limits/london-stock-exchange-group-rate-limits.yml
+content_types:
+  request: application/json (415 returned otherwise)
+  response: application/json
+date_header:
+  required: true
+  format: RFC 1123
+  purpose: Replay protection - requests are only valid at the point in time of their Date header

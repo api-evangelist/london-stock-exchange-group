@@ -1,0 +1,91 @@
+generated: '2026-06-20'
+method: searched
+source: npm registry, PyPI, Maven Central, NuGet searches (2026-07-22)
+description: >-
+  First-party client libraries published by London Stock Exchange Group (LSEG)
+  and its Refinitiv / Data & Analytics business. LSEG ships official data-access
+  SDKs on PyPI, npm, Maven Central, and NuGet. No dedicated World-Check One
+  client library is published to a public registry; World-Check One integrations
+  use the REST API directly.
+packages:
+  - language: python
+    registry: pypi
+    name: lseg-data
+    url: https://pypi.org/project/lseg-data/
+    install: pip install lseg-data
+    version: 2.1.1
+    description: LSEG Data Library for Python - client for LSEG Data Platform APIs
+    official: true
+  - language: python
+    registry: pypi
+    name: refinitiv-data
+    url: https://pypi.org/project/refinitiv-data/
+    install: pip install refinitiv-data
+    version: 1.6.2
+    description: Refinitiv Data Library for Python (predecessor of lseg-data)
+    official: true
+  - language: python
+    registry: pypi
+    name: lseg-analytics-pricing
+    url: https://pypi.org/project/lseg-analytics-pricing/
+    install: pip install lseg-analytics-pricing
+    version: 2.1.0
+    description: LSEG Analytics (LFA) SDK for Python
+    official: true
+  - language: python
+    registry: pypi
+    name: eikon
+    url: https://pypi.org/project/eikon/
+    install: pip install eikon
+    version: 1.1.18
+    description: Legacy Eikon Data API Python package (superseded by lseg-data)
+    official: true
+    status: legacy
+  - language: javascript
+    registry: npm
+    name: "@lsegroup/data"
+    url: https://www.npmjs.com/package/@lsegroup/data
+    install: npm install @lsegroup/data
+    version: 1.0.0
+    description: LSEG Data Library for TypeScript/JavaScript (maintained by lseg.com engineers)
+    official: true
+  - language: javascript
+    registry: npm
+    name: "@refinitiv-ui/elements"
+    url: https://www.npmjs.com/package/@refinitiv-ui/elements
+    install: npm install @refinitiv-ui/elements
+    version: 7.15.6
+    description: Element Framework (EF) web components for financial apps - see components/ artifact
+    official: true
+  - language: java
+    registry: maven
+    name: com.refinitiv.ema:ema
+    url: https://central.sonatype.com/artifact/com.refinitiv.ema/ema
+    install: 'implementation "com.refinitiv.ema:ema:3.8.3.0"'
+    version: 3.8.3.0
+    description: Enterprise Message API (EMA) - Real-Time SDK for Java
+    official: true
+  - language: csharp
+    registry: nuget
+    name: LSEG.Data
+    url: https://www.nuget.org/packages/LSEG.Data
+    install: dotnet add package LSEG.Data
+    version: 2.2.3
+    description: LSEG Data Library for .NET (owner LSEG)
+    official: true
+  - language: csharp
+    registry: nuget
+    name: LSEG.Ema.Core
+    url: https://www.nuget.org/packages/LSEG.Ema.Core
+    install: dotnet add package LSEG.Ema.Core
+    version: 3.5.1.1
+    description: Enterprise Message API (EMA) - Real-Time SDK for C# (owner LSEG)
+    official: true
+  - language: csharp
+    registry: nuget
+    name: LSEG.Eta.Core
+    url: https://www.nuget.org/packages/LSEG.Eta.Core
+    install: dotnet add package LSEG.Eta.Core
+    version: 3.5.1.1
+    description: Enterprise Transport API (ETA) - Real-Time SDK for C# (owner LSEG)
+    official: true

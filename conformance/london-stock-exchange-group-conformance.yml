@@ -1,0 +1,43 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/_original/lseg-world-check-one-openapi-original.yml + developers.lseg.com quick start
+standards:
+  - id: openapi-swagger-2.0
+    conforms: true
+    evidence: World-Check One API v2 definition is published in Swagger 2.0 (OpenAPI) format, version 2.61.0
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      API v3 quick start documents OAuth 2.0 service-account credentials
+      (client credentials) as the recommended authentication method
+      (https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api/quick-start)
+  - id: http-message-signatures
+    conforms: true
+    evidence: >-
+      HMAC-SHA256 request signing using the draft-cavage HTTP Signatures style
+      Authorization header (Signature keyId=..., algorithm="hmac-sha256",
+      headers="(request-target) host date content-type content-length")
+  - id: oidc
+    conforms: false
+    evidence: no OpenID Connect discovery document published (api host 401, portal soft-404)
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: errors use a custom Error envelope (error, cause, objectId), not application/problem+json
+  - id: fiql
+    conforms: true
+    evidence: case search and audit-event filters accept FIQL comparison expressions (documented in the OpenAPI descriptions)
+  - id: cursor-pagination
+    conforms: true
+    evidence: >-
+      /cases/summaries + /cases/summaries/cursor implement cursor-based
+      scrolling with a 60-second extending cursor lifespan; search responses
+      carry a pagination object (itemsPerPage, currentPage/pageReference)
+  - id: idempotency-key
+    conforms: false
+    evidence: no Idempotency-Key header or idempotency contract in the spec or docs
+  - id: rfc8594-sunset
+    conforms: false
+    evidence: no Sunset/Deprecation header support documented
+  - id: fapi
+    conforms: false
+    evidence: no FAPI conformance claimed for the World-Check One API

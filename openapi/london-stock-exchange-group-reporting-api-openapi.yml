@@ -1,0 +1,416 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange Group LSEG World-Check One Api-Info Reporting API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Reporting
+  description: Operations for the report domain.
+paths:
+  /reports:
+    post:
+      operationId: submitRequestForAsyncReport
+      tags:
+      - Reporting
+      summary: London Stock Exchange Group Submit request for async report based on the given filter conditions and return the 'reportId'.
+      description: Submit request for async report based on the given filter conditions and return the 'reportId'.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json').
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes).
+        in: header
+        type: integer
+        required: true
+      - name: asyncReportRequest
+        description: The payload for async report request.
+        in: body
+        schema:
+          $ref: '#/definitions/AsyncReportRequest'
+      responses:
+        200:
+          description: The response to async report request returns the request details and report ID.
+          schema:
+            $ref: '#/definitions/AsyncReportResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        409:
+          $ref: '#/responses/Conflict'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /reports/{reportId}/status:
+    get:
+      operationId: getSingleReportStatusByReportId
+      tags:
+      - Reporting
+      summary: London Stock Exchange Group Get the report status for the given report ID.
+      description: Get the report status for the given report ID.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: reportId
+        description: Report ID for which the status needs to be fetched.
+        in: path
+        type: string
+        required: true
+      responses:
+        200:
+          description: The report status for single report with the report ID.
+          schema:
+            $ref: '#/definitions/ReportStatus'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /reports/{reportId}:
+    get:
+      operationId: getReportDataByReportId
+      tags:
+      - Reporting
+      summary: London Stock Exchange Group Download the report for given report ID.
+      description: Download the report for given report ID.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: reportId
+        description: Report ID for which the report needs to be fetched.
+        in: path
+        type: string
+        required: true
+      produces:
+      - application/octet-stream
+      - application/json
+      responses:
+        200:
+          description: The report data for single report with the report ID.
+          schema:
+            type: string
+            format: binary
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  AsyncReportRequest:
+    type: object
+    description: "A model contains 'query', 'filter', 'reportFilter', 'customAttributes' expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\n\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing\nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved\ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single\nor double quotes.\n\n**Example:**\n  * \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
+    required:
+    - query
+    - filter
+    - sort
+    - reportFilter
+    - reportType
+    properties:
+      query:
+        type: string
+        description: "The query string used for fetching the source data for the report.\n\nThe query supports next field to specify searching criteria:\n- 'caseId' - Case ID provided by the client;\n\nThe query examples:\n  * \"query\": \"example=='TE!ST'\"\n  * \"query\": \"example==\\\\\"TE'ST\\\\\"\"\n  * \"query\": \"example=='TE\\\\\\\\'ST'\"\n  * \"query\": \"example==\\\"TEST DATA\\\"\"\n"
+      filter:
+        type: string
+        description: "The filters to be applied on the dataset returned by using the query. \n\nThe filter supports next field to specify searching criteria:\n- 'caseSystemId': Case System ID generated by the system for the client;\n\nThe filter examples:\n  * \"filter\": \"example=='TE!ST'\"\n  * \"filter\": \"example==\\\\\"TE'ST\\\\\"\"\n  * \"filter\": \"example=='TE\\\\\\\\'ST'\"\n  * \"filter\": \"example==\\\"TEST DATA\\\"\"\n"
+      reportType:
+        description: The report type specifies the type of the report, like case dossier, case summary etc.
+        $ref: '#/definitions/ReportType'
+      reportName:
+        type: string
+        description: Name for the report. If not provided, system will generate the name for the report based on the type of report.
+      reportFilter:
+        type: string
+        description: "The filters to be applied on the record level dataset.\n\nThe reportFilter supports next field to specify searching criteria:\n* 'providerType': Array of provider types used in record level filtration and does not have default providerType value.\n* 'includeUnresolvedMatches': represents the boolean value for the record level filtration and default value is false.\n* 'includePositiveMatches': represents the boolean value for the record level filtration and default value is false.\n* 'includePossibleMatches': represents the boolean value for the record level filtration and default value is false.\n* 'includeFalseMatches': represents the boolean value for the record level filtration and default value is false.\n* 'includeUnspecifiedMatches': represents the boolean value for the record level filtration and default value is false.\n* 'includeAudit': represents the boolean value for the record level filtration and default value is true.\n* 'includePassportCheck': represents the boolean value for the record level filtration and default value is false.\n* 'includeMediaCheckFullArticles': represents the boolean value for the record level filtration and default value is false.\n* 'includeMediaCheckHeadlines': represents the boolean value for the record level filtration and default value is false.\n\n**Note:** The record filters – 'includeUnresolvedMatches', 'includePositiveMatches', 'includePossibleMatches', 'includeFalseMatches' &\n          'includeUnspecifiedMatches', allow for the export of the full matched records in addition to the Case Dossier Report.\n          This selection does not affect the summary of all matched records included in the Case Dossier Report. \n          The other filters 'includeMediacheckHeadlines', 'includeMediacheckArticles', 'includePassportCheck' & 'includeAudit' are applicable\n          for the inclusion or exclusion of these sections in the Case Dossier report.\n\nThe report Level Filter examples:\n\nexample 1: To generate a case dossier PDF report for the matched World-Check records with multiple record filters along with the\n             additional filter sections namingly 'includePassportCheck', 'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines',\n             'includeAudit'.\n\n```      \n {\n    \"reportFilter\": \n     \"(includeUnresolvedMatches==true; \n       includePositiveMatches==true; \n       includePossibleMatches==true; \n       includeFalseMatches==true; \n       includeUnspecifiedMatches==true; \n       providerType==WATCHLIST),\n       (includePassportCheck==true),\n       (includeMediaCheckFullArticles==true),\n       (includeMediaCheckHeadlines==true),\n       (includeAudit==true)\"\n }   \n```\nexample 2: To generate a case dossier PDF report for the matched World-Check or Client-Watchlist records\n             with multiple record filters along with the additional filter sections namingly 'includePassportCheck',\n             'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines'.\n\n```\n {\n    \"reportFilter\": \n     \"(includeUnresolvedMatches==true; \n       includePositiveMatches==true; \n       includePossibleMatches==true; \n       providerType==WATCHLIST),\n       (includeFalseMatches==true; \n       includeUnspecifiedMatches==true; \n       providerType==CLIENT_WATCHLIST),\n       (includePassportCheck==true),\n       (includeMediaCheckFullArticles==true),\n       (includeMediaCheckHeadlines==true)\";\n }   \n```\nexample 3:  To generate a case dossier PDF report which includes only filter sections like 'includePassportCheck',\n              'includeAudit', 'includeMediaCheckFullArticles' or 'includeMediaCheckHeadlines' without the matched \n              World-Check or Client-Watchlist records.\n\n```           \n {\n   \"reportFilter\": \n    \"includePassportCheck==true,\n    includeAudit==true,\n    includeMediaCheckFullArticles==true,\n    includeMediaCheckHeadlines==true\";\n }   \n```\n"
+      customAttributes:
+        type: string
+        description: "Custom attributes for the reports (specific to the type of the report). E.g. notes for case dossier report.\n\nThe Custom attributes examples: \n  * \"customAttributes\": \"note==data\".\n  * \"customAttributes\": \"note=='note is custom attribute'\".\n  * \"customAttributes\": \"note==\\\"note is custom attribute\\\"\".\n"
+      sort:
+        type: array
+        description: The sort criteria applied to the response.
+        items:
+          $ref: '#/definitions/SortCriterion'
+    example:
+      query: caseId==SomeCustomCaseId
+      filter: caseSystemId==SomeCaseSystemId
+      reportType: CASE_DOSSIER
+      reportName: Report Name
+      reportFilter: includeUnresolvedMatches==false;providerType==WATCHLIST
+      customAttributes: note==data
+      sort:
+      - columnName: caseId
+        order: ASCENDING
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  ReportType:
+    type: string
+    description: The type of report.
+    enum:
+    - CASE_DOSSIER
+  ReportStatus:
+    type: object
+    required:
+    - reportId
+    - reportName
+    - progressStatus
+    - reportType
+    properties:
+      reportId:
+        type: string
+        description: Report ID for which the data needs to be fetched.
+      reportName:
+        type: string
+        description: Name for the report. If not provided, system will generate the name for the report based on the type of report.
+      progressStatus:
+        description: Represents the status of the report for the specified 'reportId'.
+        $ref: '#/definitions/ReportProgressStatus'
+      reportType:
+        description: The report type specifies the type of the report, like case dossier, case summary etc.
+        $ref: '#/definitions/ReportType'
+      startDate:
+        type: string
+        description: Represents the start date of the report.
+        format: date-time
+      completionDate:
+        type: string
+        description: Represents the completion date of the report.
+        format: date-time
+      deletionDate:
+        type: string
+        description: Represents the deletion date of the report.
+        format: date-time
+      summary:
+        description: Summary of the report.
+        $ref: '#/definitions/ReportSummary'
+    example:
+      reportId: Report ID
+      reportName: Report Name
+      progressStatus: COMPLETED
+      reportType: CASE_DOSSIER
+      startDate: 2019-08-28 10:05:15+00:00
+      completionDate: null
+      deletionDate: null
+      summary:
+        processedCount: 13.0
+        progressPercentage: 50.0
+  SortCriterion:
+    type: object
+    description: Sort specification
+    properties:
+      columnName:
+        type: string
+        description: The field to sort on
+      order:
+        type: string
+        description: The sort order
+        enum:
+        - ASCENDING
+        - DESCENDING
+  ReportSummary:
+    type: object
+    required:
+    - processedCount
+    - progressPercentage
+    properties:
+      processedCount:
+        type: integer
+        description: Represents number of records processed.
+        format: int32
+      progressPercentage:
+        type: integer
+        description: Represents progress percentage of records processed.
+        format: int32
+  ReportProgressStatus:
+    type: string
+    description: 'The real-time progress status of report during download.
+
+
+      - COMPLETED - Report is successfully generated.
+
+      - IN_PROGRESS - Report generation is in progress.
+
+      - FAILED - Report failed to generate. Contact helpdesk for more details.
+
+      - WAITING - Report is waiting in queue and yet to be processed.
+
+      - UNKNOWN - Report status is unknown. Contact helpdesk for more details.
+
+      - CANCELLED - Report request has been cancelled.
+
+      '
+    enum:
+    - COMPLETED
+    - IN_PROGRESS
+    - FAILED
+    - WAITING
+    - UNKNOWN
+    - CANCELLED
+  AsyncReportResponse:
+    type: object
+    description: Represents the Async Report Response which contains report ID.
+    allOf:
+    - $ref: '#/definitions/AsyncReportRequest'
+    - type: object
+      required:
+      - reportId
+      properties:
+        reportId:
+          type: string
+          description: The response containing 'reportId', which is retrieved by processing case dossier report request.
+    example:
+      query: caseId==SomeCustomCaseId
+      filter: caseSystemId==SomeCaseSystemId
+      reportType: CASE_DOSSIER
+      reportName: Report Name
+      reportFilter: includeUnresolvedMatches==false;providerType==WATCHLIST
+      customAttributes: note==data
+      sort:
+      - columnName: caseId
+        order: ASCENDING
+      reportId: Report ID
+responses:
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  Conflict:
+    description: Conflict error.
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

@@ -1,0 +1,39 @@
+generated: '2026-06-20'
+method: searched
+source: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api/quick-start
+versioning:
+  scheme: uri-path
+  current: v3
+  supported:
+    - version: v3
+      host: https://api.risk.lseg.com
+      base_path: /screening/v3/
+      status: current
+      notes: Recommended for all new integrations; where enhancements are released
+    - version: v2
+      host: https://api-worldcheck.refinitiv.com
+      base_path: /v2
+      status: supported
+      spec_version: 2.61.0
+      notes: Still supported; the OpenAPI captured in openapi/ documents v2
+    - version: v1
+      host: https://api-worldcheck.refinitiv.com
+      base_path: /v1
+      status: legacy
+      notes: Referenced in community threads for older pilot integrations
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No public deprecation policy or v2 sunset date is published; LSEG
+    communicates product changes via the Notifications & Alerts page in LSEG
+    MyAccount. Within the v2 spec the baseFilter.archivedArticles field is
+    marked deprecated.
+status_page: https://liveservice.lseg.com/
+support: https://support.lseg.com/
+enhancements: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api/enhancements
+changelog: >-
+  A dated changelog exists in the World-Check One API documentation
+  (product-docs index.html#_changelog) but is sign-in gated (HTTP 401), so its
+  entries are not captured here.
+deprecated_operations: []

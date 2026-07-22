@@ -1,0 +1,54 @@
+generated: '2026-06-20'
+method: searched
+docs: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api/quick-start
+source: >-
+  World-Check One API quick start + security documentation (the OpenAPI 2.0
+  definition declares no securityDefinitions; the auth contract is documented
+  in the developer portal, so this profile is searched, not derived)
+summary:
+  types: [oauth2, hmac-signature]
+  oauth2_flows: [clientCredentials]
+  notes: >-
+    API v3 (api.risk.lseg.com/screening/v3/) recommends OAuth 2.0
+    service-account credentials; API v2 (api-worldcheck.refinitiv.com/v2) uses
+    per-user API key + HMAC-SHA256 signed requests.
+schemes:
+  - name: oauth2ServiceAccount
+    type: oauth2
+    flow: clientCredentials
+    description: >-
+      Recommended for API v3. A service account is provisioned in the
+      World-Check One admin portal (requires the Service Account Admin role):
+      service-account-uuid acts as the client ID and service-account-password
+      as the client secret.
+    applies_to: v3 (https://api.risk.lseg.com/screening/v3/)
+  - name: hmacSignature
+    type: http-signature
+    algorithm: hmac-sha256
+    description: >-
+      Every request is signed with a keyed-hash message authentication code.
+      Each API user is issued an API key (public identifier, UUID format) and
+      an 88-character symmetric API secret known only to the user and the
+      World-Check One system; the secret is never transmitted. The signature
+      covers the request target, host, date, content-type and content-length,
+      and requests are replay-protected by validating the Date header
+      (RFC 1123 format) against the processing time.
+    authorization_header: >-
+      Authorization: Signature keyId="{API-KEY}",algorithm="hmac-sha256",
+      headers="(request-target) host date content-type content-length",
+      signature="{BASE64-HMAC-VALUE}"
+    required_headers: [Authorization, Date]
+    applies_to: v2 (https://api-worldcheck.refinitiv.com/v2) and v3
+credentials:
+  - name: API key
+    kind: public identifier
+    format: 8-4-4-4-12 character UUID
+  - name: API secret
+    kind: symmetric secret
+    format: 88 characters
+  - name: service-account-uuid / service-account-password
+    kind: OAuth 2.0 client credentials (v3)
+notes: >-
+  Credentials are issued per environment (Pilot vs Production) by the LSEG
+  account team; there is no self-service sign-up. See
+  sandbox/london-stock-exchange-group-sandbox.yml.

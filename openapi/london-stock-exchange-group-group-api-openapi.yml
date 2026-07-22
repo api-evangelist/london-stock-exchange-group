@@ -1,0 +1,733 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange LSEG World-Check One Api-Info Group API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Group
+  description: Operations for the group domain.
+paths:
+  /groups:
+    get:
+      operationId: getGroups
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get all the top-level groups with their immediate descendants
+      description: Get all the top-level groups with their immediate descendants
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: A list of all top-level groups containing their immediate descendants
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /groups/{groupId}:
+    get:
+      operationId: getGroupById
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get a specified group including its immediate descendants
+      description: Get a specified group including its immediate descendants
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: groupId
+        in: path
+        type: string
+        required: true
+        description: Group ID under which we wish to retrieve children groups
+      responses:
+        200:
+          description: A specified group including its immediate descendants
+          schema:
+            $ref: '#/definitions/Group'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /groups/{groupId}/caseTemplate:
+    get:
+      operationId: getCaseTemplateForGroup
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get the CaseTemplate for the given Group
+      description: "Get the CaseTemplate for the given Group, used for constructing a Case\n\n**Available secondary fields:**\n<details>\n  <summary>Click here to expand</summary>\n\n  | Type ID   | NAME                    | VALUE                     |\n  |--|-||\n  | SFCT_1    | GENDER                  | MALE, FEMALE, UNSPECIFIED |\n  | SFCT_2    | DATE OF BIRTH           | DATE                      |\n  | SFCT_3    | COUNTRY LOCATION        | COUNTRY CODE              |\n  | SFCT_4    | PLACE OF BIRTH          | COUNTRY CODE              |\n  | SFCT_5    | NATIONALITY             | COUNTRY CODE              |\n  | SFCT_6    | REGISTERED COUNTRY      | COUNTRY CODE              |\n  | SFCT_7    | IMO NUMBER              | TEXT                      |\n  | SFCT_8    | PASSPORT GIVEN NAMES    | TEXT                      |\n  | SFCT_9    | PASSPORT LAST NAME      | TEXT                      |\n  | SFCT_10   | PASSPORT GENDER         | MALE, FEMALE, UNSPECIFIED |\n  | SFCT_11   | PASSPORT ISSUING STATE  | STATE CODE                |\n  | SFCT_12   | PASSPORT NATIONALITY    | STATE CODE                |\n  | SFCT_13   | PASSPORT DATE OF BIRTH  | DATE                      |\n  | SFCT_14   | PASSPORT DOCUMENT TYPE  | PASSPORT, ID1, ID2        |\n  | SFCT_15   | PASSPORT ID NUMBER      | TEXT                      |\n  | SFCT_16   | PASSPORT DATE OF EXPIRY | DATE                      |\n  | SFCT_191  | DOCUMENT ID             | TEXT                      |\n  | SFCT_192  | DOCUMENT ID COUNTRY     | COUNTRY CODE              |\n  | SFCT_193  | DOCUMENT ID TYPE        | TEXT                      |\n\n</details>\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: groupId
+        in: path
+        type: string
+        required: true
+        description: Group ID under which we wish to manage Cases and perform screening
+      responses:
+        200:
+          description: The CaseTemplate for the given Group
+          schema:
+            $ref: '#/definitions/CaseTemplateResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /groups/{groupId}/resolutionToolkit:
+    get:
+      operationId: getResolutionToolkitForGroup
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get the ResolutionToolkit for the given Group.
+      description: 'Get the ResolutionToolkit for the given Group, used to construct a valid resolution request(s) on the results
+
+        for a Case belonging to the given Group `groupId`.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: groupId
+        in: path
+        type: string
+        required: true
+        description: ID of the Group to which the resolution toolkit belongs.
+      responses:
+        200:
+          description: The ResolutionToolkit for the given Group.
+          schema:
+            $ref: '#/definitions/ResolutionToolkitResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /groups/{groupId}/resolutionToolkits:
+    get:
+      operationId: getResolutionToolkitsForGroup
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get all the ResolutionToolkits for the given Group
+      description: 'Get the ResolutionToolkits for the given Group for all enabled provider types, used to construct a valid
+
+        resolution request(s) on the results for a Case belonging to the given Group `groupId`.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: groupId
+        in: path
+        type: string
+        required: true
+        description: ID of the Group to which the resolution toolkits belong.
+      responses:
+        200:
+          description: Map of ResolutionToolkits for the given Group keyed by provider type
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/ResolutionToolkitResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /groups/{groupId}/resolutionToolkits/{providerType}:
+    get:
+      operationId: getResolutionToolkitForGroupWithProviderType
+      tags:
+      - Group
+      summary: London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group
+      description: 'Get the ResolutionToolkit for a specific provider type the given Group, used to construct a valid resolution request(s) on the results
+
+        for a Case belonging to the given Group `groupId`.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: groupId
+        in: path
+        type: string
+        required: true
+        description: ID of the Group to which the resolution toolkit belongs.
+      - name: providerType
+        in: path
+        type: string
+        required: true
+        description: Provider type for which the resolution toolkit applies.
+        enum:
+        - WATCHLIST
+        - CLIENT_WATCHLIST
+      responses:
+        200:
+          description: The ResolutionToolkit for the given Group and provider type
+          schema:
+            $ref: '#/definitions/ResolutionToolkitResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  ResolutionRules:
+    type: object
+    description: A collection of [StatusRules] (#StatusRule) keyed by Status ID.
+    additionalProperties:
+      type: object
+      $ref: '#/definitions/StatusRule'
+  StatusRule:
+    type: object
+    description: Represents the rules that should be applied when resolving a Result with a specific Status.
+    required:
+    - reasons
+    - remarkRequired
+    - reasonRequired
+    - risks
+    properties:
+      reasons:
+        type: array
+        description: The IDs for the Reasons that can be used when resolving a Result with a specific Status.
+        items:
+          type: string
+      remarkRequired:
+        type: boolean
+        description: Flag indicating whether a remark is required when resolving a Result with a specific Status.
+      reasonRequired:
+        type: boolean
+        description: Flag indicating whether a reason is required when resolving a Result with a specific Status.
+      risks:
+        type: array
+        description: The IDs for the Risks that can be used when resolving a Result with a specific Status.
+        items:
+          type: string
+  ProviderType:
+    type: string
+    description: Provider Type Enumeration
+    enum:
+    - WATCHLIST
+    - PASSPORT_CHECK
+    - CLIENT_WATCHLIST
+    - MEDIA_CHECK
+  ResolutionStatusType:
+    type: string
+    description: Enumeration of resolution Status types.
+    enum:
+    - POSITIVE
+    - POSSIBLE
+    - 'FALSE'
+    - UNSPECIFIED
+  ResolutionToolkitResponse:
+    type: object
+    description: Resolution toolkit settings applicable for a Group.
+    required:
+    - groupId
+    properties:
+      groupId:
+        type: string
+        description: ID of the Group to which this resolution toolkit belongs.
+        maxLength: 255
+      providerType:
+        $ref: '#/definitions/ProviderType'
+      resolutionFields:
+        $ref: '#/definitions/ResolutionFields'
+      resolutionRules:
+        $ref: '#/definitions/ResolutionRules'
+    example:
+      groupId: GROUP_ID
+      providerType: WATCHLIST
+      resolutionFields:
+        statuses:
+        - id: STATUS_ID_1
+          label: 'FALSE'
+          type: 'FALSE'
+        - id: STATUS_ID_2
+          label: POSSIBLE
+          type: POSSIBLE
+        - id: STATUS_ID_3
+          label: POSITIVE
+          type: POSITIVE
+        - id: STATUS_ID_4
+          label: UNSPECIFIED
+          type: UNSPECIFIED
+        risks:
+        - id: RISK_ID_1
+          label: MEDIUM
+          type: 'null'
+        - id: RISK_ID_2
+          label: LOW
+          type: 'null'
+        - id: RISK_ID_3
+          label: HIGH
+          type: 'null'
+        - id: RISK_ID_4
+          label: UNKNOWN
+          type: 'null'
+        reasons:
+        - id: REASON_ID_1
+          label: unreasonable
+          type: 'null'
+        - id: REASON_ID_2
+          label: reason
+          type: 'null'
+      resolutionRules:
+        STATUS_ID_1:
+          reasons:
+          - REASON_ID_1
+          - REASON_ID_2
+          remarkRequired: true
+          reasonRequired: true
+          risks:
+          - RISK_ID_1: null
+          - RISK_ID_2: null
+        STATUS_ID_2:
+          reasons: []
+          remarkRequired: false
+          reasonRequired: false
+          risks: []
+        STATUS_ID_3:
+          reasons:
+          - REASON_ID_2
+          remarkRequired: false
+          reasonRequired: true
+          risks:
+          - RISK_ID_3: null
+        STATUS_ID_4:
+          reasons:
+          - REASON_ID_1
+          remarkRequired: false
+          reasonRequired: true
+          risks:
+          - RISK_ID_4: null
+          - RISK_ID_2: null
+  Group:
+    type: object
+    description: Structure of Groups accessible by user
+    required:
+    - id
+    - name
+    properties:
+      id:
+        type: string
+        description: Group ID
+        maxLength: 255
+      parentId:
+        type: string
+        description: Parent Group ID
+        maxLength: 255
+      name:
+        type: string
+        description: Name for the Group
+        maxLength: 255
+      hasChildren:
+        type: boolean
+        default: false
+      children:
+        type: array
+        description: Child groups
+        items:
+          $ref: '#/definitions/Group'
+      status:
+        $ref: '#/definitions/StatusType'
+    example:
+      id: Group Id
+      parentId: Parent Group ID
+      name: John Smith
+      hasChildren: true
+      children: []
+      status: ACTIVE
+  FieldValueType:
+    type: string
+    description: 'Enumerated value formats for a secondary / custom field.
+
+
+      - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
+
+      - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
+
+      - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
+
+      - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
+
+      - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
+
+      - TEXT is a string.
+
+      '
+    enum:
+    - COUNTRY
+    - DATE
+    - GENDER
+    - PASSPORT_DOCUMENT_TYPE
+    - STATE
+    - TEXT
+  StatusType:
+    type: string
+    description: Enumeration of Status types
+    enum:
+    - ACTIVE
+    - INACTIVE
+    - DELETED
+  GroupScreeningType:
+    type: string
+    description: Group screening type enumeration
+    enum:
+    - CASE_MANAGEMENT_AUDIT
+    - ZERO_FOOTPRINT
+  AbstractField:
+    type: object
+    description: Generic Field representing a Custom Field or a Secondary Field.
+    required:
+    - typeId
+    properties:
+      typeId:
+        type: string
+        description: Type Identifier of this Field
+        maxLength: 255
+  TypeAvailableSelected:
+    type: object
+    description: Represents a type and also tells whether it is available and whether it should be selected by default
+    properties:
+      selected:
+        type: boolean
+        default: false
+      type:
+        type: string
+      available:
+        type: boolean
+        default: false
+  ResolutionFields:
+    type: object
+    description: Describes all resolution fields (statuses, risks and reasons) in detail.
+    required:
+    - statuses
+    - risks
+    - reasons
+    properties:
+      statuses:
+        type: array
+        items:
+          $ref: '#/definitions/ResolutionField'
+      risks:
+        type: array
+        items:
+          $ref: '#/definitions/ResolutionField'
+      reasons:
+        type: array
+        items:
+          $ref: '#/definitions/ResolutionField'
+  SecondaryFieldsByEntity:
+    type: object
+    description: Wrapper which contains secondary fields grouped by CaseEntityType.
+    required:
+    - secondaryFieldsByEntity
+    properties:
+      secondaryFieldsByEntity:
+        type: object
+        additionalProperties:
+          type: array
+          items:
+            $ref: '#/definitions/FieldDefinition'
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  FieldDefinition:
+    type: object
+    description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
+
+      Field data when creating or updating a Case. Extends [AbstractField](#AbstractField).
+
+      '
+    allOf:
+    - $ref: '#/definitions/AbstractField'
+    - type: object
+      required:
+      - fieldValueType
+      - label
+      properties:
+        fieldValueType:
+          $ref: '#/definitions/FieldValueType'
+        fieldRequired:
+          type: boolean
+          description: Indicates whether this field is required
+          default: false
+        label:
+          type: string
+          description: Human-readable label for this field
+          maxLength: 1000
+        regExp:
+          type: string
+          description: Optional regular expression which applies to fields where fieldValueType is TEXT
+          maxLength: 255
+  ResolutionField:
+    type: object
+    description: Represents the ID, label and type for a Status, a Risk or a Reason.
+    required:
+    - id
+    - label
+    properties:
+      id:
+        type: string
+        description: The ID for the resolution label.
+      label:
+        type: string
+        description: The label for the resolution label.
+      type:
+        $ref: '#/definitions/ResolutionStatusType'
+  CaseTemplateResponse:
+    type: object
+    description: Case template, containing metadata required by the client to construct a valid Case
+    required:
+    - groupScreeningType
+    - groupId
+    properties:
+      groupScreeningType:
+        $ref: '#/definitions/GroupScreeningType'
+      groupId:
+        type: string
+      customFields:
+        type: array
+        items:
+          $ref: '#/definitions/FieldDefinition'
+      secondaryFieldsByProvider:
+        type: object
+        description: 'Mapping from ProviderType to SecondaryFieldsByEntity which contains all secondary fields that is available
+
+          for that ProviderType.
+
+          '
+        additionalProperties:
+          $ref: '#/definitions/SecondaryFieldsByEntity'
+      nameTransposition:
+        description: The indication of whether name transposition screening is available and selected.
+        $ref: '#/definitions/TypeAvailableSelected'
+      mandatoryProviderTypes:
+        type: array
+        items:
+          $ref: '#/definitions/ProviderType'
+    example:
+      groupScreeningType: CASE_MANAGEMENT_AUDIT
+      groupId: Group Id
+      customFields:
+      - typeId: Custom Field Id
+        fieldValueType: TEXT
+        fieldRequired: true
+      secondaryFieldsByProvider:
+        watchlist:
+          secondaryFieldsByEntity:
+            individual:
+            - typeId: GENDER_TYPE_ID
+              fieldFormat: GENDER
+            - typeId: DATE_OF_BIRTH_TYPE_ID
+              fieldFormat: DATE
+            - typeId: PLACE_OF_BIRTH_TYPE_ID
+              fieldFormat: COUNTRY
+            organisation:
+            - typeId: REGISTERED_COUNTRY_TYPE_ID
+              fieldFormat: COUNTRY
+            - typeId: REGISTERED_TEXT_TYPE_ID
+              fieldFormat: DOCUMENT_ID
+            - typeId: REGISTERED_COUNTRY_TYPE_ID
+              fieldFormat: DOCUMENT_ID_COUNTRY
+            - typeId: REGISTERED_TEXT_TYPE_ID
+              fieldFormat: DOCUMENT_ID_TYPE
+            vessel:
+            - typeId: IMO_NUMBER_TYPE_ID
+              fieldFormat: TEXT
+              regExp: '[0-9]{7}'
+        passport-check:
+          secondaryFieldsByEntity:
+            individual:
+            - typeId: PASSPORT_GENDER_TYPE_ID
+              fieldFormat: GENDER
+            - typeId: PASSPORT_ID_NUMBER
+              fieldFormat: TEXT
+responses:
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

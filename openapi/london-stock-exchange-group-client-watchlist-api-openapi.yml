@@ -1,0 +1,1011 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange Group LSEG World-Check One Api-Info Client-Watchlist API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Client-Watchlist
+  description: Operations for the Watchlist domain.
+paths:
+  /reference/providers/sources/{identifier}:
+    put:
+      operationId: createOrUpdateProviderSource
+      tags:
+      - Client-Watchlist
+      summary: London Stock Exchange Group Create or update a provider source
+      description: 'Create or update a provider source for uploading entity records to. An example usage would be for a client watchlist.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: identifier
+        description: Unique identifier for this provider source. Has to be alphanumeric.
+        in: path
+        required: true
+        type: string
+      - name: providerSource
+        in: body
+        description: Provider source details
+        required: true
+        schema:
+          $ref: '#/definitions/ProviderSource'
+      responses:
+        204:
+          description: Provider source definition updated
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /reference/watchlist:
+    post:
+      operationId: saveWatchlist
+      tags:
+      - Client-Watchlist
+      summary: London Stock Exchange Group Maintain your Watchlist data
+      description: "Maintain your Watchlist data using the following supported entity actions.\n\n* entityCreateOrUpdate - Add a new entity to your Watchlist or replace if it already exists.\n\n* entityDelete - Mark the given entity as deleted in your Watchlist.\n\n* entitySupersede - Supersede enables you to redirect matches against your superseded entity to a new entity. This\nis useful if you want to redirect users with existing matches against an old entity to a newer / more accurate\nversion of those entities.\n\n* entityPurge - Purge enables you to remove an entity as required by GDPR whereby the personally identifiable\ninformation is removed.\n\nDue to the large number of entries within a Watchlist it is not possible to update the entire Watchlist in a single request\nThe overall request must be split into blocks of up to 500 individual entity actions.\n\n\nThe response consists of a list of any entities which were not successfully processed and a reason for failure.\n\n**Note:** The client watchlist record may not be considered for re-screening if the 'modificationDate' field \n          has not been specified while modifying the record.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: watchlistDataSet
+        in: body
+        description: A collection of maintenance actions to be performed on your Watchlist.
+        required: true
+        schema:
+          $ref: '#/definitions/WatchlistDataSet'
+      responses:
+        201:
+          description: Request to maintain Watchlist data has succeeded. Please review the contents of WatchlistResponse errors for details on any individual entity actions which were not successful.
+          schema:
+            $ref: '#/definitions/WatchlistResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  FileMeta:
+    type: object
+    required:
+    - caption
+    - uri
+    properties:
+      caption:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+        items:
+          type: string
+  EntityPurge:
+    type: object
+    required:
+    - entityId
+    properties:
+      entityId:
+        type: string
+      purgedDate:
+        type: string
+        format: date-time
+  LanguageCode:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+  ProviderSourceType:
+    type: object
+    properties:
+      category:
+        $ref: '#/definitions/ProviderSourceTypeCategoryDetail'
+      identifier:
+        type: string
+      name:
+        type: string
+  Country:
+    type: object
+    required:
+    - code
+    - name
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+  AbstractAssociate:
+    type: object
+    description: 'The `AbstractAssociate` subclasses corresponding to each type of entity are:
+
+
+      * `COUNTRY`: `CountryAssociate`
+
+      * `INDIVIDUAL`: `IndividualAssociate`
+
+      * `ORGANISATION`: `OrganisationAssociate`
+
+      * `VESSEL`: `VesselAssociate`
+
+      '
+    discriminator: associateEntityType
+    required:
+    - associateEntityType
+    - entityType
+    properties:
+      associateEntityType:
+        type: string
+        description: Discriminator field. Might go away in a future major version of the API
+      entityType:
+        type: string
+        description: 'Profile Entity Type Enumeration.
+
+
+          The `Entity` subclasses corresponding to each type of entity are:
+
+
+          * `COUNTRY` : `CountryEntity`
+
+          * `INDIVIDUAL` : `IndividualEntity`
+
+          * `ORGANISATION` : `OrganisationEntity`
+
+          * `VESSEL` : `VesselEntity`
+
+          '
+        enum:
+        - COUNTRY
+        - INDIVIDUAL
+        - ORGANISATION
+        - VESSEL
+      reversed:
+        type: boolean
+        default: false
+      targetEntityId:
+        type: string
+      targetExternalImportId:
+        type: string
+      type:
+        type: string
+        description: Associate Type Enumeration
+        default: UNKNOWN
+        enum:
+        - ADVISOR
+        - AGENT_REPRESENTATIVE
+        - AFFILIATED_COMPANY
+        - AFFILIATED_ORGANIZATION
+        - AFFILIATED_POSITION
+        - ASSET
+        - ASSISTANT
+        - ASSOCIATE
+        - ASSOCIATED_SPECIAL_INTEREST_PERSON
+        - AUNT
+        - BANKER
+        - BRANCH_OFFICE
+        - BROTHER
+        - BROTHER_IN_LAW
+        - BUSINESS_ASSOCIATE
+        - CHILD
+        - CLIENT
+        - COLLEAGUE
+        - COUSIN
+        - CO_DEFENDANT
+        - DAUGHTER
+        - DAUGHTER_IN_LAW
+        - DIRECTOR
+        - DOC_COMPANY
+        - EMPLOYEE
+        - EMPLOYER
+        - EXECUTIVE
+        - EX_HUSBAND
+        - EX_WIFE
+        - FAMILY
+        - FAMILY_MEMBER
+        - FATHER
+        - FATHER_IN_LAW
+        - FINANCIAL_ADVISOR
+        - FRIEND
+        - FRONT_COMPANY
+        - GRANDDAUGHTER
+        - GRANDFATHER
+        - GRANDMOTHER
+        - GRANDSON
+        - GRAND_CHILD
+        - GROUP_BENEFICIAL_OWNER
+        - HUSBAND
+        - KEY_MEMBER
+        - LEGAL_ADVISOR
+        - MISC
+        - MOTHER
+        - MOTHER_IN_LAW
+        - NEPHEW
+        - NIECE
+        - NOMINEE
+        - OPERATOR
+        - OWNER
+        - PARENT
+        - POLITICAL_ADVISOR
+        - REGISTERED_OWNER
+        - RELATIVE
+        - SAME_SEX_SPOUSE
+        - SENIOR_OFFICIAL
+        - SHAREHOLDER_OWNER
+        - SHIP_MANAGER
+        - SISTER
+        - SISTER_IN_LAW
+        - SON
+        - SON_IN_LAW
+        - SPOUSE
+        - STEP_DAUGHTER
+        - STEP_SON
+        - STEPFATHER
+        - STEPMOTHER
+        - SUBSIDIARY
+        - TECHNICAL_MANAGER
+        - UNCLE
+        - UNKNOWN
+        - UNMARRIED_PARTNER
+        - WIFE
+      targetPrimaryName:
+        type: string
+      creationDate:
+        type: string
+        format: date-time
+      modificationDate:
+        type: string
+        format: date-time
+      updateCategory:
+        type: string
+        description: Entity Update Category Enumeration
+        enum:
+        - C1
+        - C2
+        - C3
+        - C4
+        - C6
+        - UNKNOWN
+      category:
+        type: string
+      targetCategories:
+        type: array
+        description: List of names of [ProviderSourceTypeCategoryDetail](#ProviderSourceTypeCategoryDetail) in sources of target Entity.
+        uniqueItems: true
+        items:
+          type: string
+  EntityType:
+    type: string
+    description: Entity type of the case.
+    enum:
+    - INDIVIDUAL
+    - ORGANISATION
+    - VESSEL
+    - COUNTRY
+  Detail:
+    type: object
+    properties:
+      detailType:
+        type: string
+        description: Detail Type Enumeration
+        default: UNKNOWN
+        enum:
+        - BIOGRAPHY
+        - FUNDING
+        - IDENTIFICATION
+        - NOTE
+        - REPORTS
+        - REGULATION
+        - SANCTION
+        - UNKNOWN
+      text:
+        type: string
+      title:
+        type: string
+        maxLength: 255
+  Provider:
+    type: object
+    properties:
+      code:
+        type: string
+      identifier:
+        type: string
+      master:
+        type: boolean
+        default: false
+      name:
+        type: string
+  Image:
+    type: object
+    required:
+    - uri
+    properties:
+      caption:
+        type: string
+      height:
+        type: integer
+        format: int32
+      imageUseCode:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+        items:
+          type: string
+      width:
+        type: integer
+        format: int32
+  Address:
+    type: object
+    properties:
+      city:
+        type: string
+      country:
+        $ref: '#/definitions/Country'
+      postCode:
+        type: string
+      region:
+        type: string
+      street:
+        type: string
+  IdentityDocumentLocationType:
+    type: object
+    description: 'Represents the type of identity document location that includes the type of document, name, country
+
+      and what type of entity it belongs to.
+
+      '
+    properties:
+      country:
+        $ref: '#/definitions/Country'
+      name:
+        type: string
+      type:
+        type: string
+      entityTypes:
+        type: array
+        items:
+          $ref: '#/definitions/EntityType'
+  TranslatedEntity:
+    type: object
+    description: Representation of translated entity.
+    properties:
+      translationDisclaimer:
+        type: string
+        description: Disclaimer for Translation Response.
+      details:
+        type: array
+        description: A collection of translated entity details.
+        items:
+          $ref: '#/definitions/Detail'
+  ProviderSourceTypeCategoryDetail:
+    type: object
+    properties:
+      description:
+        type: string
+      identifier:
+        type: string
+        maxLength: 255
+      name:
+        type: string
+        maxLength: 255
+  Name:
+    type: object
+    required:
+    - fullName
+    - type
+    properties:
+      fullName:
+        type: string
+      givenName:
+        type: string
+      languageCode:
+        $ref: '#/definitions/LanguageCode'
+      lastName:
+        type: string
+      originalScript:
+        type: string
+      prefix:
+        type: string
+      suffix:
+        type: string
+      type:
+        type: string
+        description: Watchlist Profile Name Type enumeration
+        enum:
+        - PRIMARY
+        - AKA
+        - AKAENHANCED
+        - FKA
+        - DBA
+        - MAIDEN
+        - LANG_VARIATION
+        - PREVIOUS
+        - VEHICLE_ID
+        - LOW_QUALITY_AKA
+        - NATIVE_AKA
+  IdentityDocument:
+    type: object
+    properties:
+      entity:
+        $ref: '#/definitions/Entity'
+      expiryDate:
+        type: string
+      issueDate:
+        type: string
+      issuer:
+        type: string
+      locationType:
+        $ref: '#/definitions/IdentityDocumentLocationType'
+      number:
+        type: string
+      type:
+        type: string
+  Weblink:
+    type: object
+    properties:
+      caption:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
+        items:
+          type: string
+  WatchlistDataSet:
+    type: object
+    properties:
+      entityCreateOrUpdate:
+        type: array
+        items:
+          $ref: '#/definitions/Entity'
+      entityDelete:
+        type: array
+        items:
+          $ref: '#/definitions/EntityDelete'
+      entitySupersede:
+        type: array
+        items:
+          $ref: '#/definitions/EntitySupersede'
+      entityPurge:
+        type: array
+        items:
+          $ref: '#/definitions/EntityPurge'
+  WatchlistResponse:
+    type: object
+    required:
+    - errors
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
+  EntitySupersede:
+    type: object
+    required:
+    - entityId
+    - supersedingEntityId
+    properties:
+      entityId:
+        type: string
+      supersedingEntityId:
+        type: string
+  ActionDetail:
+    type: object
+    required:
+    - actionType
+    properties:
+      actionId:
+        type: string
+      actionType:
+        type: string
+        description: Action Detail Type Enumeration
+        enum:
+        - CIVIL_ACTION
+        - CRIMINAL_CONVICTION
+        - ENFORCEMENT
+        - SANCTION
+      comment:
+        type: string
+      endDate:
+        type: string
+        format: date-time
+      files:
+        type: array
+        items:
+          $ref: '#/definitions/FileMeta'
+      publicationType:
+        type: string
+      published:
+        type: string
+      reference:
+        type: string
+      source:
+        $ref: '#/definitions/ProviderSource'
+      startDate:
+        type: string
+        format: date-time
+      text:
+        type: string
+      title:
+        type: string
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  CountryLink:
+    type: object
+    required:
+    - country
+    - type
+    properties:
+      country:
+        $ref: '#/definitions/Country'
+      countryText:
+        type: string
+      type:
+        type: string
+        description: Country Link Type Enumeration
+        enum:
+        - NATIONALITY
+        - OPERATESIN
+        - POB
+        - POD
+        - REGISTEREDIN
+        - RESIDENT
+        - VESSELFLAG
+        - LOCATION
+  EntityDelete:
+    type: object
+    required:
+    - entityId
+    properties:
+      entityId:
+        type: string
+  ProviderSource:
+    type: object
+    required:
+    - abbreviation
+    - identifier
+    - name
+    - providerSourceStatus
+    - type
+    properties:
+      abbreviation:
+        type: string
+        description: Abbreviated form of this source's `name`.
+      creationDate:
+        type: string
+        format: date-time
+      identifier:
+        type: string
+        description: An alphanumeric value
+      importIdentifier:
+        type: string
+      name:
+        type: string
+        description: Full name of this source.
+        maxLength: 255
+      provider:
+        description: Provider for this source.
+        $ref: '#/definitions/Provider'
+      providerSourceStatus:
+        type: string
+        description: Provider Source Status Enumeration
+        enum:
+        - ACTIVE
+        - DELETED
+        - HIDDEN
+      regionOfAuthority:
+        type: string
+      subscriptionCategory:
+        type: string
+        description: Subscription Category Type Enumeration
+        default: STANDARD
+        enum:
+        - PREMIUM
+        - STANDARD
+      modificationDate:
+        type: string
+        description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
+        format: date-time
+      description:
+        type: string
+        description: Description of the source.
+      type:
+        $ref: '#/definitions/ProviderSourceType'
+  ContactDetail:
+    type: object
+    required:
+    - contactDetailType
+    properties:
+      contactDetailType:
+        type: string
+        description: Contact Detail Type Enumeration
+        enum:
+        - EMAIL
+        - FAX
+        - URL
+        - VOICE
+      country:
+        $ref: '#/definitions/Country'
+      detail:
+        type: string
+  EntityUpdatedDates:
+    type: object
+    properties:
+      ageUpdated:
+        type: string
+        format: date-time
+      aliasesUpdated:
+        type: string
+        format: date-time
+      alternativeSpellingUpdated:
+        type: string
+        format: date-time
+      asOfDateUpdated:
+        type: string
+        format: date-time
+      categoryUpdated:
+        type: string
+        format: date-time
+      citizenshipsUpdated:
+        type: string
+        format: date-time
+      companiesUpdated:
+        type: string
+        format: date-time
+      deceasedUpdated:
+        type: string
+        format: date-time
+      dobsUpdated:
+        type: string
+        format: date-time
+      eiUpdated:
+        type: string
+        format: date-time
+      enteredUpdated:
+        type: string
+        format: date-time
+      externalSourcesUpdated:
+        type: string
+        format: date-time
+      firstNameUpdated:
+        type: string
+        format: date-time
+      foreignAliasUpdated:
+        type: string
+        format: date-time
+      furtherInformationUpdated:
+        type: string
+        format: date-time
+      idNumbersUpdated:
+        type: string
+        format: date-time
+      keywordsUpdated:
+        type: string
+        format: date-time
+      lastNameUpdated:
+        type: string
+        format: date-time
+      linkedToUpdated:
+        type: string
+        format: date-time
+      locationsUpdated:
+        type: string
+        format: date-time
+      lowQualityAliasesUpdated:
+        type: string
+        format: date-time
+      passportsUpdated:
+        type: string
+        format: date-time
+      placeOfBirthUpdated:
+        type: string
+        format: date-time
+      positionUpdated:
+        type: string
+        format: date-time
+      ssnUpdated:
+        type: string
+        format: date-time
+      subCategoryUpdated:
+        type: string
+        format: date-time
+      titleUpdated:
+        type: string
+        format: date-time
+      updatecategoryUpdated:
+        type: string
+        format: date-time
+      sicUpdated:
+        type: string
+        format: date-time
+  Entity:
+    type: object
+    description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
+
+      as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
+
+
+      The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
+
+
+      * `COUNTRY` : `CountryEntity`
+
+      * `INDIVIDUAL` : `IndividualEntity`
+
+      * `ORGANISATION` : `OrganisationEntity`
+
+      * `VESSEL` : `VesselEntity`
+
+
+      Notes for Client Watchlist usage:
+
+
+      * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
+
+      * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
+
+      * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
+
+      * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
+
+      '
+    discriminator: entityType
+    required:
+    - entityId
+    - creationDate
+    - names
+    - sources
+    - externalImportId
+    properties:
+      actions:
+        type: array
+        items:
+          $ref: '#/definitions/ActionDetail'
+      active:
+        type: boolean
+        default: false
+      addresses:
+        type: array
+        items:
+          $ref: '#/definitions/Address'
+      associates:
+        type: array
+        items:
+          $ref: '#/definitions/AbstractAssociate'
+      category:
+        type: string
+      comments:
+        type: string
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/ContactDetail'
+      countryLinks:
+        type: array
+        items:
+          $ref: '#/definitions/CountryLink'
+      creationDate:
+        type: string
+        format: date-time
+      deletionDate:
+        type: string
+        format: date-time
+      description:
+        type: string
+      details:
+        type: array
+        items:
+          $ref: '#/definitions/Detail'
+      entityId:
+        type: string
+        description: An alphanumeric value including "_"
+      externalImportId:
+        type: string
+        description: An alphanumeric value including "_"
+      files:
+        type: array
+        items:
+          $ref: '#/definitions/FileMeta'
+      identityDocuments:
+        type: array
+        items:
+          $ref: '#/definitions/IdentityDocument'
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      lastAdjunctChangeDate:
+        type: string
+        format: date-time
+      modificationDate:
+        type: string
+        format: date-time
+      names:
+        type: array
+        items:
+          $ref: '#/definitions/Name'
+      previousCountryLinks:
+        type: array
+        items:
+          $ref: '#/definitions/CountryLink'
+      provider:
+        $ref: '#/definitions/Provider'
+      sourceDescription:
+        type: string
+      sourceUris:
+        type: array
+        items:
+          type: string
+      sources:
+        type: array
+        items:
+          $ref: '#/definitions/ProviderSource'
+      subCategory:
+        type: string
+      updateCategory:
+        type: string
+        description: Entity Update Category Enumeration
+        enum:
+        - C1
+        - C2
+        - C3
+        - C4
+        - C6
+        - UNKNOWN
+      updatedDates:
+        $ref: '#/definitions/EntityUpdatedDates'
+      weblinks:
+        type: array
+        items:
+          $ref: '#/definitions/Weblink'
+      translatedEntity:
+        allOf:
+        - $ref: '#/definitions/TranslatedEntity'
+        x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
+responses:
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

@@ -1,0 +1,42 @@
+{
+  "provider": "london-stock-exchange-group",
+  "sources": [
+    "london-stock-exchange-group-api-info-api-openapi.yml",
+    "london-stock-exchange-group-audit-api-openapi.yml",
+    "london-stock-exchange-group-case-api-openapi.yml",
+    "london-stock-exchange-group-case-rating-api-openapi.yml",
+    "london-stock-exchange-group-client-watchlist-api-openapi.yml",
+    "london-stock-exchange-group-group-api-openapi.yml",
+    "london-stock-exchange-group-linked-cases-api-openapi.yml",
+    "london-stock-exchange-group-media-check-api-openapi.yml",
+    "london-stock-exchange-group-passport-check-api-openapi.yml",
+    "london-stock-exchange-group-reference-api-openapi.yml",
+    "london-stock-exchange-group-reporting-api-openapi.yml",
+    "london-stock-exchange-group-smart-filter-api-openapi.yml",
+    "london-stock-exchange-group-upcoming-api-openapi.yml",
+    "london-stock-exchange-group-user-api-openapi.yml",
+    "london-stock-exchange-group-zfs-api-openapi.yml"
+  ],
+  "outputs": [
+    "london-stock-exchange-group-api-info-api-openapi.yml",
+    "london-stock-exchange-group-audit-api-openapi.yml",
+    "london-stock-exchange-group-case-api-openapi.yml",
+    "london-stock-exchange-group-case-rating-api-openapi.yml",
+    "london-stock-exchange-group-client-watchlist-api-openapi.yml",
+    "london-stock-exchange-group-group-api-openapi.yml",
+    "london-stock-exchange-group-linked-cases-api-openapi.yml",
+    "london-stock-exchange-group-media-check-api-openapi.yml",
+    "london-stock-exchange-group-passport-check-api-openapi.yml",
+    "london-stock-exchange-group-reference-api-openapi.yml",
+    "london-stock-exchange-group-reporting-api-openapi.yml",
+    "london-stock-exchange-group-smart-filter-api-openapi.yml",
+    "london-stock-exchange-group-upcoming-api-openapi.yml",
+    "london-stock-exchange-group-user-api-openapi.yml",
+    "london-stock-exchange-group-zfs-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,58 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/_original/lseg-world-check-one-openapi-original.yml
+format: custom
+envelope:
+  schema: Error
+  fields:
+    - name: error
+      description: Error message
+    - name: cause
+      description: Underlying cause of the error
+    - name: objectId
+      description: Identifier of the object the error relates to
+  notes: >-
+    The World-Check One API does not use RFC 9457 application/problem+json;
+    errors return a custom Error object. Async report failures use
+    ReportErrorResponse (errorDetails[] of ReportError with objectId,
+    objectType, errorDescription).
+problems:
+  - status: 400
+    title: Bad request
+    occurrences: 77
+    remediation: Request body or parameters are malformed - validate against the OpenAPI schema (FIQL filter syntax errors are a common cause)
+  - status: 401
+    title: Unauthorized
+    occurrences: 77
+    remediation: >-
+      HMAC signature or OAuth token rejected - check API key/secret, ensure the
+      Date header is current RFC 1123 (replay-protection window), and that the
+      signed headers match "(request-target) host date content-type content-length"
+  - status: 403
+    title: Forbidden
+    occurrences: 5
+    remediation: The authenticated user lacks the entitlement or group permission for this operation
+  - status: 404
+    title: Not found
+    occurrences: 77
+    remediation: caseSystemId, groupId, reportId, or other resource identifier does not exist or is not visible to this account
+  - status: 409
+    title: Conflict
+    occurrences: 1
+    remediation: State conflict (e.g. case modification racing another update)
+  - status: 410
+    title: Gone
+    occurrences: 4
+    remediation: The resource is no longer available (e.g. an expired summaries cursor - cursors expire 60s after last access)
+  - status: 415
+    title: Unsupported media type
+    occurrences: 77
+    remediation: Send Content-Type application/json
+  - status: 429
+    title: Too many requests
+    occurrences: 77
+    remediation: Request rate exceeded the account's provisioned throughput - back off and retry
+  - status: 500
+    title: Unexpected error
+    occurrences: 77
+    remediation: Server-side failure - retry with backoff; contact LSEG support if persistent

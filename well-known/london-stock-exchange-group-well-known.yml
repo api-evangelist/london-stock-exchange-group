@@ -1,0 +1,68 @@
+generated: '2026-06-20'
+method: searched
+description: >-
+  Probe of the /.well-known/ discovery surface on the LSEG API, website, and
+  developer-portal hosts. No real well-known documents were found: the API
+  gateway auth-gates everything (401), www.lseg.com and lseg.com return 404,
+  and developers.lseg.com returns a 200 HTML SPA shell for every path
+  (soft-404, not the requested document). www.refinitiv.com likewise soft-404s
+  security.txt to an HTML marketing page. Empty is the recorded result - no
+  raw files were saved because no genuine documents exist.
+hosts:
+  - host: https://api-worldcheck.refinitiv.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+  - host: https://www.lseg.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://developers.lseg.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        soft_404: true
+        note: HTML SPA shell, not a security.txt document
+      - path: /.well-known/openid-configuration
+        status: 200
+        soft_404: true
+        note: HTML SPA shell, not an OIDC discovery document
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        soft_404: true
+      - path: /.well-known/api-catalog
+        status: 200
+        soft_404: true
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        soft_404: true
+  - host: https://www.refinitiv.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        soft_404: true
+        note: HTML marketing page, not RFC 9116 security.txt
+  - host: https://api.refinitiv.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://lseg.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404

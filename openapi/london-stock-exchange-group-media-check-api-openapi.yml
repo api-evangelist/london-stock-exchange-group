@@ -1,0 +1,1327 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange Group LSEG World-Check One Api-Info Media-Check API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Media-Check
+  description: Operations for the Media-Check domain.
+paths:
+  /cases/{caseSystemId}/mediacheck/results:
+    post:
+      operationId: getMediaCheckDetails
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve MediaCheck results
+      description: "Retrieve MediaCheck headlines results by the case ID.\n\nThe retrieval of MediaCheck headlines results may require a number of steps depending on the size of the headline result set.\n\n1. Initially the API consumer does basic search of MediaCheck news articles by specifying initial filters and facets to return.\n2. Later the API consumer may invoke the endpoint several times in order to scroll the results page by page or\nto narrow down the results by selecting specific facet values.\n\nInitial search request usually contains:\n\n * `pagination` object with specified fields `itemsPerPage` and `sort`, while the field `pageReference` is not specified. It is possible not to specify the `pagination` object at all, in this case WC1-API will use the default pagination values.\n * `facets` object contains list of facet categories to return.\n * `drilldownKeys` is empty on initial search.\n * `archivedArticles` field set as `true` within the `baseFilter` object (see explanation below).\n\nThe `archivedArticles` field previously within the `baseFilter` object is deprecated and should not be used in future development work.\n\nAdditionally, you may also limit publication dates through `publicationDate` field within `baseFilter` object.\n\nThe sample initial search request below specifies search within Media Check news articles according to the *Archive limit* of the *Media Check* Group settings issued in 2017, and requests up to 10 `geography` facet values, and a default number of `topic` facet values:\n\n```\n    {\n      \"baseFilter\": {\n        \"smartFilter\": true\n        \"reviewRequiredArticles\": true,\n        \"archivedArticles\": true,\n        \"publicationDate\": {\n          \"min\": \"2017-01-01T00:00:00.000Z\",\n          \"max\": \"2018-01-01T00:00:00.000Z\"\n        }\n      },\n      \"facets\": {\n        \"geography\": {\n          \"limit\": 10\n        },\n        \"topic\": {}\n      },\n      \"pagination\": {\n        \"itemsPerPage\": 25,\n        \"sort\": \"NEW_TO_OLD\"\n      }\n    }\n```\n\nFor example, consider the response returns a total result count of 100 articles, displaying 25 headlines per page. In order to retrieve the second page results, the one should include `pageReferences` field (the 26-50 news articles), or for the last page results (the 76-100 news articles).\n\nThere are also facet values for requested `geographies` and `topics` facets, as well as `matchingEntities` values because search request has `\"smartFilter\": true`.\n\n```\n    {\n      \"totalResultCount\": 100,\n      \"results\": [...25 items in the array...],\n      \"pageReferences\": {\n        \"last\": \"tokenLastPage\",\n        \"next\": \"tokenSecondPage\"\n      },\n      \"facets\": {\n        \"geographies\": [\n          {\n            \"drilldownKey\": \"drillDownKeyUK\",\n            \"facetLabel\": \"United Kingdom\",\n            \"articleCount\": \"56\"\n          }\n        ],\n        \"topics\": [\n          {\n            \"drilldownKey\": \"drillDownKeyFraud\",\n            \"facetLabel\": \"Fraud\",\n            \"articleCount\": \"43\"\n          }\n        ],\n        \"matchingEntities\": [\n          {\n            \"drilldownKey\": \"drillDownKeyDonald\",\n            \"facetLabel\": \"DONALD DUCK\",\n            \"articleCount\": \"20\",\n            \"matchStrength\": \"1\"\n          }\n        ]\n      }\n    }\n```\n\nThe second page results are only possible to be viewed after retrieving the first page of the headline result set. The next and subsequent pages results can be retrieved in a similar way, but additionally the request should include the `pageReference` field within the pagination object.\nFor better performance there's no need to provide `facets` object while requesting the second page.\n\n```\n    {\n      \"pagination\": {\n        \"pageReference\": \"tokenSecondPage\"\n      },\n      \"baseFilter\": {\n        \"archivedArticles\": true,\n        \"reviewRequiredArticles\": true,\n        \"publicationDate\": {\n          \"max\": \"2017-01-01T00:00:00.000Z\",\n          \"min\": \"2017-12-31T23:59:59.999Z\"\n        }\n      }\n    }\n```\n\nAlternatively, it is possible to narrow down results to the \"United Kingdom\" and \"Fraud\" topics instead of scrolling over huge number of results.\nThe example request looks like the initial search with the list of `drilldownKeys`.\n\n```\n    {\n      \"pagination\": {\n        \"itemsPerPage\": 25,\n        \"sort\": \"NEW_TO_OLD\"\n      },\n      \"baseFilter\": {\n        \"archivedArticles\": true,\n        \"reviewRequiredArticles\": true,\n        \"publicationDate\": {\n          \"max\": \"2017-01-01T00:00:00.000Z\",\n          \"min\": \"2017-12-31T23:59:59.999Z\"\n        }\n      },\n      \"facets\": {...},\n      \"drilldownKeys\": [\n        \"drillDownKeyFraud\",\n        \"drillDownKeyUK\"\n      ]\n    }\n```\n\n**Note on articles count display**: With deduplication on, the total articles count is returned, including duplicates, if any.\nThe duplicate articles are returned in the `duplicatesKey` field. The API user can use this field in the [Retrieve MediaCheck Article Duplicates](#_retrievemediacheckduplicates) endpoint to view the article duplicates.\n\n*For example*, consider the following request:\n\n```\n  {\n    \"baseFilter\": {\n      \"archivedArticles\": true,\n      \"reviewRequiredArticles\": true\n    },\n    \"pagination\": {\n      \"itemsPerPage\": 25,\n      \"sort\": \"NEW_TO_OLD\"\n    }\n  }\n```\n\nIf the deduplication is on, the API user may recieve a response containing the `duplicatesKey`:\n\n```\n  {\n    ...\n    \"results\": [\n      {\n        ...\n        \"articleSummary\": {\n          ...\n          \"duplicatesKey\": \"someDuplicatedKeyHash\",\n          ...\n        }\n      },\n      ...\n    ],\n    ...\n    \"totalResultCount\": 10550,\n    ...\n  }\n```\n\nThen the value of the received `duplicatesKey` may be used in [MediaCheckDuplicatesRequest](#MediaCheckDuplicatesRequest):\n\n```\n  {\n    \"deduplicationHash\": \"someDuplicatedKeyHash\"\n  }\n```\n\nAfterwards the API user will get the response containing duplicated articles:\n\n```\n  {\n    \"duplicates\": [\n      \"articleId\": \"someArticleId\",\n      ...\n    ]\n  }\n```\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: Accept-Language
+        description: A value that identifies GUI language for the request. The response will be provided in the selected GUI language where available, otherwise it will be returned in English. Note this cannot be used to filter content by language and is used to display localized metadata.
+        type: string
+        in: header
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for a Case.
+        required: true
+        type: string
+      - name: request
+        in: body
+        description: 'A request to retrieve the news results.
+
+          '
+        required: true
+        schema:
+          $ref: '#/definitions/MediaCheckResultsRequest'
+      responses:
+        200:
+          description: News articles headline summaries
+          schema:
+            $ref: '#/definitions/MediaCheckResultsResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/metadata:
+    post:
+      operationId: getMediaCheckArticlesMetadata
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve article metadata by the article IDs
+      description: "Retrieve Media Check headlines results by the article IDs.\n\n**Example HTTP request**\n\n```\n    {\n      \"articleIds\":[\n        \"articleID1\",\n        \"articleID2\",\n        \"articleID3\"\n      ]\n    }\n```\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: Accept-Language
+        description: A value that identifies UI language for request. The response will be provided in the selected UI language where available, otherwise it will be returned in English.
+        type: string
+        in: header
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: metadataRequest
+        in: body
+        description: Collection of Article IDs.
+        required: true
+        schema:
+          $ref: '#/definitions/MediaCheckArticlesMetadataRequest'
+      responses:
+        200:
+          description: News articles headline summaries.
+          schema:
+            $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/{articleId}/metadata:
+    get:
+      operationId: getMediaCheckSingleArticleMetadata
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve article metadata by the article ID
+      description: 'Retrieve Media Check headlines results by the article ID.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Accept-Language
+        description: A value that identifies UI language for request. The response will be provided in the selected UI language where available, otherwise it will be returned in English.
+        type: string
+        in: header
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: articleId
+        in: path
+        description: MediaCheck news article ID
+        required: true
+        type: string
+      responses:
+        200:
+          description: News articles headline summaries.
+          schema:
+            $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/content:
+    post:
+      operationId: getMediaCheckResultsContent
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve MediaCheck news articles content
+      description: "Retrieve MediaCheck news articles content and summary by the given caseSystemId and list of article IDs.\n\n**Example HTTP request**\n\n```\n    {\n      \"articleIds\":[\n        \"articleID1\",\n        \"articleID2\",\n        \"articleID3\"\n      ]\n    }\n```\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: request
+        in: body
+        description: Request to retrieve MediaCheck new articles content.
+        required: true
+        schema:
+          $ref: '#/definitions/MediaCheckContentRequest'
+      - name: enableHighlight
+        in: query
+        description: Flag to enable terms highlight
+        required: false
+        type: boolean
+      - name: context
+        in: query
+        description: Terms to highlight
+        required: false
+        type: string
+      responses:
+        200:
+          description: MediaCheck news articles content and summaries.
+          schema:
+            $ref: '#/definitions/MediaCheckResultsContentResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/{articleId}/content:
+    get:
+      operationId: getSingleArticleMediaCheckContent
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve content of single MediaCheck news article.
+      description: Retrieve content of single MediaCheck news article by the given caseSystemId and article ID.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: articleId
+        in: path
+        description: MediaCheck news article ID
+        required: true
+        type: string
+      - name: enableHighlight
+        in: query
+        description: Flag to enable terms highlight
+        required: false
+        type: boolean
+      - name: context
+        in: query
+        description: Terms to highlight
+        required: false
+        type: string
+      responses:
+        200:
+          description: MediaCheck news article content and summary.
+          schema:
+            $ref: '#/definitions/MediaCheckResultsContentResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/review:
+    put:
+      operationId: updateArticlesReviewedDate
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.
+      description: Marks all news articles as reviewed for the Case identified by the given caseSystemId.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      responses:
+        200:
+          description: Date and time when all articles were reviewed.
+          schema:
+            $ref: '#/definitions/ArticlesReviewDate'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/attach:
+    put:
+      operationId: attachArticles
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Attach articles to a case.
+      description: Attach articles to a case identified by the given caseSystemId.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: articleAttachment
+        in: body
+        description: Articles attachment.
+        required: true
+        schema:
+          $ref: '#/definitions/ResultsMediaCheckResolutionRequest'
+      responses:
+        200:
+          description: Articles have been attached.
+          schema:
+            $ref: '#/definitions/ResultsMediaCheckResolutionResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    get:
+      operationId: retrieveArticles
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve all articles attached to the case.
+      description: Retrieve Media Check results by the article attached to the case.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Accept-Language
+        description: A value that identifies UI language for request. The response will be provided in the selected UI language where available, otherwise it will be returned in English.
+        type: string
+        in: header
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      responses:
+        200:
+          description: News articles headline summaries.
+          schema:
+            $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    delete:
+      operationId: detachArticles
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Detach articles from a case.
+      description: Detach articles from a case identified by the given caseSystemId.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: articleDetachment
+        in: body
+        description: Articles detachment.
+        required: true
+        schema:
+          $ref: '#/definitions/MediaCheckDetachArticlesRequest'
+      responses:
+        200:
+          description: Articles have been detached.
+          schema:
+            $ref: '#/definitions/ResultsMediaCheckResolutionResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/{articleId}/attach:
+    delete:
+      operationId: detachArticle
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Detach single article from a case.
+      description: Detach single article from a case identified by the given caseSystemId.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: articleId
+        in: path
+        description: MediaCheck news article ID.
+        required: true
+        type: string
+      responses:
+        204:
+          description: MediaCheck article has been datached from a case.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /mediacheck/risks:
+    get:
+      operationId: getMediaCheckRisks
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve mediacheck risk definitions
+      description: 'Retrieves a list of mediacheck risk definitions.
+
+
+        The mediacheck risk definitions are used when attaching mediacheck articles to a case.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: A list of mediacheck risk definitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RiskDefinition'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/mediacheck/results/duplicates:
+    post:
+      operationId: retrieveMediaCheckDuplicates
+      tags:
+      - Media-Check
+      summary: London Stock Exchange Group Retrieve MediaCheck article duplicates.
+      description: 'Retrieve article duplicates by specifying article deduplicationHash.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: Accept-Language
+        description: A value that identifies GUI language for the request. The response will be provided in the selected GUI language where available, otherwise it will be returned in English. Note this cannot be used to filter content by language and is used to display localized metadata.
+        type: string
+        in: header
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for a Case.
+        required: true
+        type: string
+      - name: deduplicationRequest
+        in: body
+        description: Request containing data to retrieve article duplicates.
+        required: true
+        schema:
+          $ref: '#/definitions/MediaCheckDuplicatesRequest'
+      responses:
+        200:
+          description: Response containing duplicated articles summary.
+          schema:
+            $ref: '#/definitions/MediaCheckArticlesMetadataResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  MediaCheckResult:
+    description: Response with Media Check results for a case
+    type: object
+    properties:
+      resolution:
+        description: Case resolution information for Media Check headline result set.
+        $ref: '#/definitions/MediaCheckResultResolution'
+      articleSummary:
+        description: Media Check news article summary.
+        $ref: '#/definitions/MediaCheckArticleSummary'
+  MediaCheckContentRequest:
+    type: object
+    description: Definition of MediaCheck news articles content request
+    required:
+    - articleIds
+    properties:
+      articleIds:
+        maxItems: 200
+        minItems: 1
+        uniqueItems: true
+        type: array
+        description: 'MediaCheck articles IDs.
+
+          Request may contain up to 200 unique articles.
+
+          '
+        items:
+          type: string
+  RiskDefinition:
+    type: string
+    description: Definition of Media Check attached article risk level
+    example: HIGH
+  MediaCheckFacetsResponse:
+    type: object
+    description: Facets for article navigation. Use facet's `drilldownKey` to select a facet
+    properties:
+      publicationTypes:
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckRegularFacetResponse'
+      geographies:
+        type: array
+        items:
+          type: array
+          items:
+            $ref: '#/definitions/MediaCheckRegularFacetResponse'
+      topics:
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckRegularFacetResponse'
+      topicPhases:
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckRegularFacetResponse'
+      countries:
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckRegularFacetResponse'
+      publicationDates:
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckPublicationDatesFacetResponse'
+  MediaCheckDetachArticlesRequest:
+    type: object
+    description: Articles to detach.
+    required:
+    - articleIds
+    properties:
+      articleIds:
+        type: array
+        description: 'MediaCheck articles IDs.
+
+          Request may contain up to 200 articles.
+
+          '
+        uniqueItems: true
+        minItems: 1
+        maxItems: 200
+        items:
+          type: string
+  MediaCheckDuplicatesRequest:
+    type: object
+    description: Request containing deduplication hash to retrieve article duplicatates.
+    properties:
+      deduplicationHash:
+        description: Hash string containing deduplication configuration.
+        type: string
+  ArticlesReviewDate:
+    type: object
+    description: Date and time when all articles were reviewed.
+    required:
+    - dateReviewed
+    properties:
+      dateReviewed:
+        type: string
+        format: date-time
+        description: Case modification date and time.
+    example:
+      dateReviewed: 2019-05-14 11:55:19.038000+00:00
+  MediaCheckResultsResponse:
+    type: object
+    properties:
+      pageReferences:
+        description: Contains references that allows pagination across headline results for a case.
+        $ref: '#/definitions/MediaCheckResultsPaginationResponse'
+      results:
+        description: Response for Media Check results for a case.
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckResult'
+      totalResultCount:
+        description: Total number of found news articles
+        type: integer
+        format: int64
+        example: 89898
+      facets:
+        description: Contains facets available for navigation. Use facet's `drilldownKey` to select a facet
+        $ref: '#/definitions/MediaCheckFacetsResponse'
+  MediaCheckRegularFacetResponse:
+    type: object
+    properties:
+      drilldownKey:
+        description: Key of the facet that used for navigation
+        type: string
+      facetLabel:
+        description: Label of the facet
+        type: string
+      articleCount:
+        description: Number of articles within the facet
+        type: integer
+        format: int64
+  MediaCheckResultsContentResponse:
+    type: object
+    description: Response with MediCheck news articles content
+    properties:
+      results:
+        type: array
+        description: MediaCheck news article content and summary
+        items:
+          $ref: '#/definitions/MediaCheckResultsContent'
+    example:
+      results:
+      - articleContent:
+          content: Article content
+          copyrightHolder: Copyright holder
+          copyrightNotice: Copyright notice
+        articleSummary:
+          articleId: am2_newsroom_nNRAazy6q1|20191002T112015,757+0000
+          articleFound: true
+          contentType: newsroom
+          language: English
+          publicationDate: '2019-10-02T11:20:18.498Z'
+          publication:
+            code: DEUEUR
+            name: Publication name
+            status: null
+            description: null
+            languages: []
+            regions:
+            - Europe
+            publicationTypes: []
+            sectors: []
+          author: null
+          topics:
+          - Article Topic
+          countries:
+          - Netherlands
+          - Russia
+          title: Article title
+          snippet: ''
+          wordCount: 1655
+          phases:
+          - Article Phase
+  MediaCheckPublicationDateRange:
+    type: object
+    description: Date range when the article was published.
+    properties:
+      min:
+        type: string
+        format: date-time
+        description: Start date and time the article was published in ISO 8601 format excluding Week and Ordinal dates.
+      max:
+        type: string
+        format: date-time
+        description: End date and time when the article was published in ISO 8601 format excluding Week and Ordinal dates.
+  MediaCheckRegularFacetRequest:
+    type: object
+    description: Facets for MediaCheckResultsRequest
+    properties:
+      limit:
+        minimum: 1
+        maximum: 100
+        description: Maximum number of items to return
+        type: integer
+        format: int32
+  MediaCheckArticleContent:
+    type: object
+    description: MediaCheck news article content
+    properties:
+      content:
+        description: Contents of the MediaCheck news article
+        type: string
+      copyrightHolder:
+        description: Copyright holder of MediaCheck news article
+        type: string
+      copyrightNotice:
+        description: Copyright notice of the MediaCheck news article
+        type: string
+  MediaCheckArticleSummary:
+    description: 'MediaCheck news article summary
+
+      '
+    type: object
+    properties:
+      articleId:
+        description: Unique news article identifier
+        type: string
+        example: am2_newsroom_nNRA9oi5ww|20190423T153322,620+0000
+      articleFound:
+        description: Specifies whether article with the specified id is still available in the database.
+        type: boolean
+        default: true
+        example: true
+      author:
+        description: Article Author
+        type: string
+        example: Mark Twain
+      contentType:
+        description: Specifies content type, either internet (URL) or licensed (NEWSROOM)
+        type: string
+        example: NEWSROOM
+      countries:
+        description: List of countries the news article is tagged with
+        type: array
+        items:
+          type: string
+          example: USA
+      duplicatesKey:
+        description: A hash of the news article content which could be used to find similar news articles
+        type: string
+        example: 20190830_190c8483ce6671d338768ef40e2574d1e814f858
+      language:
+        description: Content language
+        type: string
+        example: English
+      publicationDate:
+        description: Article publication date
+        type: string
+        format: date-time
+      snippet:
+        description: A summary extracted from the lead paragraph of the article, typically first 450 characters.
+        type: string
+        example: 'Companies operating virtual assets must submit the transaction reports of clients
+
+          that by their behavior could be related to illicit money.
+
+          '
+      publication:
+        description: Information about MediaCheck news article issuer
+        $ref: '#/definitions/MediaCheckPublicationDetails'
+      title:
+        description: Article title/headline
+        type: string
+        example: They must report virtual asset operations
+      topics:
+        description: List of risk topics the news article is tagged with
+        type: array
+        items:
+          type: string
+          example: Fraud
+      wordCount:
+        description: Article word count
+        type: integer
+        format: int32
+        example: 432
+      phases:
+        description: List of risk phases the news article is tagged with
+        type: array
+        items:
+          type: string
+          example: Conviction
+  MediaCheckBaseFilter:
+    description: Used to filter news search results.
+    type: object
+    properties:
+      publicationDate:
+        $ref: '#/definitions/MediaCheckPublicationDateRange'
+      query:
+        description: User defined boolean query which can be used to narrow news results.
+        type: string
+        example: Theft AND Fraud
+      archivedArticles:
+        description: Indicates databases to return response from. If true and the archive limit on the Media Check group settings is set to 2 or more years, the response will contain results from both databases - the one that includes less than 2 years old articles, and the second one that includes 2 or more years old (archived) articles. By default the response will only include articles that are less than 2 years old. Must always be set to `true`. This field will be deprecated in the future releases.
+        type: boolean
+        default: false
+        example: true
+      reviewRequiredArticles:
+        type: boolean
+        description: 'Indicates whether articles that require review or reviewed articles should be included.
+
+          Review reqired articles are included if this field is not specified (default value).
+
+          '
+        default: true
+      smartFilter:
+        type: boolean
+        description: 'Indicates whether filter should be used when searching news articles.
+
+          Value of the filter field is stored on case or provided by group settings.
+
+          '
+      deduplicatedArticles:
+        description: 'Deduplication algorithm to use in MediaCheckBaseFilter.
+
+          It is possible to not specify value of deduplication algorithm in request and it will be provided by group settings.
+
+
+          Possible types of deduplication algorithm are:
+
+
+          * STRICT - If articles are the same they are grouped and only the newest one is returned to the user.
+
+          ''articleSummary'' will contain ''duplicatesKey'' field. Its value can be used to retrieve duplicated articles
+
+          using "Retrieve MediaCheck article duplicates" endpoint.
+
+          * COMPOSITE - If articles are the same and/or similar they are grouped and only the newest one is returned to
+
+          the user. ''articleSummary'' will contain ''duplicatesKey'' field. Its value can be used to retrieve duplicated
+
+          articles using "Retrieve MediaCheck article duplicates" endpoint.
+
+          * DISABLED - All articles are returned to the user, even if they are the same.
+
+          '
+        type: string
+        enum:
+        - STRICT
+        - COMPOSITE
+        - DISABLED
+  MediaCheckPageReference:
+    type: string
+    description: A string token that can be used to paginate across the headline result set.
+    example: eNqrVirOLypRslLycw2PD/GP9/dxUdJRyixJzS0OSC0KSExPVbIyMtBRKkotSy0qBnJKikpTdZQyMkuc80vzgBotLIGwFgA6Vxb3
+  MediaCheckResultsPaginationResponse:
+    description: 'Contains references that allows pagination across headline results for a case.
+
+
+      API consumer can use this object to find pagination options available and send the values as part of MediaCheckResultsPagination in pageReference field.
+
+      '
+    type: object
+    properties:
+      current:
+        $ref: '#/definitions/MediaCheckPageReference'
+      first:
+        $ref: '#/definitions/MediaCheckPageReference'
+      last:
+        $ref: '#/definitions/MediaCheckPageReference'
+      next:
+        $ref: '#/definitions/MediaCheckPageReference'
+      previous:
+        $ref: '#/definitions/MediaCheckPageReference'
+  ResultsMediaCheckResolutionRequest:
+    type: object
+    description: 'Articles to attach.
+
+      User able to attach articles only to unarchive case.
+
+      '
+    required:
+    - articleIds
+    - risk
+    properties:
+      reason:
+        type: string
+        maxLength: 2000
+        description: Reason description.
+      risk:
+        type: string
+        description: Definition of Media Check attached article risk level
+        example: HIGH
+      articleIds:
+        type: array
+        description: 'MediaCheck articles IDs.
+
+          Request may contain up to 200 articles.
+
+          '
+        uniqueItems: true
+        minItems: 1
+        maxItems: 200
+        items:
+          type: string
+  MediaCheckResultsRequest:
+    type: object
+    properties:
+      drilldownKeys:
+        type: array
+        description: Drill down keys for facet navigation.
+        items:
+          type: string
+      baseFilter:
+        $ref: '#/definitions/MediaCheckBaseFilter'
+      pagination:
+        $ref: '#/definitions/MediaCheckResultsPagination'
+      facets:
+        $ref: '#/definitions/MediaCheckFacetsRequest'
+  MediaCheckResultResolution:
+    description: Resolution details for news articles attached to a case.
+    type: object
+    properties:
+      risk:
+        type: string
+        description: Definition of Media Check attached article risk level
+        example: HIGH
+      reason:
+        description: Free text reason provided when attaching a news article to a case
+        type: string
+        example: It looks like the case we are looking for
+      reviewDate:
+        description: Date when a news article was attached to a case
+        type: string
+        format: date-time
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  MediaCheckArticlesMetadataResponse:
+    type: object
+    properties:
+      results:
+        description: Response for Media Check results for a case.
+        type: array
+        items:
+          $ref: '#/definitions/MediaCheckResult'
+  ResultsMediaCheckResolution:
+    description: Response with Media Check results for a case
+    type: object
+    properties:
+      articleId:
+        description: Media Check news article ID.
+        type: string
+      errorCodes:
+        type: array
+        description: Errors generated by validation.
+        items:
+          $ref: '#/definitions/Error'
+  MediaCheckPublicationDetails:
+    description: News article publisher details.
+    type: object
+    properties:
+      code:
+        description: Unique source code used to identify the publisher.
+        type: string
+        example: LSEG
+      countries:
+        description: List of countries the publisher covers
+        type: array
+        items:
+          type: string
+          example: USA
+      description:
+        description: Publisher description
+        type: string
+        example: Fast, accurate verbatim transcripts
+      languages:
+        description: List of languages the publisher covers.
+        type: array
+        items:
+          type: string
+          example: English
+      name:
+        description: Publisher Name.
+        type: string
+        example: LSEG
+      publicationTypes:
+        description: Publication type.
+        type: array
+        items:
+          type: string
+          example: Broadcast
+      regions:
+        description: List of regions the publisher covers.
+        type: array
+        items:
+          type: string
+          example: North America
+      sectors:
+        description: List of sectors the publisher covers.
+        type: array
+        items:
+          type: string
+          example: Government
+      status:
+        description: Status of the publisher, i.e. active / archived (discontinued).
+        type: string
+        example: active
+  MediaCheckPublicationDateFacetRequest:
+    type: object
+    description: Publication date facet request for navigation by search results through publication date.
+  MediaCheckArticlesMetadataRequest:
+    type: object
+    description: Definition of MediaCheck news articles content request
+    required:
+    - articleIds
+    properties:
+      articleIds:
+        uniqueItems: true
+        maxItems: 200
+        minItems: 1
+        type: array
+        description: 'MediaCheck articles IDs.
+
+          Request may contain up to 200 articles.
+
+          '
+        items:
+          type: string
+  MediaCheckResultsPagination:
+    description: 'Allows users to paginate across the full list of articles returned as part of the result set.
+
+
+      The object should have either pageReference field or sort + itemsPerPage fields defined.
+
+      '
+    type: object
+    properties:
+      itemsPerPage:
+        minimum: 1
+        maximum: 100
+        default: 100
+        description: The number of news article headlines returned per page.
+        type: integer
+        format: int32
+      sort:
+        type: string
+        enum:
+        - NEW_TO_OLD
+        - OLD_TO_NEW
+        default: NEW_TO_OLD
+      pageReference:
+        $ref: '#/definitions/MediaCheckPageReference'
+  MediaCheckPublicationDatesFacetResponse:
+    type: object
+    allOf:
+    - $ref: '#/definitions/MediaCheckRegularFacetResponse'
+    - properties:
+        selectedCount:
+          type: integer
+          description: Number of articles that are both within `baseFilter.publicationDate` range and this facet's range
+          format: int64
+  MediaCheckResultsContent:
+    type: object
+    description: Response with MediaCheck news articles content and summary
+    properties:
+      articleContent:
+        description: MediaCheck news article content
+        $ref: '#/definitions/MediaCheckArticleContent'
+      articleSummary:
+        description: MediaCheck news article summary
+        $ref: '#/definitions/MediaCheckArticleSummary'
+  ResultsMediaCheckResolutionResponse:
+    type: object
+    properties:
+      resolutions:
+        description: Response for Media Check results resolutions.
+        type: array
+        items:
+          $ref: '#/definitions/ResultsMediaCheckResolution'
+  MediaCheckFacetsRequest:
+    type: object
+    description: Facets for MediaCheckResultsRequest
+    properties:
+      publicationType:
+        $ref: '#/definitions/MediaCheckRegularFacetRequest'
+      topicPhase:
+        $ref: '#/definitions/MediaCheckRegularFacetRequest'
+      geography:
+        $ref: '#/definitions/MediaCheckRegularFacetRequest'
+      topic:
+        $ref: '#/definitions/MediaCheckRegularFacetRequest'
+      country:
+        $ref: '#/definitions/MediaCheckRegularFacetRequest'
+      publicationDate:
+        $ref: '#/definitions/MediaCheckPublicationDateFacetRequest'
+responses:
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

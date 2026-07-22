@@ -1,0 +1,4747 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange Group LSEG World-Check One Api-Info Case API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Case
+  description: Operations for the case domain.
+paths:
+  /caseIdentifiers:
+    head:
+      operationId: checkCaseIdentifierAvailability
+      tags:
+      - Case
+      summary: London Stock Exchange Group Check if a given caseId is available for use
+      description: 'caseIds must be unique within each Client. If any Group under a Client has a Case with a particular caseId,
+
+        that caseId cannot be reused on another Case within the same Client. This endpoint allows the user to check
+
+        if a given caseId is available to use when creating or updating a Case.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseId
+        in: query
+        type: string
+        required: true
+        description: Id to check if it is available to use as a caseId
+      responses:
+        200:
+          description: 'The given caseId is in use within the current user''s Client, therefore is not available to use on a
+
+            different Case.
+
+            '
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          description: 'The given caseId is not found within the current user''s Client, therefore is available to use as a caseId
+
+            on any Case.
+
+            '
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /caseReferences:
+    get:
+      operationId: getCaseReference
+      tags:
+      - Case
+      summary: London Stock Exchange Group Return the CaseReference (caseId, caseSystemId) for a caseId
+      description: 'Returns the CaseReference containing the caseId and caseSystemId pair for an existing Case with the given caseId.
+
+        This is useful if only the caseId is known but caseSystemId is required by other endpoints such as
+
+        `GET /cases/{caseSystemId}`.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseId
+        in: query
+        type: string
+        required: true
+        description: Case ID provided by the client or else generated by the system for the client
+      responses:
+        200:
+          description: CaseReference for the given caseId
+          schema:
+            $ref: '#/definitions/CaseReference'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases:
+    post:
+      operationId: saveCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Create a new case
+      description: 'Creates a new Case for asynchronous screening. Synchronous screening on the dedicated ZFS gateway host
+
+        via `/cases/screeningRequest` should be used instead of this for Zero Footprint Screening (ZFS).
+
+
+        **Info about available secondary fields can be found [here](#tag/groups/operation/getCaseTemplateForGroup).**
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: newCase
+        in: body
+        description: Case to be created
+        required: true
+        schema:
+          $ref: '#/definitions/NewCase'
+      responses:
+        201:
+          description: Case created
+          schema:
+            $ref: '#/definitions/Case'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/screeningRequest:
+    post:
+      operationId: screen
+      tags:
+      - Case
+      summary: London Stock Exchange Group Perform synchronous screening for a new case
+      description: "Perform synchronous screening for a new case.\n\nThis endpoint can perform a synchronous screening for a set of valid case details and, if provided,\nset the ongoing screening (OGS) state for the given provider types. The supported provider types for setting\nthe OGS state are WATCHLIST and MEDIA_CHECK. They both can be set to either INITIAL (OGS disabled) or ONGOING\n(OGS enabled) state. You cannot set the OGS state when using Zero Footprint Screening (ZFS) groups.\n\nThe returned result collection contains the regular case result details plus identity documents and important events.\nZFS is enabled by specifying a ZFS group id in the body and is available for dedicated Zero-footprint API customers\nor Regular WC1 API customers using ZFS-specific groups.\n\nThe response may contain Special Interest Categories (SIC) records that depends on the user subscription type.\nThis helps in SIC risk analysis:\n\n  - if a user has subscription type is Premium or Premium Plus, the keywords for SIC subcategories provided\n  in the \"sources\" field and full value of SIC keywords code in the \"categories\" field;\n\n  -  if a user has a Standard subscription type then the \"categories\" field will not contain SIC keywords;\n\n  -  the above behavior is the same for ZFS.\n\nThe example response body includes SIC with Premium or Premium Plus user subscription:\n\n```\n    {\n      \"sources\":[\n        \"b_trwc_M:1TQ\",\n        \"b_trwc_4\"\n      ],\n      \"categories\":[\n        \"Special Interest Categories\",\n        \"Other Bodies\"\n      ]\n    }\n```\n\n**Note:** The maximum number of World-Check screenings (including initial, rescreening, and ZFP ones)\n          that a client can perform in an hour is limited.\n\nWhen using the API care should be taken when using operator words even when combined with an apostrophe,\nfor example the below combinations will cause an error 403 to be returned:\n\n- String ‘AND (String)\n- String ‘OR (String)\n- String ‘AND NOT (String)\n- String ‘OR NOT (String)\n- String ‘AND AS (String)\n- String ‘OR AS (String)\n\n**Info about available secondary fields can be found [here](#tag/groups/operation/getCaseTemplateForGroup).**\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: screeningRequest
+        in: body
+        description: Screening Request
+        required: true
+        schema:
+          $ref: '#/definitions/ScreeningRequest'
+      responses:
+        200:
+          description: Collection of Screening Results
+          schema:
+            $ref: '#/definitions/ScreeningResultCollection'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}:
+    put:
+      operationId: updateExistingCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Update an existing Case by its caseSystemId
+      description: "Updates an existing Case identified by the given caseSystemId. When the case is updated, all the non-empty fields for the case are required to be sent, including the updated field(s). Non-empty fields that are not sent when calling this endpoint will be overwritten as null.\nFor example, if the date of birth for a case need to be updated, existing fields such as nationality, etc. should contain the original values, otherwise it will be updated as null. That is, all the other fields should be included in the body with their existing data. This applies to Custom Fields as well.\n\n**Note:** When updating an existing Case details with Passport-Check details within the API, to check\n          the details in the UI information you must refresh the page to view all updated details.\n\n**Info about available secondary fields can be found [here](#tag/groups/operation/getCaseTemplateForGroup).**\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: updateCase
+        in: body
+        description: Update Case
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateCase'
+      responses:
+        200:
+          description: Case updated
+          schema:
+            $ref: '#/definitions/Case'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    patch:
+      operationId: partialUpdateCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Partial update an existing Case by its caseSystemId
+      description: "Updates an existing Case identified by the given caseSystemId. When the case is updated, only updated field(s) for the case are required to be sent.\nIf non-empty fields are not sent they will be left untouched.\nCase screening results related to the value provided in Screen query parameter.\nCalling the endpoint without any change in the existing case payload, but retained query parameter screen=SYNC, works as synchronous re-screening.\n\n**Note:** The maximum number of World-Check screenings (including initial, rescreening, and ZFP ones)\n          that a client can perform in an hour is limited.\n\nWhen updating an existing Case details with Passport-Check details within the API, to check\nthe details in the UI information you must refresh the page to view all updated details.\n\n**Info about available secondary fields can be found [here](#tag/groups/operation/getCaseTemplateForGroup).**\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: updateCase
+        in: body
+        description: Update Case
+        required: true
+        schema:
+          $ref: '#/definitions/PartialUpdateCase'
+      - name: screen
+        in: query
+        description: Screen mode
+        required: false
+        type: string
+        enum:
+        - NONE
+        - SYNC
+        - ASYNC
+        default: NONE
+      responses:
+        200:
+          description: Case updated
+          schema:
+            $ref: '#/definitions/ScreeningResultCollection'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    get:
+      operationId: getCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Fetch Full Case Details
+      description: "Returns full details of the Case identified by the given 'caseSystemId'.\n\n**Note:** A delay of up to 40s after Case is screened is recommended while fetching full Case details with\n          aggregated summaries, although a delay of up to 5s would work in most of the cases. If aggregated\n          summaries return nil stats, a responsible retry mechanism with a maximum of five retries is\n          recommended for the Cases where stats are expected.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: aggregatedSummary
+        in: query
+        description: Flag to enable aggregated summary for case
+        required: false
+        type: boolean
+      responses:
+        200:
+          description: Case response
+          schema:
+            $ref: '#/definitions/Case'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    delete:
+      operationId: deleteCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Delete a Case
+      description: "Delete a Case identified by the given caseSystemId. The case must be first archived in order to delete it.\nThe user must be active and have delete permissions. The client must have delete functionality enabled.\n\n**Note:** After successful deletion, a corresponding audit with actionType 'DELETE_CASE' will be saved for the case. \n          All other audits for this case will be deleted within 15 minutes.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      responses:
+        204:
+          description: Case deleted
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/screeningRequest:
+    post:
+      operationId: screenCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Request full or delta screening for an existing Case.
+      description: "Make a request for screening of the Case identified by the given caseSystemId.\n\nScreening could be synchronous or asynchronous operation. The type of Screening could be full or delta.\n\nIn the case of asynchronous Screening result will return immediately. As a result of this call, \nthe screening request will be queued to be processed. When this request has been processed, there will be a new \n`SCREENED_CASE` audit event that can be queried via `/cases/{caseSystemId}/auditEvents` and then the results \ncan be retrieved via `/cases/{caseSystemId}/results`.\n\nIn the case of a synchronous screening as a result of the call will be returned result collection contains \nthe regular case result details plus identity documents and important events.\n\nDelta Screening performs Screening from the time of the last screening date and shows new results that appeared \nafter the last screening.\n\n**Note:** The maximum number of World-Check screenings (including initial, rescreening, and ZFP ones)\n          that a client can perform in an hour is limited.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json').
+        in: header
+        type: string
+        required: false
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes).
+        in: header
+        type: integer
+        required: false
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: CaseScreeningRequest
+        description: Case Screening Request.
+        in: body
+        required: false
+        schema:
+          $ref: '#/definitions/CaseScreeningRequest'
+      responses:
+        200:
+          description: Collection of screening results.
+          schema:
+            $ref: '#/definitions/CaseScreeningResultCollection'
+        201:
+          description: Screening request successfully queued for asynchronous processing.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/ongoingScreening:
+    put:
+      operationId: enableOngoingScreening
+      tags:
+      - Case
+      summary: London Stock Exchange Group Enable OGS for a Case.
+      description: 'Enable Ongoing Screening for the Case identified by the given caseSystemId. This will schedule the Case
+
+        to be re-screened periodically by the system.
+
+        In order to enable Ongoing Screening for multiple or specific provider type fill out an optional request body
+
+        with provider types for which to enable Ongoing Screening. If no request body provided Ongoing Screening request
+
+        will be performed for WATCHLIST provider type.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json').
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes).
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: ongoingScreeningRequest
+        in: body
+        description: Request containing details to enable Ongoing Screening for Case.
+        required: false
+        schema:
+          $ref: '#/definitions/OngoingScreeningRequest'
+      responses:
+        204:
+          description: Ongoing Screening enabled for Case.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    delete:
+      operationId: disableOngoingScreening
+      tags:
+      - Case
+      summary: London Stock Exchange Group Disable OGS for a Case.
+      description: 'Disable Ongoing Screening for the Case identified by the given caseSystemId.
+
+        In order to disable Ongoing Screening for multiple or specific provider type fill out an optional request body
+
+        with provider types for which to disable Ongoing Screening. If no request body provided Ongoing Screening request
+
+        will be performed for WATCHLIST provider type.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json').
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes).
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: ongoingScreeningRequest
+        in: body
+        description: Request containing details to disable Ongoing Screening for Case.
+        required: false
+        schema:
+          $ref: '#/definitions/OngoingScreeningRequest'
+      responses:
+        204:
+          description: Ongoing Screening disabled for Case.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/archive:
+    put:
+      operationId: archiveCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Archive a Case.
+      description: 'Archive the Case identified by the given caseSystemId. This will put the case into a state from
+
+        which it can be either unarchived or deleted.
+
+        The user must be active and have the archive permission.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      responses:
+        204:
+          description: Case archived.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    delete:
+      operationId: unarchive
+      tags:
+      - Case
+      summary: London Stock Exchange Group Unarchive a Case
+      description: 'Unarchive the Case identified by the given caseSystemId.
+
+        The user must be active and have the archive permission.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      responses:
+        204:
+          description: Case unarchived
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/archive:
+    post:
+      operationId: archiveCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Update Archive States
+      description: "Bulk Update Archive States of cases identified by the given `caseSystemIds`. The arhive states are updated \naccording to the value specified in the `\"archive\"` field: if set to `true` then all the cases will be updated \nwith the \"archive\" state, otherwise, the \"unarchived\" state will be used.\n\nIn response, the user receives a summary (`\"statuses\"`) of the archiving operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case with `\"caseSystemId1\"` has been archived successfully.\n  2. The second case with `\"caseSystemId2\"` has been archived successfully.\n  3. The third case with `\"caseSystemId3\"` has not been archived because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n\nThe user must be active and have the archive permission.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkArchiveRequest
+        in: body
+        description: A request on Bulk Update Archive States
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkArchiveRequest'
+      responses:
+        200:
+          description: A response on Bulk Update Archive States
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/assign:
+    post:
+      operationId: assignCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Update Case Assignments
+      description: "Bulk Update Case Assignments, where `Case`s are identified by the given `caseSystemIds` and assignee `User` \nis identified by the given `userId` (in case of assigning action). The case assignements are updated according \nto the value specified in the `\"userId\"` field: if set to `null` or is absent then the bulk unassigning action \nhappens, otherwise, the bulk assigning to the `User` identified by the given `userId` action \nis performed.\n\nIn response, the user receives a summary (`\"statuses\"`) of the assigning/unassigning operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case with `\"caseSystemId1\"` has been assigned successfully.\n  2. The second case with `\"caseSystemId2\"` has been assigned successfully.\n  3. The third case with `\"caseSystemId3\"` has not been assigned because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n\nThe user must be active and have the archive permission.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkAssignRequest
+        in: body
+        description: A request on Bulk Update Case Assignments
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkAssignRequest'
+      responses:
+        200:
+          description: A response on Bulk Update Case Assignments
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/delete:
+    post:
+      operationId: deleteCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Delete Cases
+      description: "Bulk Delete Cases identified by the given `caseSystemIds`. The cases must be first archived in order to delete them.\nThe user must be active and have delete permissions. The client must have delete functionality enabled.\n\nIn response, the user receives a summary (`\"statuses\"`) of the archiving operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case with `\"caseSystemId1\"` has been deleted successfully.\n  2. The second case with `\"caseSystemId2\"` has been deleted successfully.\n  3. The third case with `\"caseSystemId3\"` has not been deleted because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkDeleteRequest
+        in: body
+        description: A request on Bulk Delete Cases
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkDeleteRequest'
+      responses:
+        200:
+          description: A response on Bulk Delete Cases
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/move:
+    post:
+      operationId: updateCasesOwner
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Move Cases Between Groups
+      description: "Bulk Move Cases identified by the given `caseSystemIds` to the `Group` identified by the given `groupId`.\nThe user must be active and have move cases between groups permissions. The client must have move cases functionality enabled.\nThe current Group and the destination Group should contain identical custom fields. Cases can not be moved to ZFS group.\n\nIn response, the user receives a summary (`\"statuses\"`) of the moving cases operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case with `\"caseSystemId1\"` has been moved successfully.\n  2. The second case with `\"caseSystemId2\"` has been moved successfully.\n  3. The third case with `\"caseSystemId3\"` has not been moved because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkMoveRequest
+        in: body
+        description: A request on Bulk Move Cases
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkMoveRequest'
+      responses:
+        200:
+          description: A response on Bulk Move Cases
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/ongoingScreening:
+    post:
+      operationId: toggleOngoingScreeningByProviderTypes
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Update Ongoing Screening States
+      description: "Bulk Update Ongoing Screening (OGS) States of cases with provided `caseSystemIds` and `ProviderType`s specified in \n`caseScreeningState`. Ongoing screening can be performed for MEDIA_CHECK and WATCHLIST provider types.\nThe user must be active and have CASE_OGS permissions.\n\nIn response, the user receives a summary (`\"statuses\"`) of the World-Check/Media-Check Ongoing Screening operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. Watchlist Ongoing Screening successfully enabled for the first case with `\"caseSystemId1\"`.\n  2. Media Check Ongoing Screening successfully disabled for the second case with `\"caseSystemId2\"`.\n  3. World-Check/Media-Check Ongoing Screening operation can not be performed for the third case with `\"caseSystemId3\"` because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkOngoingScreeningRequest
+        in: body
+        description: A request on Bulk Update Ongoing Screening States
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkOngoingScreeningRequest'
+      responses:
+        200:
+          description: A response on Bulk Update Ongoing Screening States
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/bulk/link:
+    post:
+      operationId: linkCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Bulk Update Case Links
+      description: "Bulk Update Case Links for `Case`s with provided `caseSystemIds` and `relationshipTypes` specified in \n`relationshipType` field. The case links are updated according to the value specified in the \"link\" field: \nif set to `true` then the link bulk action happens, otherwise, the unlinking is performed.\n\nIn response, the user receives a summary (`\"statuses\"`) of the Link/Unlink operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case with `\"caseSystemId1\"` was linked/unlinked successfully.\n  2. The second case with `\"caseSystemId2\"` was linked/unlinked successfully.\n  3. Link/Unlink operation can not be performed for the third case with `\"caseSystemId3\"` because it does not meet the validation criteria;\n  `\"error\"` and `\"cause\"` fields contain detailed information on the error.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseBulkLinkRequestCollection
+        in: body
+        description: A request on Bulk Update Case Links
+        required: true
+        schema:
+          $ref: '#/definitions/CaseBulkLinkRequestCollection'
+      responses:
+        200:
+          description: A response on Bulk Update Case Links
+          schema:
+            $ref: '#/definitions/CaseBulkResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/results:
+    get:
+      operationId: getResults
+      tags:
+      - Case
+      summary: London Stock Exchange Group Get collection of Results for a Case by its caseSystemId
+      description: "Return a collection of Results for the Case identified by the given caseSystemId.\nThe response may contain Special Interest Categories (SIC) records that depends on the user subscription type. This helps in SIC risk analysis:\nIf a user has subscription type is Premium or Premium Plus, the keywords for SIC subcategories provided in the \"sources\" field and full value of\nSIC keywords code in the \"categories\" field.\nIf a user has a Standard subscription type then the \"categories\" field will not contain SIC keywords.\nThe above behavior is the same for Zero Footprint Screening (ZFS).\n\nThe example response body includes SIC with Premium or Premium Plus user subscription:\n\n```\n    {\n      \"sources\":[\n        \"b_trwc_M:1TQ\",\n        \"b_trwc_4\"\n      ],\n      \"categories\":[\n        \"Special Interest Categories\",\n        \"Other Bodies\"\n      ]\n    }\n```\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for a Case
+        required: true
+        type: string
+      responses:
+        200:
+          description: Collection of Results
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Result'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/results/review:
+    put:
+      operationId: reviewResults
+      tags:
+      - Case
+      summary: London Stock Exchange Group Add a review remark to the specified result IDs for the given case
+      description: Add a review remark to the specified result IDs for the given case.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: resultsReview
+        in: body
+        description: Object representing the IDs to be reviewed, and the review remark
+        required: true
+        schema:
+          $ref: '#/definitions/ResultsReview'
+      responses:
+        204:
+          description: All result IDs were successfully updated
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/results/resolution:
+    put:
+      operationId: resolveResults
+      tags:
+      - Case
+      summary: London Stock Exchange Group Resolves a list of results.
+      description: 'Resolves a list of results for the Case identified by the given caseSystemId.
+
+        The endpoint for the resolution toolkit ''/groups/{groupId}/resolutionToolkit'' provides the resolution rules
+
+        to be applied when resolving results of any [Case](#Case) within a specific [Group](#Group).
+
+
+        Any resultIds which relate to records that have been removed from World-Check One can only be resolved as FALSE.
+
+        '
+      parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        required: true
+      - name: Date
+        in: header
+        type: string
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        required: true
+      - name: Content-Type
+        in: header
+        type: string
+        description: The media type of the request (e.g., 'application/json').
+        required: true
+      - name: Content-Length
+        in: header
+        type: integer
+        description: The length of the request body in octets (8-bit bytes).
+        required: true
+      - name: caseSystemId
+        in: path
+        type: string
+        description: System generated ID for the Case.
+        required: true
+      - name: resultsResolutionAction
+        in: body
+        description: 'Represents the request details required for resolving Results.
+
+
+          **Note:** Fields ''reasonId'' and ''resolutionRemark'' are required **ONLY** if they are specified accordingly
+
+          in the configuration settings.
+
+          '
+        required: true
+        schema:
+          $ref: '#/definitions/ResultsResolutionAction'
+      responses:
+        204:
+          description: Results resolved.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/ongoingScreeningUpdates:
+    post:
+      operationId: getOngoingScreeningUpdates
+      tags:
+      - Case
+      summary: London Stock Exchange Group Get ongoing screening updates.
+      description: "Get ongoing screening updates for all `Case` objects that are visible to the current user and are flagged for\nongoing screening.\n\nFilter and sort the ongoing screening updates in the response by:\n\n  **updateDate**: The date and time of this ongoing screening update in ISO 8601 format (excluding Week and\n  Ordinal dates).  Required.\n\n  **providerType**: Ongoing screening provider type to query for results. Optional.\n\n  e.g. Filter body that specifies the page size to be `50` and queries the first page of ongoing screening updates\n  for WATCHLIST and MEDIA_CHECK provider types occurred since `2016-07-26T00:00:00Z` sorted by `updateDate` in `DESCENDING` order:\n\n    {\n      \"query\": \"updateDate>='2016-07-26T00:00:00Z', providerType==WATCHLIST, providerType==MEDIA_CHECK\",\n      \"sort\": [\n        {\n          \"columnName\": \"updateDate\",\n          \"order\": \"DESCENDING\"\n        }\n      ],\n      \"pagination\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 50\n      }\n    }\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: filter
+        in: body
+        description: Filter and sort the ongoing screening updates in the response.
+        required: true
+        schema:
+          $ref: '#/definitions/Filter'
+      responses:
+        200:
+          description: Ongoing screening update search response.
+          schema:
+            $ref: '#/definitions/OngoingScreeningUpdateSearchResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/assignee:
+    put:
+      operationId: assignCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Assign the Case to a User.
+      description: 'Assign the Case to a User. ''/users'' endpoint provides the active users
+
+        that a Case can be assigned to.
+
+        '
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case.
+        required: true
+        type: string
+      - name: assignee
+        in: body
+        description: User to whom the case will be assigned.
+        required: true
+        schema:
+          $ref: '#/definitions/Assignee'
+      responses:
+        204:
+          description: The case has been assigned successfully.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+    delete:
+      operationId: unassignCase
+      tags:
+      - Case
+      summary: London Stock Exchange Group Unassign a Case.
+      description: Once you have assigned the case to the User, you can now unassign the same case.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      responses:
+        204:
+          description: The case has been unassigned successfully.
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/search:
+    post:
+      operationId: searchCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Search for Cases based on specified criteria using filter or query parameters.
+      description: "Search for Cases based on specified criteria using filter or query parameters.\n\nThis endpoint allows you to find cases that match your search criteria. \nYou can provide these criteria through the [CaseSearchRequest](#CaseSearchRequest) object, which includes 'query' and 'filter' fields. \nExpressions in 'query' and 'filter' must adhere to the Atom Feed Item Query Language (FIQL), \nwhich is documented in [RFC 4288](https://tools.ietf.org/html/rfc4288) and the superset supported by the WC1 API, \nas documented in [WC1 API Query Language](https://github.com/jirutka/rsql-parser).\n\n**Note:** To learn about the available search fields and their usage, you can use the `GET /reference/searchFilters` endpoint.\n\nResponse details can be customized using the 'detailLevel' field:\n  - 'CASE': The search response will provide full Case details.\n  - 'CASE_AND_RESULTS': The search response will include Сase details and Result summary related to this Case.\n  - 'CASE_AND_AGGREGATED_RESULTS': The search response will provide full Case details with an aggregated Result summary, summarizing data from primary and sub-cases.\n  - 'CASE_AND_RESULTS_AND_AGGREGATED_RESULTS': The search response will provide full Case details with a Result and aggregated(summarizing data from primary and sub-cases) summaries.\n\nNumber of results can be controlled through 'pagination' and 'sort' fields.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json').
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes).
+        in: header
+        type: integer
+        required: true
+      - name: caseSearchRequest
+        description: The request containing search criteria.
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CaseSearchRequest'
+      responses:
+        200:
+          description: A set of Cases that match the specified criteria.
+          schema:
+            $ref: '#/definitions/CaseSearchResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/summaries:
+    post:
+      operationId: retrieveCaseSummaries
+      tags:
+      - Case
+      summary: London Stock Exchange Group User activity monitoring. Initial request.
+      description: "Return a collection of Cases that were modified by users in particular date range.\nEndpoint allow to initiate search and retrieve the first page of result set.\nThe query supports next field to specify searching criteria:\n\n'modificationDate' - Time when the case has been modified by the user;\n\n'assignedUserId' - Identifier of the User cases are assigned to;\n\n'groupId' - Identifier of the Group that owns the case;\n\n'creatorUserId' - Identifier of the case author;\n\n'modifierUserId' - Identifier of the recent changes author;\n\n'creationDate' - Time when the case has been created.\n\nTo retrieve the next set of results please use '/cases/summaries/cursor' endpoint.\n\n**Note:** Cursor lifespan keeps extending if the cursor is accessed within its current lifespan.\n          For example, once the cursor-id is generated using `POST /cases/summaries` endpoint, its lifespan is 60secs\n          from there. Within that 60secs, if `POST /cases/summaries/cursor` endpoint is called, it extends the\n          lifespan of the cursor to another 60secs from the point that call is made – and so on. If there are\n          no subsequent calls to `POST /cases/summaries/cursor` endpoint using the same cursor within 60secs, cursor\n          will expire.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: filter
+        in: body
+        description: The "query" is a FIQL expression which allows specifying comparison expression on case fields and it also allows specifying boolean operators AND/OR. The "sort" allows specifying items order in the response. The "cursorOptions" allows specifying count of items in the first response.
+        required: true
+        schema:
+          $ref: '#/definitions/CaseSummaryFilter'
+      responses:
+        200:
+          description: Case search response.
+          schema:
+            $ref: '#/definitions/CaseSearchResultResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/summaries/cursor:
+    post:
+      operationId: scrollCaseSummaries
+      tags:
+      - Case
+      summary: London Stock Exchange Group User activity monitoring. Subsequent request.
+      description: "Continue loading result sets by cursor ID retrieved from POST/cases/summaries.\n\n**Note:** Cursor lifespan keeps extending if the cursor is accessed within its current lifespan.\n          For example, once the cursor-id is generated using `POST /cases/summaries` endpoint, its lifespan is 60secs\n          from there. Within that 60secs, if `POST /cases/summaries/cursor` endpoint is called, it extends the\n          lifespan of the cursor to another 60secs from the point that call is made – and so on. If there are\n          no subsequent calls to `POST /cases/summaries/cursor` endpoint using the same cursor within 60secs, cursor\n          will expire.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: cursor
+        in: body
+        description: Request to continue cases retrieval.
+        required: true
+        schema:
+          $ref: '#/definitions/Cursor'
+      responses:
+        200:
+          description: Case search response.
+          schema:
+            $ref: '#/definitions/CaseSearchResultResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/saveAndScreen:
+    post:
+      operationId: saveAndScreenCases
+      tags:
+      - Case
+      summary: London Stock Exchange Group Save and screen multiple cases.
+      description: "Save and screen multiple cases for the given group Id. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).\nIn response, the caller receives a summary of the creation operation for each case.\n\n*Example HTTP response* below, shows the following summary:\n\n  1. The first case has been created successfully.\n  2. The second case has not been created successfully because it does not meet the validation criteria;\n   \"errors\" and \"cause\" fields contain detailed information.\n\n**Example HTTP response**\n\n```\n  [\n      {\n          \"name\": \"Name 1\",\n          \"caseId\": \"Case ID 1\",\n          \"caseSystemId\": \"Case System ID 1\",\n          \"nameTransposition\": true,\n          \"caseScreeningState\": {\n              \"WATCHLIST\": \"INITIAL\"\n          }\n      },\n      {\n          \"name\": \"Name 2\",\n          \"caseId\": \"Case ID 2\",\n          \"errors\": [\n              {\n                  \"error\": \"CASE_ID_EXISTS\",\n                  \"cause\": \"Case IDs must be unique within the same client and request.\"\n              }\n          ]\n      }\n  ]\n```\n\n**Note:** The maximum number of World-Check screenings (including initial, rescreening, and ZFP ones)\n          that a client can perform in an hour is limited.\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseDetailsCollection
+        in: body
+        description: Container of cases that is used in scope of creation operation.
+        required: true
+        schema:
+          $ref: '#/definitions/CaseDetailsCollection'
+      responses:
+        200:
+          description: 'If the request passed general validation, the caller receives response with CaseReference list,
+
+            with summaries for each case located in payload.
+
+            '
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CaseReferenceDetails'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        403:
+          $ref: '#/responses/Forbidden'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/screeningStatus:
+    post:
+      operationId: screeningStatus
+      tags:
+      - Case
+      summary: London Stock Exchange Group Retrieve case screening status and aggregated result for multiple cases.
+      description: "Retrieve case screening statuses and aggregated results. Caller may include multiple cases with up to 50 entities in a single request (see *Example HTTP request* below).\nIn response, the caller receives a status and aggregated screening results for each case.\n\n**Example HTTP response**\n\n```\n  Response example returned for request not containing \"providerTypes\" field.\n  [\n      {\n          \"caseSystemId\": \"Case System ID 1\",\n          \"screeningStatus\": \"SCREENED\",\n          \"requestFromScreenedDate\": \"2020-10-24T11:40:21.517Z\",\n          \"lastScreenedDate\": \"2019-12-16T14:44:15.582Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"totalMatches\": 38,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 35\n              }\n          }\n      },\n      {\n          \"caseSystemId\": \"Case System ID 2\",\n          \"screeningStatus\": \"NOT_SCREENED\",\n          \"requestFromScreenedDate\": \"2020-10-24T11:40:21.517Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"totalMatches\": 0,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 0\n              },\n              \"PASSPORT_CHECK\": {\n                  \"isReviewRequired\": false\n              }\n          }\n      },\n      {\n          \"caseSystemId\": \"Case System ID 3\",\n          \"screeningStatus\": \"SCREENED\",\n          \"requestFromScreenedDate\": \"2019-10-24T11:40:21.517Z\",\n          \"lastScreenedDate\": \"2019-12-20T08:25:32.146Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"totalMatches\": 625,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 618\n              }\n          }\n      }\n  ]\n\n  Response example returned for request containing \"providerTypes\" field.\n  [\n      {\n          \"caseSystemId\": \"Case System ID 1\",\n          \"requestFromScreenedDate\": \"2020-10-24T11:40:21.517Z\",\n          \"lastScreenedDate\": \"2019-12-16T14:44:15.582Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"status\": \"SCREENED\",\n                  \"totalMatches\": 38,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 35\n              }\n          }\n      },\n      {\n          \"caseSystemId\": \"Case System ID 2\",\n          \"requestFromScreenedDate\": \"2020-10-24T11:40:21.517Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"status\": \"SCREENED\",\n                  \"totalMatches\": 0,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 0\n              },\n              \"PASSPORT_CHECK\": {\n                  \"isReviewRequired\": false\n              }\n          }\n      },\n      {\n          \"caseSystemId\": \"Case System ID 3\",\n          \"requestFromScreenedDate\": \"2019-10-24T11:40:21.517Z\",\n          \"lastScreenedDate\": \"2019-12-20T08:25:32.146Z\",\n          \"providerSummaries\": {\n              \"WATCHLIST\": {\n                  \"status\": \"SCREENED\",\n                  \"totalMatches\": 625,\n                  \"reviewRequired\": 0,\n                  \"unresolved\": 618\n              },\n              \"MEDIA_CHECK\": {\n                  \"status\": \"SCREENED\",\n                  \"isReviewRequired\":\n              }\n          }\n      }\n  ]\n```\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseScreeningStatus
+        in: body
+        description: Allows to specify cases and their screening dates that are using to define the screening status.
+        required: true
+        schema:
+          $ref: '#/definitions/ScreeningStatusRequestCollection'
+      responses:
+        200:
+          description: 'If the request passed general validation, the caller receives a response with screening status and aggregated results for each case in the payload.
+
+            '
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ScreeningStatusResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  CaseBulkLinkRequestCollection:
+    type: object
+    description: A request body on Bulk Update Case Links
+    required:
+    - link
+    - relationshipType
+    - caseSystemIds
+    properties:
+      link:
+        type: boolean
+        description: A flag indicating whether to Bulk Link (`true`) or Unlink (`false`) Cases.
+      relationshipType:
+        type: string
+        description: Relationship type between cases.
+        enum:
+        - SUBCASE_TO_PRIMARY
+        - PRIMARY_TO_SUBCASE
+      caseSystemIds:
+        type: array
+        description: An array of case bulk link requests
+        items:
+          $ref: '#/definitions/CaseBulkLinkRequest'
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      link: true
+      relationshipType: SUBCASE_TO_PRIMARY
+      caseSystemIds:
+      - caseSystemId: caseSystemId1
+      - relatedCaseSystemIds:
+        - caseSystemId2
+        - caseSystemId3
+        - caseSystemId4
+      - caseSystemId: caseSystemId5
+      - relatedCaseSystemIds:
+        - caseSystemId6
+        - caseSystemId7
+        - caseSystemId8
+      note: Audit note
+  ProviderSourceType:
+    type: object
+    properties:
+      category:
+        $ref: '#/definitions/ProviderSourceTypeCategoryDetail'
+      identifier:
+        type: string
+      name:
+        type: string
+  AbstractAssociate:
+    type: object
+    description: 'The `AbstractAssociate` subclasses corresponding to each type of entity are:
+
+
+      * `COUNTRY`: `CountryAssociate`
+
+      * `INDIVIDUAL`: `IndividualAssociate`
+
+      * `ORGANISATION`: `OrganisationAssociate`
+
+      * `VESSEL`: `VesselAssociate`
+
+      '
+    discriminator: associateEntityType
+    required:
+    - associateEntityType
+    - entityType
+    properties:
+      associateEntityType:
+        type: string
+        description: Discriminator field. Might go away in a future major version of the API
+      entityType:
+        type: string
+        description: 'Profile Entity Type Enumeration.
+
+
+          The `Entity` subclasses corresponding to each type of entity are:
+
+
+          * `COUNTRY` : `CountryEntity`
+
+          * `INDIVIDUAL` : `IndividualEntity`
+
+          * `ORGANISATION` : `OrganisationEntity`
+
+          * `VESSEL` : `VesselEntity`
+
+          '
+        enum:
+        - COUNTRY
+        - INDIVIDUAL
+        - ORGANISATION
+        - VESSEL
+      reversed:
+        type: boolean
+        default: false
+      targetEntityId:
+        type: string
+      targetExternalImportId:
+        type: string
+      type:
+        type: string
+        description: Associate Type Enumeration
+        default: UNKNOWN
+        enum:
+        - ADVISOR
+        - AGENT_REPRESENTATIVE
+        - AFFILIATED_COMPANY
+        - AFFILIATED_ORGANIZATION
+        - AFFILIATED_POSITION
+        - ASSET
+        - ASSISTANT
+        - ASSOCIATE
+        - ASSOCIATED_SPECIAL_INTEREST_PERSON
+        - AUNT
+        - BANKER
+        - BRANCH_OFFICE
+        - BROTHER
+        - BROTHER_IN_LAW
+        - BUSINESS_ASSOCIATE
+        - CHILD
+        - CLIENT
+        - COLLEAGUE
+        - COUSIN
+        - CO_DEFENDANT
+        - DAUGHTER
+        - DAUGHTER_IN_LAW
+        - DIRECTOR
+        - DOC_COMPANY
+        - EMPLOYEE
+        - EMPLOYER
+        - EXECUTIVE
+        - EX_HUSBAND
+        - EX_WIFE
+        - FAMILY
+        - FAMILY_MEMBER
+        - FATHER
+        - FATHER_IN_LAW
+        - FINANCIAL_ADVISOR
+        - FRIEND
+        - FRONT_COMPANY
+        - GRANDDAUGHTER
+        - GRANDFATHER
+        - GRANDMOTHER
+        - GRANDSON
+        - GRAND_CHILD
+        - GROUP_BENEFICIAL_OWNER
+        - HUSBAND
+        - KEY_MEMBER
+        - LEGAL_ADVISOR
+        - MISC
+        - MOTHER
+        - MOTHER_IN_LAW
+        - NEPHEW
+        - NIECE
+        - NOMINEE
+        - OPERATOR
+        - OWNER
+        - PARENT
+        - POLITICAL_ADVISOR
+        - REGISTERED_OWNER
+        - RELATIVE
+        - SAME_SEX_SPOUSE
+        - SENIOR_OFFICIAL
+        - SHAREHOLDER_OWNER
+        - SHIP_MANAGER
+        - SISTER
+        - SISTER_IN_LAW
+        - SON
+        - SON_IN_LAW
+        - SPOUSE
+        - STEP_DAUGHTER
+        - STEP_SON
+        - STEPFATHER
+        - STEPMOTHER
+        - SUBSIDIARY
+        - TECHNICAL_MANAGER
+        - UNCLE
+        - UNKNOWN
+        - UNMARRIED_PARTNER
+        - WIFE
+      targetPrimaryName:
+        type: string
+      creationDate:
+        type: string
+        format: date-time
+      modificationDate:
+        type: string
+        format: date-time
+      updateCategory:
+        type: string
+        description: Entity Update Category Enumeration
+        enum:
+        - C1
+        - C2
+        - C3
+        - C4
+        - C6
+        - UNKNOWN
+      category:
+        type: string
+      targetCategories:
+        type: array
+        description: List of names of [ProviderSourceTypeCategoryDetail](#ProviderSourceTypeCategoryDetail) in sources of target Entity.
+        uniqueItems: true
+        items:
+          type: string
+  EntityType:
+    type: string
+    description: Entity type of the case.
+    enum:
+    - INDIVIDUAL
+    - ORGANISATION
+    - VESSEL
+    - COUNTRY
+  CursorOptions:
+    type: object
+    properties:
+      itemsPerPage:
+        type: integer
+        description: Required parameter, with validation min value 1, max value 1000 which allows to define items per page in the response.
+        format: int64
+  CaseBulkStatus:
+    type: object
+    description: Case Bulk Status
+    required:
+    - caseSystemId
+    - success
+    properties:
+      caseSystemId:
+        type: string
+        description: System generated ID for the Case
+      success:
+        type: boolean
+        description: Indicates the result of Case Archiving / Unarchiving action
+        example: true
+      errors:
+        type: array
+        description: A set of validation errors
+        items:
+          $ref: '#/definitions/Error'
+  ProviderTypeSummaryResult:
+    type: object
+    description: 'Contains enabled in the case provider types and their aggregated screening results.
+
+      '
+    properties:
+      status:
+        type: string
+        description: Case Screening State Enumeration representing type of Screening.
+        enum:
+        - NOT_SCREENED
+        - SCREENED
+      totalMatches:
+        type: integer
+        format: int64
+        example: 10
+        description: Total mathes for provider type.
+      reviewRequired:
+        type: integer
+        format: int64
+        example: 10
+        description: Review required for provider type.
+      isReviewRequired:
+        type: boolean
+        example: true
+        description: Identifies whether a review is required for the provider type.
+      unresolved:
+        type: integer
+        format: int64
+        example: 10
+        description: Unresolved for provider type.
+  TranslatedEntity:
+    type: object
+    description: Representation of translated entity.
+    properties:
+      translationDisclaimer:
+        type: string
+        description: Disclaimer for Translation Response.
+      details:
+        type: array
+        description: A collection of translated entity details.
+        items:
+          $ref: '#/definitions/Detail'
+  WatchlistResultSummary:
+    type: object
+    description: Match summary for results with provider type WATCHLIST
+    properties:
+      watchlistTotalMatches:
+        type: integer
+        format: int32
+        description: Field contains watch list total matches count
+      watchlistUnresolved:
+        type: integer
+        format: int32
+        description: Field contains count of watch list unresolved
+      watchlistReviewRequired:
+        type: integer
+        format: int32
+        description: Field contains count of watch list review required
+      categorisedMatches:
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: integer
+  PaginationResponse:
+    type: object
+    description: Outbound - used to describe paginated partial result sets
+    allOf:
+    - $ref: '#/definitions/Pagination'
+    - properties:
+        totalItems:
+          type: integer
+          format: int64
+  AbstractScreeningResult:
+    type: object
+    description: Generic common Result fields returned after a Case is screened
+    required:
+    - referenceId
+    properties:
+      resultId:
+        type: string
+        maxLength: 255
+        description: Result identifier
+      referenceId:
+        type: string
+        description: The reference ID of the matched Entity
+        maxLength: 255
+      matchStrength:
+        type: string
+        description: Matched Result Strength
+        enum:
+        - WEAK
+        - MEDIUM
+        - STRONG
+        - EXACT
+      matchScore:
+        type: number
+        description: the exact match score with value rounded to 2 decimal places
+        format: double
+      matchedTerm:
+        type: string
+        description: Matched term for the Result. DEPRECATED in flavour of matchedTerms field
+        maxLength: 1000
+      matchedTerms:
+        type: array
+        description: List of matched terms for the result with resultId.
+        items:
+          $ref: '#/definitions/MatchedTerm'
+      submittedTerm:
+        type: string
+        description: Submitted term for the Result
+        maxLength: 1000
+      matchedNameType:
+        type: string
+        description: Watchlist Profile Name Type enumeration. DEPRECATED in flavour of matchedTerms field
+        enum:
+        - PRIMARY
+        - AKA
+        - AKAENHANCED
+        - FKA
+        - DBA
+        - MAIDEN
+        - LANG_VARIATION
+        - PREVIOUS
+        - VEHICLE_ID
+        - LOW_QUALITY_AKA
+        - NATIVE_AKA
+        - DOCUMENT_ID
+      secondaryFieldResults:
+        type: array
+        description: Match results for Case secondary fields.
+        items:
+          $ref: '#/definitions/SecondaryFieldResult'
+      sources:
+        type: array
+        description: 'Set of [ProviderSource](#ProviderSource)s, each of which contains this Result''s Entity and was used to screen
+
+          the Case when this Result was last found.
+
+          '
+        items:
+          type: string
+          description: '[ProviderSource] (#ProviderSource) Identifier.
+
+            '
+      categories:
+        type: array
+        description: 'Set of [ProviderSourceTypeCategory] (#ProviderSourceTypeCategoryDetail) names of this Result''s sources.
+
+          '
+        items:
+          type: string
+          description: '[ProviderSourceTypeCategory] (#ProviderSourceTypeCategoryDetail) Name.
+
+            '
+      creationDate:
+        type: string
+        format: date-time
+        description: Result creation date and time.
+      modificationDate:
+        type: string
+        format: date-time
+        description: Result modification date and time.
+      lastAlertDate:
+        type: string
+        format: date-time
+        description: Last alert date of the matched result term.
+      modifier:
+        description: The modifier of the matched result term.
+        $ref: '#/definitions/UserSummary'
+      resolution:
+        $ref: '#/definitions/Resolution'
+      resultReview:
+        $ref: '#/definitions/Review'
+  CaseDetails:
+    type: object
+    description: 'Representation of a single case that is used for case creation operation.
+
+      Defines Case data that can be sent when creating a new Case.
+
+      '
+    required:
+    - entityType
+    - name
+    properties:
+      caseId:
+        type: string
+        description: Case ID provided by the client. This is auto-generated by the system if not provided.
+        maxLength: 512
+      entityType:
+        type: string
+        description: Case Entity Type Enumeration.
+        enum:
+        - INDIVIDUAL
+        - ORGANISATION
+        - VESSEL
+        - UNSPECIFIED
+      name:
+        type: string
+        description: Name to screen for this case.
+        maxLength: 1000
+      customFields:
+        type: array
+        description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`.
+
+          '
+        items:
+          $ref: '#/definitions/Field'
+      secondaryFields:
+        type: array
+        description: 'Case Secondary Fields. Available secondary fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`.
+
+          '
+        items:
+          $ref: '#/definitions/Field'
+    example:
+      caseId: Client Case Id
+      entityType: INDIVIDUAL
+      name: John Smith
+      customFields:
+      - typeId: Custom Field Id 1
+        value: Reference ID 1234567
+      - typeId: Custom Field Id 2
+        value: Deal Id 1234567
+      secondaryFields:
+      - typeId: SFCT_1
+        value: MALE
+      - typeId: SFCT_2
+        dateTimeValue: '1990-11-20'
+  CaseScreeningResultCollection:
+    type: object
+    description: Contains an array of Watchlist Screening Result objects from a synchronous screening operation.
+    properties:
+      case:
+        type: object
+        description: Contains the Case data.
+        $ref: '#/definitions/Case'
+      results:
+        type: array
+        description: Contains the Screening Result objects of the screening.
+        items:
+          $ref: '#/definitions/Result'
+  SearchResponse:
+    type: object
+    description: Common fields used in search responses.  These fields are included in response types, and objects of this type are not returned directly.
+    required:
+    - totalResultCount
+    properties:
+      query:
+        type: string
+      sort:
+        type: array
+        description: The sort critieria to apply to the query
+        items:
+          $ref: '#/definitions/SortCriterion'
+      pagination:
+        $ref: '#/definitions/PaginationResponse'
+      totalResultCount:
+        type: integer
+        format: int64
+  Pagination:
+    type: object
+    description: Inbound - the pagination to apply to the query.
+    required:
+    - currentPage
+    - itemsPerPage
+    properties:
+      currentPage:
+        type: integer
+        format: int32
+      itemsPerPage:
+        type: integer
+        format: int32
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  CaseEntityType:
+    type: string
+    description: Case entity type enumeration.
+    enum:
+    - INDIVIDUAL
+    - ORGANISATION
+    - VESSEL
+    - UNSPECIFIED
+  CaseBulkDeleteRequest:
+    type: object
+    description: A request body on Bulk Delete Cases
+    required:
+    - caseSystemIds
+    properties:
+      caseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+          description: System generated Id for the Case
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      caseSystemIds:
+      - caseSystemId1
+      - caseSystemId2
+      - caseSystemId3
+      note: Audit note
+  CaseBulkAssignRequest:
+    type: object
+    description: A request body on Bulk Update Case Assignments
+    required:
+    - caseSystemIds
+    properties:
+      userId:
+        type: string
+        description: User to whom the cases will be assigned, or `"UNASSIGN"` when unassign action is expected
+      caseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+          description: System generated Id for the Case
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      userId: userId
+      caseSystemIds:
+      - caseSystemId1
+      - caseSystemId2
+      - caseSystemId3
+      note: Audit note
+  ProviderSource:
+    type: object
+    required:
+    - abbreviation
+    - identifier
+    - name
+    - providerSourceStatus
+    - type
+    properties:
+      abbreviation:
+        type: string
+        description: Abbreviated form of this source's `name`.
+      creationDate:
+        type: string
+        format: date-time
+      identifier:
+        type: string
+        description: An alphanumeric value
+      importIdentifier:
+        type: string
+      name:
+        type: string
+        description: Full name of this source.
+        maxLength: 255
+      provider:
+        description: Provider for this source.
+        $ref: '#/definitions/Provider'
+      providerSourceStatus:
+        type: string
+        description: Provider Source Status Enumeration
+        enum:
+        - ACTIVE
+        - DELETED
+        - HIDDEN
+      regionOfAuthority:
+        type: string
+      subscriptionCategory:
+        type: string
+        description: Subscription Category Type Enumeration
+        default: STANDARD
+        enum:
+        - PREMIUM
+        - STANDARD
+      modificationDate:
+        type: string
+        description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
+        format: date-time
+      description:
+        type: string
+        description: Description of the source.
+      type:
+        $ref: '#/definitions/ProviderSourceType'
+  CaseSummaryFilterResponse:
+    type: object
+    description: Filter the response
+    properties:
+      query:
+        type: string
+        description: "A query filter expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\nThe query supports next field to specify searching criteria:\n\n'modificationDate' - Time when the case has been modified by the user;\n\n'assignedUserId' - Identifier of the User cases are assigned to;\n\n'groupId' - Identifier of the Group that owns the case.\n\n'creatorUserId' - Identifier of the case author\n\n'modifierUserId' - Identifier of the recent changes author\n\n'creationDate' - Time when the case has been created\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing \nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved \ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nThe query examples:\n\n* \"query\": \"example=='TE!ST'\"\n* \"query\": \"example==\\\\\"TE'ST\\\\\"\"\n* \"query\": \"example=='TE\\\\\\\\'ST'\"\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single \nor double quotes.\n\nExample:\n\n* \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
+      sort:
+        type: array
+        description: The sort critieria to apply to the query
+        items:
+          $ref: '#/definitions/SortCriterion'
+  CaseBulkResponse:
+    type: object
+    description: Cases Archived / Unarchived Bulk Response
+    required:
+    - statuses
+    properties:
+      statuses:
+        type: array
+        description: A set of results on each Case
+        items:
+          $ref: '#/definitions/CaseBulkStatus'
+    example:
+      statuses:
+      - caseSystemId: caseSystemId1
+        success: true
+      - caseSystemId: caseSystemId2
+        success: true
+      - caseSystemId: caseSystemId3
+        success: false
+        errors:
+        - error: CASE_NOT_FOUND
+          cause: API key does not have permission to access the case or case not found.
+  PageReference:
+    type: object
+    description: Model representing references to previous and next pages.
+    properties:
+      previous:
+        type: string
+        description: A reference to the previous page.
+      current:
+        type: string
+        description: A reference to the current page.
+      next:
+        type: string
+        description: A reference to the next page.
+  Filter:
+    type: object
+    description: Filter the response
+    properties:
+      query:
+        type: string
+        description: "A query filter expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing \nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved \ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nThe query examples:\n\n* \"query\": \"example=='TE!ST'\"\n* \"query\": \"example==\\\\\"TE'ST\\\\\"\"\n* \"query\": \"example=='TE\\\\\\\\'ST'\"\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single \nor double quotes.\n\nExample:\n\n* \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
+      sort:
+        type: array
+        description: The sort critieria to apply to the query
+        items:
+          $ref: '#/definitions/SortCriterion'
+      pagination:
+        $ref: '#/definitions/Pagination'
+  EntityUpdatedDates:
+    type: object
+    properties:
+      ageUpdated:
+        type: string
+        format: date-time
+      aliasesUpdated:
+        type: string
+        format: date-time
+      alternativeSpellingUpdated:
+        type: string
+        format: date-time
+      asOfDateUpdated:
+        type: string
+        format: date-time
+      categoryUpdated:
+        type: string
+        format: date-time
+      citizenshipsUpdated:
+        type: string
+        format: date-time
+      companiesUpdated:
+        type: string
+        format: date-time
+      deceasedUpdated:
+        type: string
+        format: date-time
+      dobsUpdated:
+        type: string
+        format: date-time
+      eiUpdated:
+        type: string
+        format: date-time
+      enteredUpdated:
+        type: string
+        format: date-time
+      externalSourcesUpdated:
+        type: string
+        format: date-time
+      firstNameUpdated:
+        type: string
+        format: date-time
+      foreignAliasUpdated:
+        type: string
+        format: date-time
+      furtherInformationUpdated:
+        type: string
+        format: date-time
+      idNumbersUpdated:
+        type: string
+        format: date-time
+      keywordsUpdated:
+        type: string
+        format: date-time
+      lastNameUpdated:
+        type: string
+        format: date-time
+      linkedToUpdated:
+        type: string
+        format: date-time
+      locationsUpdated:
+        type: string
+        format: date-time
+      lowQualityAliasesUpdated:
+        type: string
+        format: date-time
+      passportsUpdated:
+        type: string
+        format: date-time
+      placeOfBirthUpdated:
+        type: string
+        format: date-time
+      positionUpdated:
+        type: string
+        format: date-time
+      ssnUpdated:
+        type: string
+        format: date-time
+      subCategoryUpdated:
+        type: string
+        format: date-time
+      titleUpdated:
+        type: string
+        format: date-time
+      updatecategoryUpdated:
+        type: string
+        format: date-time
+      sicUpdated:
+        type: string
+        format: date-time
+  MediaCheckResultSummary:
+    type: object
+    description: Match summary for results with provider type MEDIA_CHECK
+    properties:
+      mediaCheckAttachedCount:
+        type: integer
+        format: int64
+        description: Field contains counter for media check attached
+      mediaCheckReviewRequired:
+        type: boolean
+        description: Flag that indicates that MEDIA_CHECK case should be resolved
+  CaseDetailed:
+    type: object
+    description: 'Defines complete Case data returned during a search operation.
+
+      This model provides detailed information about a Case.
+
+      '
+    properties:
+      caseId:
+        type: string
+        description: 'The unique identifier for the Case, which can be provided by the Client or generated by the system.
+
+          This field is not applicable for ''Zero Footprint Screening (ZFS)''.
+
+          '
+        maxLength: 1000
+      name:
+        type: string
+        description: The name used for screening this Case.
+        maxLength: 1000
+      providerTypes:
+        type: array
+        description: 'The provider types required to screen this Case.
+
+          For ''Zero Footprint Screening (ZFS)'', only ''WATCHLIST'' and ''CLIENT_WATCHLIST'' are supported.
+
+          '
+        minItems: 1
+        items:
+          $ref: '#/definitions/ProviderType'
+      customFields:
+        type: array
+        description: "Custom fields associated with this Case. \nDefinitions for available custom fields can be obtained via `GET /groups/{groupId}/caseTemplate` endpoint. \nCustom fields cannot be used with 'Zero Footprint Screening (ZFS)'.\n"
+        items:
+          $ref: '#/definitions/Field'
+      secondaryFields:
+        type: array
+        description: "Secondary fields associated with this Case. \nDefinitions for available secondary fields can be obtained via `GET /groups/{groupId}/caseTemplate` endpoint.\n"
+        items:
+          $ref: '#/definitions/Field'
+      groupId:
+        type: string
+        description: "The identifier of the group that owns this Case. \nThe group determines whether the case is screened as 'Zero Footprint Screening (ZFS)' or not.\n"
+        maxLength: 255
+      entityType:
+        $ref: '#/definitions/CaseEntityType'
+      caseSystemId:
+        type: string
+        description: The system-generated ID for the Case.
+        maxLength: 1000
+      caseScreeningState:
+        type: object
+        description: "A mapping from [ProviderType](#ProviderType) to indicate whether ongoing screening is enabled for this case on the specific [ProviderType](#ProviderType). \nBy default, the value is set from account settings.\n"
+        additionalProperties:
+          type: string
+      lifecycleState:
+        type: string
+        description: Case Lifecycle State Enumeration.
+        enum:
+        - ARCHIVED
+        - UNARCHIVED
+      creator:
+        $ref: '#/definitions/UserSummary'
+      modifier:
+        $ref: '#/definitions/UserSummary'
+      assignee:
+        $ref: '#/definitions/UserSummary'
+      creationDate:
+        type: string
+        description: The date and time when the Case was created.
+        format: date-time
+      modificationDate:
+        type: string
+        description: The date and time when the Case was last modified.
+        format: date-time
+      lastScreenedDate:
+        type: string
+        description: The date and time when the Case was last screened.
+        format: date-time
+      modificationDateBySystem:
+        type: string
+        description: The date and time of the last modification to the Case by the system.
+        format: date-time
+      modificationDateByUser:
+        type: string
+        description: The date and time of the last modification to the Case by a User.
+        format: date-time
+      lastAuditEventActivity:
+        type: string
+        description: Type of action that caused the audit event to be created.
+      caseRating:
+        type: string
+        description: Rating of the case.
+        enum:
+        - NO_RISK
+        - LOW
+        - MEDIUM
+        - HIGH
+        - UNKNOWN
+        - NOT_RATED
+      primaryCase:
+        type: boolean
+        description: A flag indicating whether this is a parent Case.
+      nameTransposition:
+        type: boolean
+        description: A flag indicating whether name transposition is enabled for the Case.
+      outstandingActions:
+        type: boolean
+        description: A flag indicating outstanding actions on a Case.
+      batches:
+        type: array
+        description: The owning batch of the Case.
+        items:
+          $ref: '#/definitions/ItemIdentifier'
+      noOfExcludedResults:
+        type: integer
+        description: The number of results that have been excluded from the result set due to auto-resolution rules.
+        format: int32
+      noOfAutoResolvedResults:
+        type: integer
+        description: The number of results that have been auto-resolved as 'False' due to auto-resolution rules.
+        format: int32
+      resultSummaries:
+        $ref: '#/definitions/CaseResultSummaries'
+      aggregatedResultSummaries:
+        $ref: '#/definitions/CaseResultSummaries'
+  AbstractCase:
+    type: object
+    description: "Defines Case data that can be sent when creating or updating a Case.\n\nNote that availability and definitions of 'customFields' and 'secondaryFields' should be obtained via\n`groups/{groupId}/caseTemplate` before creating or updating a Case. Following are some example JSON segments\nfor secondary fields using unreal 'typeId's for illustrative purposes.\n\n- Example INDIVIDUAL secondary fields\n      1. GENDER\n         ```\n          {\n            \"typeId\":\"SFCT_1\",\n            \"value\":\"MALE\"\n          }\n         ```\n      2. DATE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\":\"1990-12-20\"\n          }\n         ```\n         or\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\": {\n              \"timelinePrecision\": \"ON\",\n              \"pointInTimePrecision\": \"DAY\",\n              \"utcDateTime\": 316310400000,\n              \"timeZone\": null\n            }\n          }\n         ```\n      3. COUNTRY_OF_RESIDENCE\n         ```\n          {\n            \"typeId\":\"SFCT_3\",\n            \"value\":\"GBR\"\n          }\n         ```\n      4. PLACE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_4\",\n            \"value\":\"GBR\"\n          }\n         ```\n      5. NATIONALITY\n         ```\n          {\n            \"typeId\":\"SFCT_5\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example ORGANISATION secondary fields\n      1. REGISTERED_COUNTRY\n         ```\n          {\n            \"typeId\":\"SFCT_6\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example VESSEL secondary fields\n      1. IMO_NUMBER\n         ```\n          {\n            \"typeId\":\"SFCT_7\",\n            \"value\":\"1234567\"\n          }\n         ```\n"
+    properties:
+      caseId:
+        type: string
+        maxLength: 512
+        description: 'Case ID provided by the Client or else generated by the system for the Client.
+
+          This field is not applicable for ''Zero Footprint Screening (ZFS)''.
+
+          '
+      name:
+        type: string
+        description: Name to screen for this Case.
+        maxLength: 1000
+      providerTypes:
+        type: array
+        description: 'Provider Types required to Screen this Case.
+
+          For ''Zero Footprint Screening (ZFS)'', only ''WATCHLIST'' is supported.
+
+          '
+        minItems: 1
+        items:
+          $ref: '#/definitions/ProviderType'
+      caseScreeningState:
+        type: object
+        description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+          Supported ProviderTypes: [WATCHLIST], [MEDIA_CHECK]. By default, value will be set from account settings.
+
+          This field is not applicable for Zero Footprint Screening (ZFS).
+
+          '
+        additionalProperties:
+          type: string
+      customFields:
+        description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`. Custom fields cannot be used with ''Zero Footprint Screening (ZFS)''.
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      secondaryFields:
+        description: 'Case Secondary Fields. Available secondary fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`.
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      nameTransposition:
+        type: boolean
+        description: Flag indicating whether name transposition is enabled for the case.
+    example:
+      caseId: Client Case Id
+      name: John Smith
+      providerTypes:
+      - WATCHLIST
+      caseScreeningState:
+        WATCHLIST: INITIAL
+        MEDIA_CHECK: ONGOING
+      customFields:
+      - typeId: Custom Field Id 1
+        value: Reference ID 1234567
+      - typeId: Custom Field Id 2
+        value: Deal Id 1234567
+      secondaryFields:
+      - typeId: SFCT_1
+        value: MALE
+      - typeId: SFCT_2
+        dateTimeValue: '1990-11-20'
+      nameTransposition: true
+  MediaCheckCaseDetails:
+    type: object
+    description: Details about the Media-Check settings on a case (e.g., smart filter).
+    required:
+    - smartFilter
+    properties:
+      smartFilter:
+        type: boolean
+        description: 'Flag indicating whether smart filter state on the case.
+
+          The default value fetched from the group setting "Allow users to enable/disable the Smart Filter".
+
+          '
+  CaseReferenceDetails:
+    type: object
+    description: 'Reference representation of a single case that is used for case creation operation.
+
+      Defines Case data that was saved or not valid.
+
+      '
+    required:
+    - name
+    properties:
+      name:
+        description: Name provided for the Case.
+        type: string
+        maxLength: 1000
+      caseId:
+        description: Case ID provided by the client. This is auto-generated by the system if not provided.
+        type: string
+        maxLength: 512
+      caseSystemId:
+        description: System-generated ID for a successfully created Case.
+        type: string
+        maxLength: 192
+      nameTransposition:
+        description: 'Flag indicating whether name transposition is enabled for the Case.
+
+          '
+        type: boolean
+      caseScreeningState:
+        description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+          Supported ProviderType [WATCHLIST]. By default, value will be set from account settings.
+
+          '
+        type: object
+        additionalProperties:
+          type: string
+      errors:
+        type: array
+        description: List of validation errors (if any).
+        items:
+          $ref: '#/definitions/Error'
+    example:
+      name: John Smith
+      caseId: Client Case Id
+      caseSystemId: System Case Id
+      nameTransposition: true
+      caseScreeningState:
+        WATCHLIST: INITIAL
+  LanguageCode:
+    type: object
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+  Assignee:
+    type: object
+    required:
+    - userId
+    properties:
+      userId:
+        type: string
+        maxLength: 255
+        description: Identifier of the assignee user.
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+  OngoingScreeningUpdateSearchResponse:
+    type: object
+    description: 'Search response containing a collection of `OngoingScreeningUpdate` s. Extends [SearchResponse](#SearchResponse).
+
+      '
+    allOf:
+    - $ref: '#/definitions/SearchResponse'
+    - required:
+      - results
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/OngoingScreeningUpdate'
+    example:
+      searchCriteria: updateDate>='2016-07-27T00:00:00Z'
+      totalResultCount: 45
+      paginationDetails:
+        currentPage: 1
+        itemsPerPage: 25
+        totalItems: 45
+      results:
+      - caseSystemId: Case System ID 1
+        updateDate: 2016-07-28 10:05:05+00:00
+        numberOfNewResults: 1
+        numberOfReviewRequiredResults: 0
+      - caseSystemId: Case System ID 2
+        updateDate: 2016-07-27 15:35:10+00:00
+        numberOfNewResults: 0
+        numberOfReviewRequiredResults: 2
+  Address:
+    type: object
+    properties:
+      city:
+        type: string
+      country:
+        $ref: '#/definitions/Country'
+      postCode:
+        type: string
+      region:
+        type: string
+      street:
+        type: string
+  Name:
+    type: object
+    required:
+    - fullName
+    - type
+    properties:
+      fullName:
+        type: string
+      givenName:
+        type: string
+      languageCode:
+        $ref: '#/definitions/LanguageCode'
+      lastName:
+        type: string
+      originalScript:
+        type: string
+      prefix:
+        type: string
+      suffix:
+        type: string
+      type:
+        type: string
+        description: Watchlist Profile Name Type enumeration
+        enum:
+        - PRIMARY
+        - AKA
+        - AKAENHANCED
+        - FKA
+        - DBA
+        - MAIDEN
+        - LANG_VARIATION
+        - PREVIOUS
+        - VEHICLE_ID
+        - LOW_QUALITY_AKA
+        - NATIVE_AKA
+  CaseSearchResponse:
+    type: object
+    description: A response model containing a result set of searched Cases with the requested details.
+    allOf:
+    - $ref: '#/definitions/AbstractCaseSearchModel'
+    - type: object
+      description: Response model that includes pagination details and an array of case details.
+      properties:
+        pagination:
+          $ref: '#/definitions/PaginationReferenceResponse'
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/CaseDetailed'
+    example:
+      query: primaryName==Smith and caseId=in=(John, James)
+      filter: providerType==WATCHLIST and entityType=in=(UNSPECIFIED, INDIVIDUAL) and creationDate=RANGE=(2023-01-01, 2023-05-31)
+      detailLevel: CASE_AND_RESULTS_AND_AGGREGATED_RESULTS
+      sort:
+      - columnName: primaryName
+        order: DESCENDING
+      - columnName: providerType
+        order: ASCENDING
+      pagination:
+        itemsPerPage: 1
+        totalItems: 3
+        pageReferences:
+          previous: Reference ID of the previous page
+          current: Reference ID of the current page
+          next: Reference ID of the next page
+      results:
+      - caseId: Client Case ID
+        name: John Smith
+        providerTypes:
+        - WATCHLIST
+        customFields:
+        - typeId: Custom Field ID 1
+          value: Reference ID 1234567
+        - typeId: Custom Field ID 2
+          value: Deal ID 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+        groupId: Client Group ID
+        entityType: INDIVIDUAL
+        caseSystemId: System-generated ID
+        caseScreeningState:
+          WATCHLIST: INITIAL
+        lifecycleState: ARCHIVED
+        creator:
+          userId: Creator ID
+          firstName: Creator first name
+          lastName: Creator last name
+          fullName: Creator full name
+          email: Creator email
+          status: ACTIVE
+        modifier:
+          userId: Modifier ID
+          firstName: Modifier first name
+          lastName: Modifier last name
+          fullName: Modifier full name
+          email: Modifier email
+          status: ACTIVE
+        assignee:
+          userId: Assignee ID
+          firstName: Assignee first name
+          lastName: Assignee last name
+          fullName: Assignee full name
+          email: Assignee email
+          status: ACTIVE
+        creationDate: '2016-02-18T14:00:00Z'
+        modificationDate: '2016-02-18T14:00:00Z'
+        lastScreenedDate: '2016-02-18T14:00:00Z'
+        modificationDateBySystem: '2016-02-18T14:00:00Z'
+        modificationDateByUser: '2016-02-18T14:00:00Z'
+        lastAuditEventActivity: SCREENED_CASE
+        caseRating: NOT_RATED
+        primaryCase: true
+        nameTransposition: true
+        outstandingActions: false
+        batches:
+        - id: Batch ID
+          label: Batch Name
+        noOfExcludedResults: 1
+        noOfAutoResolvedResults: 2
+        resultSummaries:
+          totalMandatoryActions: 1
+          totalSubCases: 1
+          mediaCheck:
+            mediaCheckAttachedCount: 1
+            mediaCheckReviewRequired: true
+          watchlist:
+            watchlistTotalMatches: 1
+            watchlistUnresolved: 2
+            watchlistReviewRequired: 3
+            categorisedMatches:
+              watchlistUnresolvedBySubCategory:
+                Other Bodies: 1
+                Law Enforcement: 2
+                PEP: 3
+                Special Interest Categories: 4
+                Regulatory Enforcement: 5
+                Sanctions: 6
+              watchlistReviewRequiredBySubCategory:
+                Other Bodies: 1
+                Law Enforcement: 2
+                PEP: 3
+                Special Interest Categories: 4
+                Regulatory Enforcement: 5
+                Sanctions: 6
+          clientWatchlist:
+            clientWatchlistTotalMatches: 1
+            clientWatchlistUnresolved: 2
+            clientWatchlistReviewRequired: 3
+        aggregatedResultSummaries:
+          totalMandatoryActions: 2
+          totalSubCases: 2
+          mediaCheck:
+            mediaCheckAttachedCount: 2
+            mediaCheckReviewRequired: true
+          watchlist:
+            watchlistTotalMatches: 2
+            watchlistUnresolved: 3
+            watchlistReviewRequired: 4
+            categorisedMatches:
+              watchlistUnresolvedBySubCategory:
+                Other Bodies: 2
+                Law Enforcement: 3
+                PEP: 4
+                Special Interest Categories: 5
+                Regulatory Enforcement: 6
+                Sanctions: 7
+              watchlistReviewRequiredBySubCategory:
+                Other Bodies: 2
+                Law Enforcement: 3
+                PEP: 4
+                Special Interest Categories: 5
+                Regulatory Enforcement: 6
+                Sanctions: 7
+          clientWatchlist:
+            clientWatchlistTotalMatches: 2
+            clientWatchlistUnresolved: 3
+            clientWatchlistReviewRequired: 4
+  AbstractCaseSearchModel:
+    type: object
+    description: "Request model used to search within, sort across, paginate through, and filter down the set of Cases.\n\nA model contains 'query', 'filter' expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\n\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing \nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved \ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nThe query examples:\n\n* \"query\": \"example=='TE!ST'\"\n* \"query\": \"example==\\\\\"TE'ST\\\\\"\"\n* \"query\": \"example=='TE\\\\\\\\'ST'\"\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single \nor double quotes.\n\nExample:\n\n* \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
+    properties:
+      query:
+        type: string
+        description: 'A string containing the search query.
+
+          **Note:** To find the available search fields, check for fields with ''QUERY'' type in the `GET /reference/searchFilters` endpoint.
+
+          '
+      filter:
+        type: string
+        description: 'A string containing filter criteria.
+
+          **Note:** To find the available search fields, check for fields with ''FILTER'' type in the `GET /reference/searchFilters` endpoint.
+
+          '
+      detailLevel:
+        description: The detail level of the search response.
+        $ref: '#/definitions/CaseDetailLevel'
+      sort:
+        type: array
+        description: "An array of sorting criteria.\n\nThe list of available sort parameter names:\n- 'primaryName' - sort by the primary name for the Case;\n- 'caseId' - sort by the unique identifier for the Case;\n- 'caseSystemId' - sort by the system-generated ID for the Case;\n- 'creationDate' - sort by the time when the Case has been created;\n- 'modificationDateByUser' - sort by the time when the Case has been modified by the User;\n- 'modificationDateBySystem' - sort by the time when the Case has been modified by the system;\n- 'lastScreenedDate' - sort by the time when the Case was last screened;\n- 'primaryCase' - sort by the total child Cases count contained within the Case;  \n- 'nameTransposition' - sort by the name transposition state for the Case;\n- 'lifecycleState' - sort by the lifecycle state for the Case;\n- 'watchlistCaseScreeningState' - sort by the World-Check ongoing screening state for the Case;\n- 'mediaCheckCaseScreeningState' - sort by the Media-Check ongoing screening state for the Case;\n- 'entityType' - sort by the entity type for the Case;\n- 'caseRating' - sort by the rating for the Case;\n- 'mandatoryActions' - sort by the number of mandatory actions on this Case;\n- 'watchlistUnresolved' - sort by the count of unresolved matches with the provider type 'WATCHLIST';\n- 'watchlistReviewRequired' - sort by the count of matches with the provider type 'WATCHLIST' that require review;\n- 'clientWatchlistUnresolved' - sort by the count of unresolved matches with the provider type 'CLIENT_WATCHLIST';\n- 'clientWatchlistReviewRequired' - sort by the count of matches with the provider type 'CLIENT_WATCHLIST' that require review;\n- 'mediaCheckReviewRequired' - sort by the count of matches with the provider type 'MEDIA_CHECK' that require review;\n- 'secondaryFieldCountryLocation' - sort by the country location or registered country secondary field value;\n- 'secondaryFieldNationality'  - sort by the citizenship secondary field value;\n- 'secondaryFieldPlaceOfBirth' - sort by the place of birth secondary field value;\n- 'groupId' - sort by the name of the Group owning the Case;\n- 'creatorUserId' - sort by the full name of the User who created the Case;\n- 'modifierUserId' - sort by the full name of the User who modified the Case;\n- 'assigneeUserId' - sort by the full name of the User the Case is currently assigned to.\n"
+        items:
+          $ref: '#/definitions/SortCriterion'
+  OngoingScreeningProviderType:
+    type: string
+    description: Ongoing screening supported provider types
+    enum:
+    - WATCHLIST
+    - MEDIA_CHECK
+  StatusType:
+    type: string
+    description: Enumeration of Status types
+    enum:
+    - ACTIVE
+    - INACTIVE
+    - DELETED
+  SortCriterion:
+    type: object
+    description: Sort specification
+    properties:
+      columnName:
+        type: string
+        description: The field to sort on
+      order:
+        type: string
+        description: The sort order
+        enum:
+        - ASCENDING
+        - DESCENDING
+  CountryLink:
+    type: object
+    required:
+    - country
+    - type
+    properties:
+      country:
+        $ref: '#/definitions/Country'
+      countryText:
+        type: string
+      type:
+        type: string
+        description: Country Link Type Enumeration
+        enum:
+        - NATIONALITY
+        - OPERATESIN
+        - POB
+        - POD
+        - REGISTEREDIN
+        - RESIDENT
+        - VESSELFLAG
+        - LOCATION
+  PartialUpdateCase:
+    type: object
+    description: Defines Case data that can be sent when updating a Case partially. Extends [AbstractCase](#AbstractCase).
+    allOf:
+    - $ref: '#/definitions/AbstractCase'
+    - type: object
+    properties:
+      note:
+        type: string
+        description: Note added by the User.
+        maxLength: 1000
+    example:
+      caseId: Client Case Id
+      name: John Smith
+      providerTypes:
+      - WATCHLIST
+      customFields:
+      - typeId: Custom Field Id 1
+        value: Reference ID 1234567
+      - typeId: Custom Field Id 2
+        value: Deal Id 1234567
+      secondaryFields:
+      - typeId: SFCT_1
+        value: MALE
+      - typeId: SFCT_2
+        dateTimeValue: '1990-11-20'
+      nameTransposition: true
+      note: Audit note
+  OngoingScreeningRequest:
+    type: object
+    description: Request containing ongoing screening details
+    required:
+    - providerTypes
+    properties:
+      providerTypes:
+        type: array
+        description: Provider types for which to enable/disable ongoing screening.
+        items:
+          $ref: '#/definitions/OngoingScreeningProviderType'
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the User.
+  ResultsResolutionAction:
+    type: object
+    description: 'Represents the request details required for resolving Results. Resolution ids (i.e. statusId, riskId) as well as
+
+      the resultIds of the results to be resolved are required to perform a resolution operation.
+
+      '
+    allOf:
+    - $ref: '#/definitions/AbstractResolution'
+    - type: object
+      required:
+      - resultIds
+      - statusId
+      - riskId
+      - reasonId
+      - resolutionRemark
+      properties:
+        resultIds:
+          type: array
+          description: Identifiers of a set of results linked to one Case.
+          uniqueItems: true
+          items:
+            type: string
+            maxLength: 255
+  PaginationReferenceResponse:
+    type: object
+    description: Response model containing pagination details.
+    properties:
+      itemsPerPage:
+        type: integer
+        description: The number of items per page.
+        format: int32
+      totalItems:
+        type: integer
+        description: The total number of items available.
+        format: int64
+      pageReferences:
+        description: Pagination details including items per page, total items, and page references.
+        $ref: '#/definitions/PageReference'
+  OngoingScreeningUpdate:
+    type: object
+    description: 'Respresents an update on the results of the `Case` identified by `caseSystemId` indicating that there are
+
+      some new or updated results as a result of ongoing screening of this `Case`.
+
+      '
+    required:
+    - caseSystemId
+    - updateDate
+    properties:
+      caseSystemId:
+        type: string
+        maxLength: 192
+        description: System generated ID for the Case
+      updateDate:
+        type: string
+        format: date-time
+        description: Creation date and time of this ongoingScreeningUpdate in ISO 8601 format excluding Week and Ordinal dates.
+      numberOfNewResults:
+        type: integer
+        format: int32
+        description: 'Number of new results added to the Case identified by caseSystemId during the ongoing screening operation
+
+          that this update belongs to.
+
+          '
+      numberOfUpdatedResults:
+        type: integer
+        format: int32
+        description: 'Number of updates in the existing results of the Case identified by caseSystemId found during the ongoing
+
+          screening operation that this update belongs to.
+
+          '
+  NewCase:
+    type: object
+    description: Defines Case data that can be sent when creating a new Case. Extends [AbstractCase](#AbstractCase).
+    allOf:
+    - $ref: '#/definitions/AbstractCase'
+    - type: object
+      required:
+      - name
+      - groupId
+      - entityType
+      properties:
+        groupId:
+          type: string
+          maxLength: 255
+          description: 'Group identifier owning this case.
+
+            The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
+
+            '
+        entityType:
+          type: string
+          description: Case Entity Type Enumeration
+          enum:
+          - INDIVIDUAL
+          - ORGANISATION
+          - VESSEL
+          - UNSPECIFIED
+      example:
+        name: John Smith
+        caseId: Client Case Id
+        groupId: Client Group Id
+        entityType: INDIVIDUAL
+        providerTypes:
+        - WATCHLIST
+        customFields:
+        - typeId: Custom Field Id 1
+          value: Reference ID 1234567
+        - typeId: Custom Field Id 2
+          value: Deal Id 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+  ScreeningStatusResponse:
+    type: object
+    description: 'Contains status and aggregated screening result for each requested case.
+
+      If ''requestFromScreenedDate'' less than ''lastScreenedDate'' then status equals ''NOT_SCREENED'' else status equals ''SCREENED''.
+
+      '
+    required:
+    - caseSystemId
+    - screeningStatus
+    - requestFromScreenedDate
+    - providerSummaries
+    properties:
+      caseSystemId:
+        type: string
+        description: System-generated ID for a successfully created Case.
+        maxLength: 192
+      screeningStatus:
+        type: string
+        description: Case Screening State Enumeration representing type of Screening
+        enum:
+        - NOT_SCREENED
+        - SCREENED
+      requestFromScreenedDate:
+        type: string
+        format: date-time
+        description: Date and time of Last Case Screening in ISO 8601 format excluding Week and Ordinal dates.
+        maxLength: 255
+      lastScreenedDate:
+        type: string
+        format: date-time
+        description: Date and time of Last performed Case Screening in ISO 8601 format excluding Week and Ordinal dates.
+        maxLength: 255
+      providerSummaries:
+        type: object
+        description: 'Contains enabled for this Case ProviderType(s).
+
+          Supported ProviderType [WATCHLIST], [CLIENT_WATCHLIST], [MEDIA_CHECK] and [PASSPORT_CHECK].
+
+          '
+        additionalProperties:
+          $ref: '#/definitions/ProviderTypeSummaryResult'
+    example:
+    - caseSystemId: Case System ID 1
+      requestFromScreenedDate: '2016-07-27T15:35:10Z'
+      lastScreenedDate: '2016-07-27T15:30:10Z'
+      providerSummaries:
+        WATCHLIST:
+          status: SCREENED
+          totalMatches: 120
+          reviewRequired: 20
+          unresolved: 17
+        PASSPORT_CHECK:
+          isReviewRequired: false
+    - caseSystemId: Case System ID 2
+      requestFromScreenedDate: '2016-07-27T15:35:10Z'
+      lastScreenedDate: '2016-07-27T15:30:10Z'
+      providerSummaries:
+        WATCHLIST:
+          status: NOT_SCREENED
+          totalMatches: 0
+          reviewRequired: 0
+          unresolved: 0
+  FileMeta:
+    type: object
+    required:
+    - caption
+    - uri
+    properties:
+      caption:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+        items:
+          type: string
+  CaseDetailLevel:
+    type: string
+    description: "Enumeration that defines the detail level of the search response:\n  - 'CASE': The search response will provide full Case details.\n  - 'CASE_AND_RESULTS': The search response will include Сase details and Result summary related to this Case.\n  - 'CASE_AND_AGGREGATED_RESULTS': The search response will provide full Case details with an aggregated Result summary, summarizing data from primary and sub-cases.\n  - 'CASE_AND_RESULTS_AND_AGGREGATED_RESULTS': The search response will provide full Case details with a Result and aggregated(summarizing data from primary and sub-cases) summaries.\n"
+    enum:
+    - CASE
+    - CASE_AND_RESULTS
+    - CASE_AND_AGGREGATED_RESULTS
+    - CASE_AND_RESULTS_AND_AGGREGATED_RESULTS
+  Event:
+    type: object
+    description: Event related to Entity.
+    required:
+    - type
+    properties:
+      address:
+        description: Address related to Entity.
+        $ref: '#/definitions/Address'
+      allegedAddresses:
+        type: array
+        description: Alleged addresses list.
+        items:
+          $ref: '#/definitions/Address'
+      day:
+        type: integer
+        description: The day of the month on which the event occurred.
+        format: int32
+      fullDate:
+        type: string
+        description: A text representation of the date according 'ISO 8601' standard when the event occurred.
+      month:
+        type: integer
+        description: The month of the year in which the event occurred.
+        format: int32
+      type:
+        description: State representing the event in relation to an individual.
+        $ref: '#/definitions/EventType'
+      year:
+        type: integer
+        description: The year in which the event occurred.
+        format: int32
+  Detail:
+    type: object
+    properties:
+      detailType:
+        type: string
+        description: Detail Type Enumeration
+        default: UNKNOWN
+        enum:
+        - BIOGRAPHY
+        - FUNDING
+        - IDENTIFICATION
+        - NOTE
+        - REPORTS
+        - REGULATION
+        - SANCTION
+        - UNKNOWN
+      text:
+        type: string
+      title:
+        type: string
+        maxLength: 255
+  CaseSearchRequest:
+    type: object
+    description: Request model used to search within, sort across, paginate through, and filter down the set of Cases.
+    allOf:
+    - $ref: '#/definitions/AbstractCaseSearchModel'
+    - type: object
+      properties:
+        pagination:
+          description: Request model that includes pagination options.
+          $ref: '#/definitions/PaginationReferenceRequest'
+    example:
+      query: primaryName==Smith and caseId=in=(John, James)
+      filter: providerType==WATCHLIST and entityType=in=(UNSPECIFIED, INDIVIDUAL) and creationDate=RANGE=(2023-01-01, 2023-05-31)
+      detailLevel: CASE_AND_RESULTS_AND_AGGREGATED_RESULTS
+      sort:
+      - columnName: primaryName
+        order: DESCENDING
+      - columnName: providerType
+        order: ASCENDING
+      pagination:
+        itemsPerPage: 25
+        pageReference: Reference ID of the requested page
+  CaseSearchUserSummary:
+    type: object
+    required:
+    - fullName
+    properties:
+      fullName:
+        type: string
+        maxLength: 2001
+        description: Full name of the User.
+  Provider:
+    type: object
+    properties:
+      code:
+        type: string
+      identifier:
+        type: string
+      master:
+        type: boolean
+        default: false
+      name:
+        type: string
+  CaseBulkOngoingScreeningRequest:
+    type: object
+    description: A request body on Bulk Update Ongoing Screening States
+    required:
+    - caseScreeningState
+    - caseSystemIds
+    properties:
+      caseScreeningState:
+        type: object
+        description: 'Mapping from ProviderType to toggle Ongoing Screening ON/OFF for these Cases on the specific ProviderType.
+
+          Supported ProviderTypes [WATCHLIST, MEDIA_CHECK].
+
+          '
+        additionalProperties:
+          type: string
+      caseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+          description: System generated Id for the Case
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      caseScreeningState:
+        WATCHLIST: INITIAL
+        MEDIA_CHECK: ONGOING
+      caseSystemIds:
+      - caseSystemId1
+      - caseSystemId2
+      - caseSystemId3
+      note: Audit note
+  CaseSearchResultResponse:
+    type: object
+    description: 'Search response containing N cases matched searching criteria.
+
+      '
+    allOf:
+    - $ref: '#/definitions/CaseSummaryFilterResponse'
+    - required:
+      - results
+      properties:
+        cursor:
+          $ref: '#/definitions/Cursor'
+        results:
+          type: array
+          description: 'Cases that matched search criteria. No case ID will be returned when using Zero Footprint Screening (ZFS)
+
+            and it should not be specified in the request either.
+
+            '
+          items:
+            $ref: '#/definitions/CaseSummaryResult'
+    example:
+      searchCriteria: modificationDate>='2016-07-27T00:00:00Z'
+      totalResultCount: 2
+      sort:
+        columnName: modificationDate
+        order: ASCENDING
+      cursor:
+        cursorId: DnF1ZXJ5VGhlbkZldGNoBQAAAAAANCsbFkRiRXB6SU9tUVRpMTVZc2hER3RHeUEAAAAAADcWIRZVTkdzdTBWWVQtaVpHVGt3Nl9MUV9RAAAAAAALGugWbTM3dzI1aUxTS3VGYXVDbUZyX1RXdwAAAAAACxrpFm0zN3cyNWlMU0t1RmF1Q21Gcl9UV3cAAAAAADQrHBZEYkVweklPbVFUaTE1WXNoREd0R3lB
+      results:
+      - caseSystemId: 45698dc-e17a-fdcv-a8bb-456efcvc8483
+        caseId: e5928fca-e17a-4aa8-a8bb-d85e224aec46
+        groupId: lpsc4312-e17a-4aa8-vcs5-66669fd7wwqf
+        modificationDate: 2018-09-28 16:55:05+00:00
+        assignee:
+          fullName: Assignee Name
+        modifier:
+          fullName: Modifier Name
+        creator:
+          fullName: Creator Name
+        creationDate: 2018-09-28 16:55:05+00:00
+        caseRating: HIGH
+      - caseSystemId: 45698dc-e17a-fdcv-cdas-6728jiednab5
+        caseId: e5928fca-43fs-4aa8-a8bb-8974xsdf1258
+        groupId: edwqdewq-e17a-4aa8-vcs5-78ccdeerf49w
+        modificationDate: 2019-08-28 10:05:15+00:00
+        assignee:
+          fullName: Assignee Name
+        modifier:
+          fullName: Modifier Name
+        creator:
+          fullName: Creator Name
+        creationDate: 2019-08-28 10:05:15+00:00
+        caseRating: NOT_RATED
+  Image:
+    type: object
+    required:
+    - uri
+    properties:
+      caption:
+        type: string
+      height:
+        type: integer
+        format: int32
+      imageUseCode:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+        items:
+          type: string
+      width:
+        type: integer
+        format: int32
+  CaseDetailsCollection:
+    type: object
+    description: Container of cases, that is used in scope of creation operation.
+    required:
+    - groupId
+    - providerTypes
+    - cases
+    properties:
+      groupId:
+        type: string
+        description: Group identifier owning the cases.
+        maxLength: 255
+      providerTypes:
+        type: array
+        description: Array of provider types used in screening the cases.
+        uniqueItems: true
+        minItems: 1
+        items:
+          $ref: '#/definitions/ProviderType'
+      nameTransposition:
+        type: boolean
+        description: 'Flag indicating whether name transposition should be enabled for the cases.
+
+          The value from the Account settings will be used if not provided.
+
+          '
+      caseScreeningState:
+        type: object
+        description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+          Supported ProviderType [WATCHLIST]. By default, value will be set from account settings.
+
+          '
+        additionalProperties:
+          type: string
+      cases:
+        type: array
+        description: 'Array of CaseDetails used in creation of cases.
+
+          The maximum number of cases is configured in account settings.
+
+          '
+        uniqueItems: true
+        minItems: 1
+        items:
+          $ref: '#/definitions/CaseDetails'
+    example:
+      groupId: Client Group Id
+      providerTypes:
+      - WATCHLIST
+      nameTransposition: true
+      caseScreeningState:
+        WATCHLIST: INITIAL
+      cases:
+      - caseId: Client Case Id
+        entityType: INDIVIDUAL
+        name: John Smith
+        customFields:
+        - typeId: Custom Field Id 1
+          value: Reference ID 1234567
+        - typeId: Custom Field Id 2
+          value: Deal Id 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+  Field:
+    type: object
+    description: 'Holds the value of a Custom Field or a Secondary Field. Valid value type for this field is specified
+
+      in the corresponding FieldDefinition of CaseTemplateResponse. Extends [AbstractField](#AbstractField).
+
+      '
+    allOf:
+    - $ref: '#/definitions/AbstractField'
+    - type: object
+      properties:
+        value:
+          type: string
+          maxLength: 1000
+          description: Value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+        dateTimeValue:
+          type: string
+          format: date-time
+          maxLength: 255
+          description: DateTime value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+  ScreeningStatusRequest:
+    type: object
+    description: 'Contains ''caseSystemId'' and presumptive screening timestamp which should be checked.
+
+      '
+    properties:
+      caseSystemId:
+        type: string
+        description: System-generated ID for a successfully created Case.
+        maxLength: 192
+      dateFrom:
+        type: string
+        format: date-time
+        description: Date and time of Last Case Screening in ISO 8601 format excluding Week and Ordinal dates.
+        maxLength: 255
+  ProviderType:
+    type: string
+    description: Provider Type Enumeration
+    enum:
+    - WATCHLIST
+    - PASSPORT_CHECK
+    - CLIENT_WATCHLIST
+    - MEDIA_CHECK
+  CaseSummaryFilter:
+    type: object
+    description: Defines search criteria, sorting and items count in the response.
+    allOf:
+    - $ref: '#/definitions/CaseSummaryFilterResponse'
+    - properties:
+        cursorOptions:
+          description: The cursorOptions critieria allows specifying count of items in the response.
+          $ref: '#/definitions/CursorOptions'
+  ScreeningStatusRequestCollection:
+    type: object
+    description: 'Collection  of ''ScreeningStatusRequest''.
+
+      The maximum number of cases is configured in account settings.
+
+      '
+    properties:
+      screeningStatusRequests:
+        type: array
+        uniqueItems: true
+        description: 'Contains ''caseSystemId'' and presumptive screening timestamp which should be checked.
+
+          '
+        items:
+          $ref: '#/definitions/ScreeningStatusRequest'
+      providerTypes:
+        type: array
+        description: Provider types for which results are exposed.
+        items:
+          $ref: '#/definitions/ProviderType'
+    example:
+    - screeningStatusRequests:
+      - caseSystemId: Case System ID 1
+        dateFrom: '2020-10-24T11:40:21.517Z'
+      - caseSystemId: Case System ID 2
+        dateFrom: '2020-10-24T11:40:21.517Z'
+    - providerTypes:
+      - WATCHLIST
+      - PASSPORT_CHECK
+  EventType:
+    type: string
+    description: Event Type Enumeration.
+    enum:
+    - ACQUISTION_DATE
+    - BANKRUPTCY_DATE
+    - BIRTH
+    - CALCULATED_YOB
+    - CESSATION_DATE
+    - COMMENCEMENT_DATE
+    - DEATH
+    - DECEASED_DATE
+    - INCORP_DATE
+    - NATIONALISATION_DATE
+    - PRIVATISATION_DATE
+    - REGISTRATION_DATE
+    - REPORTED_DOB
+  PaginationReferenceRequest:
+    type: object
+    description: Request model for defining pagination options.
+    properties:
+      itemsPerPage:
+        type: integer
+        description: The number of items to return per page.
+        format: int32
+      pageReference:
+        type: string
+        description: A reference to a specific page.
+  MatchedTerm:
+    type: object
+    description: Matched term of a Result.
+    properties:
+      term:
+        type: string
+      type:
+        type: string
+        description: Enumeration of available matched types. Includes DOCUMENT_ID unlike NameType.
+        enum:
+        - PRIMARY
+        - AKA
+        - AKAENHANCED
+        - FKA
+        - DBA
+        - MAIDEN
+        - LANG_VARIATION
+        - PREVIOUS
+        - VEHICLE_ID
+        - LOW_QUALITY_AKA
+        - NATIVE_AKA
+        - DOCUMENT_ID
+      isPartOfUpdatedResults:
+        type: boolean
+        description: "The flag indicating whether the matched term is still relevant to the case after changes to either \ncase details or admin settings or record details. Please note this field must not be used for filtering \nongoing screening updates.\n"
+  ActionDetail:
+    type: object
+    required:
+    - actionType
+    properties:
+      actionId:
+        type: string
+      actionType:
+        type: string
+        description: Action Detail Type Enumeration
+        enum:
+        - CIVIL_ACTION
+        - CRIMINAL_CONVICTION
+        - ENFORCEMENT
+        - SANCTION
+      comment:
+        type: string
+      endDate:
+        type: string
+        format: date-time
+      files:
+        type: array
+        items:
+          $ref: '#/definitions/FileMeta'
+      publicationType:
+        type: string
+      published:
+        type: string
+      reference:
+        type: string
+      source:
+        $ref: '#/definitions/ProviderSource'
+      startDate:
+        type: string
+        format: date-time
+      text:
+        type: string
+      title:
+        type: string
+  Result:
+    type: object
+    description: 'Result found after performing a synchronous screening of a Case.
+
+      This contains the abstract case screening result details plus includes identity documents and important events
+
+      '
+    allOf:
+    - $ref: '#/definitions/AbstractScreeningResult'
+    - type: object
+      required:
+      - referenceId
+      properties:
+        primaryName:
+          type: string
+          description: The primary name associated with the Result
+          maxLength: 255
+        events:
+          type: array
+          description: List of dates of births and deaths
+          items:
+            $ref: '#/definitions/Event'
+        countryLinks:
+          type: array
+          description: Country links for the Screening Result
+          items:
+            $ref: '#/definitions/CountryLink'
+        identityDocuments:
+          type: array
+          description: List of identity documents from the Result
+          items:
+            $ref: '#/definitions/IdentityDocument'
+        category:
+          type: string
+          description: 'The category of the Result, i.e. `POLITICAL - INDIVIDUAL`, `INDIVIDUAL`, `DIPLOMAT`, `TERRORISM`, `CRIME - NARCOTICS`,
+
+            `CRIME - ORGANIZED`, `CRIME - OTHER`, `CRIME - NARCOTICS`, `CRIME - FINANCIAL` etc.
+
+            '
+          maxLength: 255
+        providerType:
+          type: string
+          description: Provider Type Enumeration
+          enum:
+          - WATCHLIST
+          - PASSPORT_CHECK
+          - CLIENT_WATCHLIST
+          - MEDIA_CHECK
+        gender:
+          type: string
+          description: Gender Type Enumeration
+          default: UNKNOWN
+          enum:
+          - MALE
+          - FEMALE
+          - UNKNOWN
+        entityCreationDate:
+          type: string
+          format: date-time
+          description: Entity creation date of the result.
+        entityModificationDate:
+          type: string
+          format: date-time
+          description: Entity modification date of the result.
+        pepStatus:
+          type: string
+          description: The PEP Status of the result.
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - UNKNOWN
+          - NOT_AVAILABLE
+        actionTypes:
+          type: array
+          description: Reasons for pending alerts.
+          items:
+            type: string
+            enum:
+            - DATA_ISSUE
+            - RESULT_NOT_FOUND
+            - SCORE_INCREASED
+            - SCORE_DECREASED
+            - PROFILE_UPDATED
+            - PROFILE_UPDATED_C1
+            - PROFILE_UPDATED_C2
+            - PROFILE_UPDATED_C3
+            - PROFILE_UPDATED_C4
+            - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
+            - GENDER_UPDATED
+            - DATE_OF_BIRTH_UPDATED
+            - COUNTRY_LOCATION_UPDATED
+            - PLACE_OF_BIRTH_UPDATED
+            - NATIONALITY_UPDATED
+            - REGISTERED_COUNTRY_UPDATED
+            - IMO_NUMBER_UPDATED
+  ResultsReview:
+    type: object
+    description: Entity to set the review remark of supplied result IDs
+    required:
+    - resultIds
+    - remark
+    properties:
+      resultIds:
+        type: array
+        description: Result IDs of the case we are wishing to review
+        uniqueItems: true
+        items:
+          type: string
+      remark:
+        type: string
+        description: The review remark we wish to assign to the supplied result IDs
+  CaseScreeningRequest:
+    type: object
+    description: Defines Case Screening Request that could be sent for an existing Case.
+    properties:
+      screeningMode:
+        type: string
+        description: Screening Mode Enumeration.
+        enum:
+        - FULL_SYNC
+        - FULL_ASYNC
+        - DELTA_SYNC
+        - DELTA_ASYNC
+      caseInfo:
+        type: boolean
+        description: Flag indicating whether there will be information about the Case in response.
+  ScreeningResultCollection:
+    type: object
+    description: Contains an array of Watchlist Screening Result objects from a synchronous screening operation.
+    required:
+    - results
+    - name
+    - providerTypes
+    - groupId
+    - entityType
+    properties:
+      caseId:
+        type: string
+        maxLength: 512
+        description: 'Case ID provided by the client or else generated by the system for the client. No case ID will be returned
+
+          when using Zero Footprint Screening (ZFS) and it should not be specified in the request either.
+
+          '
+      name:
+        type: string
+        maxLength: 1000
+        description: Name to screen for this case.
+      providerTypes:
+        type: array
+        description: 'Provider Types required to Screen this case.
+
+          For Zero Footprint Screening (ZFS), only `WATCHLIST` is supported.
+
+          '
+        minItems: 1
+        items:
+          $ref: '#/definitions/ProviderType'
+      customFields:
+        description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`. Custom fields cannot be used with Zero Footprint Screening (ZFS).
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      secondaryFields:
+        description: 'Case Secondary Fields. Available secondary fields and their definitions can be obtained via
+
+          `groups/{groupId}/caseTemplate`.
+
+          '
+        type: array
+        items:
+          $ref: '#/definitions/Field'
+      groupId:
+        type: string
+        maxLength: 255
+        description: 'Group identifier owning this case.
+
+          The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
+
+          '
+      entityType:
+        type: string
+        description: Case Entity Type Enumeration
+        enum:
+        - INDIVIDUAL
+        - ORGANISATION
+        - VESSEL
+        - UNSPECIFIED
+      caseSystemId:
+        type: string
+        maxLength: 192
+        description: System generated ID for the Case
+      caseScreeningState:
+        description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+          By default, value will be set from account settings.
+
+          '
+        type: object
+        additionalProperties:
+          type: string
+      lifecycleState:
+        type: string
+        description: Case Lifecycle State Enumeration
+        enum:
+        - ARCHIVED
+        - UNARCHIVED
+      creator:
+        $ref: '#/definitions/UserSummary'
+      modifier:
+        $ref: '#/definitions/UserSummary'
+      assignee:
+        $ref: '#/definitions/UserSummary'
+      creationDate:
+        type: string
+        format: date-time
+        description: Case creation date and time
+      modificationDate:
+        type: string
+        format: date-time
+        description: Case modification date and time
+      nameTransposition:
+        type: boolean
+        description: Flag indicating whether name transposition is enabled for the case.
+      outstandingActions:
+        type: boolean
+        description: Flag indicating outstanding actions on a Case
+      lastScreenedDatesByProviderType:
+        type: object
+        description: Case screenings date and time by provider type.
+        additionalProperties:
+          type: string
+          format: date-time
+          maxLength: 255
+          description: Date and time by Provider Type.
+      lastIndexDatesByProviderType:
+        type: object
+        description: 'Case index date and time by provider type. Represents date and time that should be used during  ZFS screening as
+
+          starting point to not lose any results. Available only for ZFS screening.
+
+          '
+        additionalProperties:
+          type: string
+          format: date-time
+          maxLength: 255
+          description: Date and time by Provider Type.
+      providerTypeDetails:
+        $ref: '#/definitions/ProviderTypeDetails'
+      results:
+        description: Contains the Screening Result objects of the screening.
+        type: array
+        items:
+          $ref: '#/definitions/Result'
+  ContactDetail:
+    type: object
+    required:
+    - contactDetailType
+    properties:
+      contactDetailType:
+        type: string
+        description: Contact Detail Type Enumeration
+        enum:
+        - EMAIL
+        - FAX
+        - URL
+        - VOICE
+      country:
+        $ref: '#/definitions/Country'
+      detail:
+        type: string
+  CaseBulkMoveRequest:
+    type: object
+    description: A request body on Bulk Move Cases
+    required:
+    - groupId
+    - caseSystemIds
+    properties:
+      groupId:
+        type: string
+        description: Group to which the cases will be moved
+      caseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+          description: System generated Id for the Case
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      groupId: groupId
+      caseSystemIds:
+      - caseSystemId1
+      - caseSystemId2
+      - caseSystemId3
+      note: note
+  CaseResultSummaries:
+    type: object
+    description: Case Statistics contains the Category and the count for all the results in the Case.
+    properties:
+      totalMandatoryActions:
+        type: integer
+        format: int32
+        description: The number of mandatory actions on this case
+      totalSubCases:
+        type: integer
+        format: int32
+        description: Holds a count of the number of child cases
+      mediaCheck:
+        $ref: '#/definitions/MediaCheckResultSummary'
+      watchlist:
+        $ref: '#/definitions/WatchlistResultSummary'
+      clientWatchlist:
+        $ref: '#/definitions/ClientWatchlistResultSummary'
+  ProviderTypeDetails:
+    type: object
+    description: Details about the specific provider type.
+    required:
+    - mediaCheck
+    properties:
+      mediaCheck:
+        $ref: '#/definitions/MediaCheckCaseDetails'
+  Case:
+    type: object
+    description: Defines full Case data returned when retrieving a Case. Extends [NewCase](#NewCase).
+    allOf:
+    - $ref: '#/definitions/NewCase'
+    - type: object
+      properties:
+        caseSystemId:
+          type: string
+          maxLength: 192
+          description: System generated ID for the Case
+        lifecycleState:
+          type: string
+          description: Case Lifecycle State Enumeration
+          enum:
+          - ARCHIVED
+          - UNARCHIVED
+        assignee:
+          $ref: '#/definitions/UserSummary'
+        creator:
+          $ref: '#/definitions/UserSummary'
+        modifier:
+          $ref: '#/definitions/UserSummary'
+        creationDate:
+          type: string
+          format: date-time
+          description: Case creation date and time
+        modificationDate:
+          type: string
+          format: date-time
+          description: Case modification date and time
+        outstandingActions:
+          type: boolean
+          description: Flag indicating outstanding actions on a Case
+        lastScreenedDatesByProviderType:
+          type: object
+          description: Case screenings date and time by provider type
+          additionalProperties:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: Date and time by Provider Type
+        providerTypeDetails:
+          $ref: '#/definitions/ProviderTypeDetails'
+        aggregatedResultSummaries:
+          $ref: '#/definitions/CaseResultSummaries'
+      example:
+        name: John Smith
+        caseId: Client Case Id
+        groupId: Client Group Id
+        entityType: INDIVIDUAL
+        providerTypes:
+        - WATCHLIST
+        customFields:
+        - typeId: Custom Field Id 1
+          value: Reference ID 1234567
+        - typeId: Custom Field Id 2
+          value: Deal Id 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+        caseScreeningState:
+          WATCHLIST: INITIAL
+        lifecycleState: ARCHIVED
+        creator:
+          userId: Creator ID
+          fullName: Creator Name
+          status: ACTIVE
+        modifier:
+          userId: Modifier ID
+          fullName: Modifier Name
+          status: ACTIVE
+        creationDate: '2016-02-18T14:00:00Z'
+        modificationDate: '2016-02-18T14:00:00Z'
+        outstandingActions: false
+        lastScreenedDatesByProviderType:
+          WATCHLIST: '2016-02-18T14:00:00Z'
+        providerTypeDetails:
+          mediaCheck:
+            smartFilter: true
+  UpdateCase:
+    type: object
+    description: Defines Case data that can be sent when updating a Case. Extends [AbstractCase](#AbstractCase).
+    allOf:
+    - $ref: '#/definitions/AbstractCase'
+    - type: object
+      required:
+      - name
+    properties:
+      note:
+        type: string
+        description: Note added by the User.
+        maxLength: 1000
+    example:
+      caseId: Client Case Id
+      name: John Smith
+      providerTypes:
+      - WATCHLIST
+      customFields:
+      - typeId: Custom Field Id 1
+        value: Reference ID 1234567
+      - typeId: Custom Field Id 2
+        value: Deal Id 1234567
+      secondaryFields:
+      - typeId: SFCT_1
+        value: MALE
+      - typeId: SFCT_2
+        dateTimeValue: '1990-11-20'
+      nameTransposition: true
+      note: Audit note
+  Country:
+    type: object
+    required:
+    - code
+    - name
+    properties:
+      code:
+        type: string
+      name:
+        type: string
+  ClientWatchlistResultSummary:
+    type: object
+    description: Match summary for results with provider type CLIENT_WATCHLIST
+    properties:
+      clientWatchlistTotalMatches:
+        type: integer
+        format: int32
+        description: Field contains client watch list total matches count
+      clientWatchlistUnresolved:
+        type: integer
+        format: int32
+        description: Field contains count of client watch list unresolved
+      clientWatchlistReviewRequired:
+        type: integer
+        format: int32
+        description: Field contains count of client watch list review required
+  ScreeningRequest:
+    type: object
+    description: Defines Case data that can be sent when creating a synchronous screening request for a new Case. Extends [NewCase](#NewCase).
+    allOf:
+    - $ref: '#/definitions/NewCase'
+    - type: object
+      properties:
+        startScreeningDate:
+          type: string
+          format: date-time
+          description: "The starting date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
+        endScreeningDate:
+          type: string
+          format: date-time
+          description: "The ending date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
+      example:
+        name: John Smith
+        caseId: Client Case Id
+        groupId: Client Group Id
+        entityType: INDIVIDUAL
+        providerTypes:
+        - WATCHLIST
+        - MEDIA_CHECK
+        caseScreeningState:
+          WATCHLIST: INITIAL
+          MEDIA_CHECK: ONGOING
+        startScreeningDate: 2020-08-01 15:00:00.003000+00:00
+        endScreeningDate: 2021-08-02 15:00:00.003000+00:00
+        customFields:
+        - typeId: Custom Field Id 1
+          value: Reference ID 1234567
+        - typeId: Custom Field Id 2
+          value: Deal Id 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+  IdentityDocumentLocationType:
+    type: object
+    description: 'Represents the type of identity document location that includes the type of document, name, country
+
+      and what type of entity it belongs to.
+
+      '
+    properties:
+      country:
+        $ref: '#/definitions/Country'
+      name:
+        type: string
+      type:
+        type: string
+      entityTypes:
+        type: array
+        items:
+          $ref: '#/definitions/EntityType'
+  UserSummary:
+    type: object
+    required:
+    - userId
+    - fullName
+    - email
+    - status
+    properties:
+      userId:
+        type: string
+        maxLength: 255
+        description: Identifier of the User
+      fullName:
+        type: string
+        maxLength: 2001
+        description: Full name of the User
+      firstName:
+        type: string
+        maxLength: 1000
+        description: First name of the User
+      lastName:
+        type: string
+        maxLength: 1000
+        description: Last name of the User
+      email:
+        type: string
+        maxLength: 1000
+        description: Email address of the User
+      status:
+        $ref: '#/definitions/StatusType'
+      uuid:
+        type: string
+        description: AAA UUID of the User.
+        maxLength: 192
+      loginAccountStatus:
+        description: The status of the User login account.
+        allOf:
+        - $ref: '#/definitions/AccelusUserLoginAccountStatus'
+      lastLoginDate:
+        type: string
+        description: User's last login date and time in 'UTC' timezone.
+        format: date-time
+  ProviderSourceTypeCategoryDetail:
+    type: object
+    properties:
+      description:
+        type: string
+      identifier:
+        type: string
+        maxLength: 255
+      name:
+        type: string
+        maxLength: 255
+  SecondaryFieldResult:
+    type: object
+    description: 'Belongs to a Result and provides the details of the comparison of the Case''s secondary field with the corresponding
+
+      field in the reference data. Extends [AbstractField](#AbstractField).
+
+      '
+    allOf:
+    - $ref: '#/definitions/AbstractField'
+    - type: object
+      required:
+      - field
+      - fieldResult
+      properties:
+        field:
+          description: Matched [Field] (#Field) data. Deprecated in favor of matchedValue and matchedDateTimeValue.
+          $ref: '#/definitions/Field'
+        submittedValue:
+          type: string
+          description: Submitted value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+          maxLength: 1000
+        submittedDateTimeValue:
+          type: string
+          format: date-time
+          maxLength: 255
+          description: Submitted date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+        matchedValue:
+          type: string
+          description: Matched value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+          maxLength: 1000
+        matchedDateTimeValue:
+          type: string
+          format: date-time
+          maxLength: 255
+          description: Matched date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+        fieldResult:
+          type: string
+          description: Field result enumeration
+          enum:
+          - LINKED
+          - MATCHED
+          - NOT_MATCHED
+          - NOT_RUN
+          - UNKNOWN
+  CaseBulkArchiveRequest:
+    type: object
+    description: A request body on Bulk Update Archive States
+    required:
+    - archive
+    - caseSystemIds
+    properties:
+      archive:
+        type: boolean
+        description: A flag indicating whether to Bulk Archive (`true`) or Unarchive (`false`) Cases.
+      caseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+          description: System generated Id for the Case
+      note:
+        type: string
+        maxLength: 1000
+        description: Note added by the user.
+    example:
+      archive: true
+      caseSystemIds:
+      - caseSystemId1
+      - caseSystemId2
+      - caseSystemId3
+      note: Audit note
+  IdentityDocument:
+    type: object
+    properties:
+      entity:
+        $ref: '#/definitions/Entity'
+      expiryDate:
+        type: string
+      issueDate:
+        type: string
+      issuer:
+        type: string
+      locationType:
+        $ref: '#/definitions/IdentityDocumentLocationType'
+      number:
+        type: string
+      type:
+        type: string
+  AbstractResolution:
+    type: object
+    description: Abstract resolution object
+    properties:
+      statusId:
+        type: string
+        description: 'Unique status ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+          status IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+          '
+        maxLength: 255
+      riskId:
+        type: string
+        description: 'Unique risk ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+          risk IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+          '
+        maxLength: 255
+      reasonId:
+        type: string
+        description: 'Unique reason ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+          reason IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+          '
+        maxLength: 255
+      resolutionRemark:
+        type: string
+        description: Resolution remark added when resolving this Result.
+        maxLength: 1000
+  CaseBulkLinkRequest:
+    type: object
+    description: Case Bulk Link Request
+    required:
+    - caseSystemId
+    - relatedCaseSystemIds
+    properties:
+      caseSystemId:
+        type: string
+        description: System generated ID for the Case
+      relatedCaseSystemIds:
+        type: array
+        description: An array of system generated Ids for the Cases
+        items:
+          type: string
+  Weblink:
+    type: object
+    properties:
+      caption:
+        type: string
+      uri:
+        type: string
+      tags:
+        type: array
+        description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
+        items:
+          type: string
+  Cursor:
+    type: object
+    description: Identifier which allows retrieving next N cases.
+    required:
+    - cursorId
+    properties:
+      cursorId:
+        type: string
+        description: 'Identifier of the cursor returned by the data source and needs to be provided when scrolling to the next page
+
+          of results. CursorID exists for 60 seconds.
+
+          '
+  ItemIdentifier:
+    type: object
+    description: Represents the details (ID and label) of an individual item value.
+    properties:
+      id:
+        type: string
+        description: A string identifier for the item value.
+      label:
+        type: string
+        description: A string label for the item value.
+  AbstractField:
+    type: object
+    description: Generic Field representing a Custom Field or a Secondary Field.
+    required:
+    - typeId
+    properties:
+      typeId:
+        type: string
+        description: Type Identifier of this Field
+        maxLength: 255
+  Resolution:
+    type: object
+    description: Resolution details of a Result.
+    allOf:
+    - $ref: '#/definitions/AbstractResolution'
+    - type: object
+      properties:
+        resolutionDate:
+          type: string
+          format: date-time
+          description: Represents the date and time when this Result was last resolved.
+  CaseSummaryResult:
+    type: object
+    description: 'Represents an update on the results of the Case identified by ''caseSystemId'' indicating that there are
+
+      some new or updated results as a result of ongoing screening of this Case.
+
+      '
+    required:
+    - caseSystemId
+    properties:
+      caseSystemId:
+        type: string
+        maxLength: 192
+        description: System generated ID for the Case.
+      caseId:
+        type: string
+        maxLength: 512
+        description: Case ID provided by the client or else generated by the system for the client. This field is not applicable for Zero Footprint Screening (ZFS).
+      groupId:
+        type: string
+        maxLength: 255
+        description: Group identifier owning this case.
+      modificationDate:
+        type: string
+        format: date-time
+        description: Case modification date in ISO 8601 format excluding Week and Ordinal dates.
+      assignee:
+        description: User to whom the case assigned.
+        $ref: '#/definitions/CaseSearchUserSummary'
+      creator:
+        description: Case author.
+        $ref: '#/definitions/CaseSearchUserSummary'
+      modifier:
+        description: Author of recent changes.
+        $ref: '#/definitions/CaseSearchUserSummary'
+      creationDate:
+        type: string
+        format: date-time
+        description: Case creation date in ISO 8601 format excluding Week and Ordinal dates.
+      caseRating:
+        type: string
+        description: Rating of the case.
+        enum:
+        - NO_RISK
+        - LOW
+        - MEDIUM
+        - HIGH
+        - UNKNOWN
+        - NOT_RATED
+  Review:
+    type: object
+    description: Review details of a Result.
+    properties:
+      reviewRequired:
+        type: boolean
+        description: Flag to indicate Review Required after re-screening the CASE for this result.
+      reviewRequiredDate:
+        type: string
+        format: date-time
+        description: Represents the date and time when this Result was last flagged for review.
+      reviewRemark:
+        type: string
+        description: Review remark added when reviewing this Result.
+        maxLength: 2000
+      reviewDate:
+        type: string
+        format: date-time
+        description: Represents the date and time when this Result was last reviewed.
+  Entity:
+    type: object
+    description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
+
+      as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
+
+
+      The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
+
+
+      * `COUNTRY` : `CountryEntity`
+
+      * `INDIVIDUAL` : `IndividualEntity`
+
+      * `ORGANISATION` : `OrganisationEntity`
+
+      * `VESSEL` : `VesselEntity`
+
+
+      Notes for Client Watchlist usage:
+
+
+      * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
+
+      * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
+
+      * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
+
+      * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
+
+      '
+    discriminator: entityType
+    required:
+    - entityId
+    - creationDate
+    - names
+    - sources
+    - externalImportId
+    properties:
+      actions:
+        type: array
+        items:
+          $ref: '#/definitions/ActionDetail'
+      active:
+        type: boolean
+        default: false
+      addresses:
+        type: array
+        items:
+          $ref: '#/definitions/Address'
+      associates:
+        type: array
+        items:
+          $ref: '#/definitions/AbstractAssociate'
+      category:
+        type: string
+      comments:
+        type: string
+      contacts:
+        type: array
+        items:
+          $ref: '#/definitions/ContactDetail'
+      countryLinks:
+        type: array
+        items:
+          $ref: '#/definitions/CountryLink'
+      creationDate:
+        type: string
+        format: date-time
+      deletionDate:
+        type: string
+        format: date-time
+      description:
+        type: string
+      details:
+        type: array
+        items:
+          $ref: '#/definitions/Detail'
+      entityId:
+        type: string
+        description: An alphanumeric value including "_"
+      externalImportId:
+        type: string
+        description: An alphanumeric value including "_"
+      files:
+        type: array
+        items:
+          $ref: '#/definitions/FileMeta'
+      identityDocuments:
+        type: array
+        items:
+          $ref: '#/definitions/IdentityDocument'
+      images:
+        type: array
+        items:
+          $ref: '#/definitions/Image'
+      lastAdjunctChangeDate:
+        type: string
+        format: date-time
+      modificationDate:
+        type: string
+        format: date-time
+      names:
+        type: array
+        items:
+          $ref: '#/definitions/Name'
+      previousCountryLinks:
+        type: array
+        items:
+          $ref: '#/definitions/CountryLink'
+      provider:
+        $ref: '#/definitions/Provider'
+      sourceDescription:
+        type: string
+      sourceUris:
+        type: array
+        items:
+          type: string
+      sources:
+        type: array
+        items:
+          $ref: '#/definitions/ProviderSource'
+      subCategory:
+        type: string
+      updateCategory:
+        type: string
+        description: Entity Update Category Enumeration
+        enum:
+        - C1
+        - C2
+        - C3
+        - C4
+        - C6
+        - UNKNOWN
+      updatedDates:
+        $ref: '#/definitions/EntityUpdatedDates'
+      weblinks:
+        type: array
+        items:
+          $ref: '#/definitions/Weblink'
+      translatedEntity:
+        allOf:
+        - $ref: '#/definitions/TranslatedEntity'
+        x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
+  CaseReference:
+    type: object
+    description: Container of 'caseId' and 'caseSystemId'.
+    required:
+    - caseId
+    - caseSystemId
+    properties:
+      caseSystemId:
+        type: string
+        maxLength: 192
+        description: System generated ID for the Case.
+      caseId:
+        type: string
+        maxLength: 512
+        description: Case ID provided by the client or else generated by the system for the client.
+  AccelusUserLoginAccountStatus:
+    type: string
+    description: The status of the User login account.
+    enum:
+    - NOT_REGISTERED
+    - REGISTERED
+    - FIRST_TIME_LOGIN_COMPLETED
+responses:
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  Forbidden:
+    description: Forbidden
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

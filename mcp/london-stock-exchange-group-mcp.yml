@@ -1,0 +1,81 @@
+generated: '2026-06-20'
+method: searched
+status: candidate
+source: https://www.lseg.com/en/insights/scaling-ai-financial-services-with-lseg-trusted-ai-ready-content-mcp
+published_servers:
+  summary: >-
+    LSEG publicly describes LSEG-managed MCP servers that give agents and LLMs
+    a structured interface to LSEG content (fixed income analytics, macro data,
+    earnings estimates, intraday pricing). Access is client/entitlement-gated;
+    no public endpoint URL, registry entry, or tools/list surface was found, so
+    the live tool schemas cannot be captured here.
+  evidence:
+    - https://www.lseg.com/en/insights/scaling-ai-financial-services-with-lseg-trusted-ai-ready-content-mcp
+server:
+  name: london-stock-exchange-group
+  transport: http
+  url: null
+tools:
+  # Candidate tool surface derived from the World-Check One API v2 OpenAPI -
+  # a starting point for an MCP server over the screening domain, not a
+  # published LSEG tool list.
+  - name: screen_entity
+    description: Perform synchronous screening for a new case without persisting it
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#screen
+  - name: save_case
+    description: Create a new screening case
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#saveCase
+  - name: save_and_screen_cases
+    description: Save and screen multiple cases
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#saveAndScreenCases
+  - name: screen_case
+    description: Request full or delta screening for an existing case
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#screenCase
+  - name: get_case
+    description: Fetch full case details
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#getCase
+  - name: get_case_results
+    description: Get the collection of screening results for a case
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#getResults
+  - name: review_results
+    description: Add a review remark to specified results
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#reviewResults
+  - name: resolve_results
+    description: Resolve a list of screening results
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#resolveResults
+  - name: search_cases
+    description: Search for cases with FIQL criteria
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#searchCases
+  - name: enable_ongoing_screening
+    description: Enable ongoing screening (OGS) for a case
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#enableOngoingScreening
+  - name: get_ongoing_screening_updates
+    description: Get ongoing screening updates
+    source_operation: openapi/london-stock-exchange-group-case-api-openapi.yml#getOngoingScreeningUpdates
+  - name: get_case_audit_events
+    description: Get a filtered list of audit events for a case
+    source_operation: openapi/london-stock-exchange-group-audit-api-openapi.yml#getCaseAuditEventsByCaseSystemId
+  - name: get_media_check_results
+    description: Retrieve MediaCheck adverse-media results for a case
+    source_operation: openapi/london-stock-exchange-group-media-check-api-openapi.yml#getMediaCheckDetails
+  - name: get_groups
+    description: Get all top-level groups (also the recommended credential smoke test)
+    source_operation: openapi/london-stock-exchange-group-group-api-openapi.yml#getGroups
+  - name: get_case_template
+    description: Get the case template for a group
+    source_operation: openapi/london-stock-exchange-group-group-api-openapi.yml#getCaseTemplateForGroup
+  - name: get_users
+    description: Get active users in the client account
+    source_operation: openapi/london-stock-exchange-group-user-api-openapi.yml#getUsers
+  - name: get_countries
+    description: Get country codes and names reference data
+    source_operation: openapi/london-stock-exchange-group-reference-api-openapi.yml#getCountries
+  - name: get_profile
+    description: Get a World-Check profile by ID
+    source_operation: openapi/london-stock-exchange-group-reference-api-openapi.yml#getProfile
+  - name: submit_report_request
+    description: Submit a request for an async case report
+    source_operation: openapi/london-stock-exchange-group-reporting-api-openapi.yml#submitRequestForAsyncReport
+  - name: get_report
+    description: Download a completed report by report ID
+    source_operation: openapi/london-stock-exchange-group-reporting-api-openapi.yml#getReportDataByReportId

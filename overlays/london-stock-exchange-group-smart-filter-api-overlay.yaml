@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for London Stock Exchange Group LSEG World-Check One Api-Info Smart-Filter
+    API
+  version: 1.0.0
+extends: openapi/london-stock-exchange-group-smart-filter-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      provider: london-stock-exchange-group
+      reviewed: '2026-06-20'
+      artifacts:
+        authentication: authentication/london-stock-exchange-group-authentication.yml
+        conventions: conventions/london-stock-exchange-group-conventions.yml
+        errors: errors/london-stock-exchange-group-problem-types.yml
+        lifecycle: lifecycle/london-stock-exchange-group-lifecycle.yml
+- target: $.info
+  update:
+    x-audience: external-partner
+    x-auth-note: 'HMAC-SHA256 signed requests (Authorization: Signature ... + Date header); OAuth 2.0
+      service accounts on API v3'

@@ -1,0 +1,32 @@
+generated: '2026-06-20'
+method: searched
+source: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api/quick-start
+description: >-
+  World-Check One offers a dedicated Pilot environment for developing and
+  verifying an integration before promotion to Production. Pilot and Production
+  are separate accounts with separate API credentials; credentials are
+  provisioned by the LSEG account team (they cannot be self-served). No magic
+  test identifiers or fixture data are published - the Pilot account screens
+  against real World-Check data under a non-production entitlement.
+environments:
+  - name: pilot
+    purpose: Development and basic testing before go-live
+    api_v2_host: https://api-worldcheck.refinitiv.com/v2
+    api_v3_host: https://api.risk.lseg.com/screening/v3/
+    credentials: Separate pilot API key/secret (HMAC) or service-account (OAuth 2.0), issued by the LSEG account team
+  - name: production
+    purpose: Live screening
+    api_v2_host: https://api-worldcheck.refinitiv.com/v2
+    api_v3_host: https://api.risk.lseg.com/screening/v3/
+    credentials: Separate production credentials
+test_guidance:
+  smoke_test: >-
+    The quick start recommends calling GET /groups first to verify credentials -
+    a 200 response returning your accessible groups confirms authentication works.
+  postman: >-
+    An official Postman collection (Case Management and Audit v3) plus a Postman
+    environment file with all required variables is published on the quick-start
+    page (sign-in required to download).
+notes: >-
+  Pilot and production share the same hostnames and URL structure; only the
+  credentials and entitlements differ.

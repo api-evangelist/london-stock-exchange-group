@@ -1,0 +1,635 @@
+swagger: '2.0'
+info:
+  title: London Stock Exchange Group LSEG World-Check One Api-Info Audit API
+  description: 'The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.
+
+    The API provides, among other features:
+
+    - The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.
+
+    - The ability to retrieve results of the screening process from the World-Check database
+
+    - The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.
+
+    - The ability to submit request for reports.
+
+    - The ability to fetch the status of the report requests and download the completed reports.
+
+    > © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. ''LSEG'' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.
+
+    '
+  version: 2.61.0
+  termsOfService: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+  contact:
+    name: LSEG World-Check One API Q&A
+    url: https://community.developers.refinitiv.com/index.html
+    email: c3r.api1@lseg.com
+  license:
+    name: Commercial
+    url: https://www.lseg.com/en/risk-intelligence/screening-solutions/world-check-kyc-screening/one-kyc-verification
+host: api-worldcheck.refinitiv.com
+basePath: /v2
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+- application/octet-stream
+tags:
+- name: Audit
+  description: Operations for the audit domain.
+paths:
+  /cases/{caseSystemId}/auditEvents:
+    post:
+      operationId: getCaseAuditEventsByCaseSystemId
+      tags:
+      - Audit
+      summary: London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId
+      description: "Return all audit events related to cases visible to the current user. To get all audit events initial request \nwith no payload should be provided. However, please note that when audit is requested without any date range for eventDate in the query, \nit returns audit data for the last 168 hours by default. Also, caller may filter and sort the response by:\n\n**eventDate**: The time when the Audit Event was created (ISO 8601 format excluding Week and Ordinal dates)\n\n       e.g. eventDate>=2010-07-28T22:25:51Z;eventDate<2015-07-28T22:25:51Z\n\n**actionType**: Signifies the event links to a Case object.\n          Please refer to ``ActionType`` object for detailed description.\n\n       e.g. actionType=='ASSIGN_CASE'\n            actionType=in=('ASSIGN_CASE', 'NEW_MATCH')\n\n\n**actionedByUserId**: Identifier of the User who created this audit event.\n           Please refer to ``AuditEvent/properties/actionedByUserId`` for detailed description.\n\n       e.g. actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5\n\n\n**The above criteria can also be combined**\n\n       e.g. eventDate>=20120915T155300;eventDate<=2015-07-28T22:25:51Z;actionType=='NEW_MATCH'\n            actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5;eventDate>=2010-07-28T22:25:51Z\n\n**Please note that the above examples are only for the ``query`` part of the Filter**\n"
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format
+        in: header
+        type: string
+        required: true
+      - name: Content-Type
+        description: The media type of the request (e.g., 'application/json')
+        in: header
+        type: string
+        required: true
+      - name: Content-Length
+        description: The length of the request body in octets (8-bit bytes)
+        in: header
+        type: integer
+        required: true
+      - name: caseSystemId
+        in: path
+        description: System generated ID for the Case
+        required: true
+        type: string
+      - name: filter
+        in: body
+        description: Filter the AuditEvents in the response
+        required: false
+        schema:
+          $ref: '#/definitions/Filter'
+      responses:
+        200:
+          description: Collection of audit events in relation to a particular case
+          schema:
+            $ref: '#/definitions/AuditSearchResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+  /cases/{caseSystemId}/auditEvents/{auditEventId}:
+    get:
+      operationId: retrieveCaseAuditEvent
+      tags:
+      - Audit
+      summary: London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
+      description: Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.
+      parameters:
+      - name: Authorization
+        description: The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).
+        in: header
+        type: string
+        required: true
+      - name: Date
+        description: The date and time at which the message was originated in 'RFC 1123' format.
+        in: header
+        type: string
+        required: true
+      - name: caseSystemId
+        description: System generated ID for the Case.
+        in: path
+        type: string
+        required: true
+      - name: auditEventId
+        description: ID of the audit event.
+        in: path
+        type: string
+        required: true
+      responses:
+        200:
+          description: Details about the desired audit event.
+          schema:
+            $ref: '#/definitions/AuditEventDetailsResponse'
+        400:
+          $ref: '#/responses/BadRequest'
+        401:
+          $ref: '#/responses/Unauthorized'
+        404:
+          $ref: '#/responses/CannotReturnResponse'
+        415:
+          $ref: '#/responses/UnsupportedMediaType'
+        429:
+          $ref: '#/responses/TooManyRequests'
+        500:
+          $ref: '#/responses/UnexpectedError'
+definitions:
+  AbstractAuditDetails:
+    type: object
+    description: Abstract case audit event details object
+    discriminator: detailsType
+    required:
+    - detailsType
+    properties:
+      detailsType:
+        type: string
+        description: Concrete case details type
+        enum:
+        - CaseCreatedAuditDetails
+        - CaseDeletedAuditDetails
+        - CaseEditedAuditDetails
+        - ScreenCaseAuditDetails
+        - AssignCaseToUserAuditDetails
+        - ChangeCaseLifecycleStateAuditDetails
+        - ChangeCaseScreeningStateAuditDetails
+        - MigrationEventAuditDetails
+        - ReviewResultsAuditDetails
+        - ResolveResultsAuditDetails
+        - VerifyPassportAuditDetails
+        - EDDRequestAuditDetails
+        - AddNoteToCaseAuditDetails
+        - ChildCaseAuditDetails
+        - ChildCaseEventAuditDetails
+        - MergeCaseAuditDetails
+        - ChildCaseTransferredOutParent
+        - ChildCaseTransferredInParent
+        - ChildCaseMove
+        - ParentCaseDetailsChangedEventDetails
+        - ResolveMediaCheckResultsAuditDetails
+        - DeleteAttachedMediaCheckResultsAuditDetails
+        - ChangedCaseMediaCheckOgsPreferenceAuditDetails
+        - ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
+  AuditEntityType:
+    type: string
+    description: Entity type of the object that the audit event belongs to.
+    enum:
+    - CASE
+  MatchedNameType:
+    type: string
+    description: The matched name type enumeration.
+    enum:
+    - PRIMARY
+    - AKA
+    - AKAENHANCED
+    - FKA
+    - DBA
+    - MAIDEN
+    - LANG_VARIATION
+    - PREVIOUS
+    - VEHICLE_ID
+    - LOW_QUALITY_AKA
+    - NATIVE_AKA
+    - DOCUMENT_ID
+  AuditEventDetailsResponse:
+    type: object
+    description: Audit event response object.
+    allOf:
+    - $ref: '#/definitions/AuditEvent'
+    - type: object
+      properties:
+        matchEvents:
+          type: array
+          description: A Set of [AuditMatchEvent](#AuditMatchEvent) that is included only for the [ScreenCaseAuditDetails](#ScreenCaseAuditDetails) 'detailsType'.
+          uniqueItems: true
+          items:
+            $ref: '#/definitions/AuditMatchEvent'
+    example:
+      id: Audit ID
+      objectId: Object ID
+      eventDate: Event date
+      actionedByUserId: Actioned by User ID
+      actionedByUserName: Actioned by User Name
+      note: Note
+      entityType: CASE
+      actionType: CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
+      sourceType: API
+      auditEventToDate: null
+      details:
+      - detailsType: ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
+        casePreferenceType: MEDIA_CHECK_SMART_FILTER
+        status: false
+        dateTimeModification: 2022-05-15 15:03:24.984000+00:00
+      matchEvents:
+      - providerType: WATCHLIST
+        referenceId: e_tr_wc_1234567
+        matchedTerms:
+        - term: Maxym
+          type: PRIMARY
+        categories:
+        - PEP
+        matchedDate: 2022-05-15 15:03:24.984000+00:00
+        alertDate: null
+        actionTypes: null
+        score: 0.8979323846
+        matchEventType: UNRESOLVED
+        matchStatus: UNRESOLVED
+  AuditEventSourceType:
+    type: string
+    description: 'Enumeration of available audit event sources types.
+
+
+      Possible types of audit event sources are:
+
+
+      * DESKTOP - Signifies the event is originating from DESKTOP/UI
+
+      * DESKTOP_BULK - Signifies the event is originating from DESKTOP/UI Bulk actions
+
+      * API - Signifies the event is originating from API
+
+      * API_BULK - Signifies the event is originating from API Bulk actions
+
+      * DESKTOP_BATCH - Signifies the event is originating from DESKTOP/UI Batch screening
+
+      * API_BATCH - Signifies the event is originating from API Batch screening via saveAndScreen endpoint
+
+      * OGS - Signifies the event is originating from ongoing screening
+
+      * UNKNOWN - Signifies the event source is unknown
+
+      '
+    enum:
+    - DESKTOP
+    - DESKTOP_BULK
+    - API
+    - API_BULK
+    - DESKTOP_BATCH
+    - API_BATCH
+    - OGS
+    - UNKNOWN
+  MatchEventType:
+    type: string
+    description: The matched event type enumeration.
+    enum:
+    - UNRESOLVED
+    - AUTO_RESOLVED
+    - REVIEW_REQUIRED
+    - REVIEW_REQUIRED_ALERT
+  ProviderType:
+    type: string
+    description: Provider Type Enumeration
+    enum:
+    - WATCHLIST
+    - PASSPORT_CHECK
+    - CLIENT_WATCHLIST
+    - MEDIA_CHECK
+  AuditSearchResponse:
+    type: object
+    description: Audit Search Response Object
+    allOf:
+    - $ref: '#/definitions/SearchResponse'
+    - type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/definitions/AuditEvent'
+  AuditEventActionType:
+    type: string
+    description: Type of action that caused the audit event to be created.
+    enum:
+    - NEW_CASE
+    - SCREENED_CASE
+    - ASSIGN_CASE
+    - NEW_MATCH
+    - NEW_NOTE
+    - CHANGE_CASE_OWNER
+    - UPDATE_CASE_OWNER
+    - CHANGE_CASE_LIFECYCLE_STATE
+    - CHANGE_CASE_SCREENING_STATE
+    - EDITED_CASE
+    - MIGRATION
+    - REVIEW_RESULT
+    - RESOLVE_RESULT
+    - VERIFY_PASSPORT_DETAILS
+    - EDD_REPORT_REQUESTED_CASE
+    - DELETE_CASE
+    - NEW_CLIENT
+    - NEW_GROUP
+    - UPDATE_GROUP
+    - UPDATE_GROUP_STATUS
+    - UPDATE_CLIENT_STATUS
+    - DELETE_GROUP
+    - UPDATE_GROUP_MEMBERSHIP
+    - UPDATE_GROUP_AUTO_RESOLUTION
+    - UPDATE_GROUP_CUSTOM_FIELDS
+    - UPDATE_GROUP_RESOLUTION_TOOLKIT
+    - UPDATE_GROUP_TIMEZONE
+    - UPDATE_GROUP_EMAIL_SCHEDULE
+    - UPDATE_CLIENT_SETTINGS
+    - UPDATE_GROUP_SUBSCRIPTION_SETTINGS
+    - UPDATE_GROUP_SCREENING_SETTINGS
+    - UPDATE_GROUP_PRODUCT_ENTITLEMENTS
+    - CREATE_ROLE
+    - UPDATE_ROLE
+    - NEW_USER
+    - UPDATE_USER
+    - UPDATE_USER_ROLES
+    - UPDATE_USER_MEMBERSHIP
+    - UPDATE_USER_STATUS
+    - DELETE_USER
+    - NEW_PARENT_CASE
+    - ADD_CHILD_CASE
+    - UNLINK_CHILD_CASE
+    - MERGE_CASE
+    - ADD_TO_PARENT_CASE
+    - UNLINK_PARENT_CASE
+    - CHILD_CASE_TRANSFERRED_OUT
+    - CHILD_CASE_TRANSFERRED_IN
+    - MOVE_CHILD_TO_ANOTHER_PARENT
+    - ARCHIVE_PARENT_CASE
+    - UNARCHIVE_PARENT_CASE
+    - ARCHIVE_CHILD_CASE
+    - UNARCHIVE_CHILD_CASE
+    - DELETE_CHILD_CASE
+    - PARENT_CASE_DETAILS_CHANGED
+    - NEW_PARENT_CASE_NOTE
+    - CHANGED_CASE_MEDIA_CHECK_OGS_PREFERENCE
+    - CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
+    - CHANGE_CASE_RATING
+  AuditEvent:
+    type: object
+    description: Abstract audit event object
+    required:
+    - id
+    - objectId
+    - entityType
+    - eventDate
+    - actionType
+    - actionedByUserId
+    - actionedByUserName
+    - details
+    properties:
+      id:
+        type: string
+        description: Identifier for this audit event
+        maxLength: 255
+      objectId:
+        type: string
+        description: Identifier of the entity for which this audit event was created
+        maxLength: 255
+      entityType:
+        $ref: '#/definitions/AuditEntityType'
+      eventDate:
+        type: string
+        format: date-time
+        description: Creation date and time of this audit event in ISO 8601 format excluding Week and Ordinal dates.
+      actionType:
+        $ref: '#/definitions/AuditEventActionType'
+      sourceType:
+        $ref: '#/definitions/AuditEventSourceType'
+      actionedByUserId:
+        type: string
+        maxLength: 255
+        description: Identifier of the User who created this audit event
+      actionedByUserName:
+        type: string
+        maxLength: 2001
+        description: Full name of the User who created this audit event
+      note:
+        type: string
+        maxLength: 1000
+        description: a comment added by the user
+      auditEventToDate:
+        type: string
+        format: date-time
+        description: Unused field to represent the date and time of the last event for a continuous series of OGS audit events with zero matches. The value is in ISO 8601 format excluding Week and Ordinal dates.
+      details:
+        $ref: '#/definitions/AbstractAuditDetails'
+  AuditMatchTerm:
+    type: object
+    description: The Case match details.
+    required:
+    - term
+    - type
+    properties:
+      term:
+        type: string
+        description: The matched term.
+        maxLength: 255
+      type:
+        description: The matched name type.
+        $ref: '#/definitions/MatchedNameType'
+  AuditMatchEvent:
+    type: object
+    description: Represents a match that was found on the Case during screening.
+    required:
+    - providerType
+    - referenceId
+    - matchedTerms
+    - categories
+    - matchedDate
+    - score
+    - matchEventType
+    - matchStatus
+    properties:
+      providerType:
+        description: The provider type.
+        $ref: '#/definitions/ProviderType'
+      referenceId:
+        type: string
+        description: The reference ID of the matched Entity.
+        maxLength: 255
+      matchedTerms:
+        type: array
+        description: The matched terms.
+        items:
+          $ref: '#/definitions/AuditMatchTerm'
+      categories:
+        type: array
+        description: Sources for the result/match.
+        uniqueItems: true
+        items:
+          type: string
+      matchedDate:
+        type: string
+        description: Date on which the result was matched.
+        format: date-time
+      alertDate:
+        type: string
+        description: Date on which the result was auto resolved, 'null' otherwise.
+        format: date-time
+      actionTypes:
+        type: array
+        description: Action type for the case indicating why the action was taken (reasons for an action).
+        uniqueItems: true
+        items:
+          $ref: '#/definitions/MatchActionType'
+      score:
+        type: number
+        description: The score of the result term.
+        format: double
+      matchEventType:
+        description: The case match event type.
+        $ref: '#/definitions/MatchEventType'
+      matchStatus:
+        type: string
+        description: Last resolution status of the match.
+  PaginationResponse:
+    type: object
+    description: Outbound - used to describe paginated partial result sets
+    allOf:
+    - $ref: '#/definitions/Pagination'
+    - properties:
+        totalItems:
+          type: integer
+          format: int64
+  SortCriterion:
+    type: object
+    description: Sort specification
+    properties:
+      columnName:
+        type: string
+        description: The field to sort on
+      order:
+        type: string
+        description: The sort order
+        enum:
+        - ASCENDING
+        - DESCENDING
+  SearchResponse:
+    type: object
+    description: Common fields used in search responses.  These fields are included in response types, and objects of this type are not returned directly.
+    required:
+    - totalResultCount
+    properties:
+      query:
+        type: string
+      sort:
+        type: array
+        description: The sort critieria to apply to the query
+        items:
+          $ref: '#/definitions/SortCriterion'
+      pagination:
+        $ref: '#/definitions/PaginationResponse'
+      totalResultCount:
+        type: integer
+        format: int64
+  Pagination:
+    type: object
+    description: Inbound - the pagination to apply to the query.
+    required:
+    - currentPage
+    - itemsPerPage
+    properties:
+      currentPage:
+        type: integer
+        format: int32
+      itemsPerPage:
+        type: integer
+        format: int32
+  Error:
+    type: object
+    required:
+    - error
+    - cause
+    properties:
+      error:
+        type: string
+      cause:
+        type: string
+      objectId:
+        type: string
+  MatchActionType:
+    type: string
+    description: The matched action type enumeration.
+    enum:
+    - DATA_ISSUE
+    - RESULT_NOT_FOUND
+    - SCORE_INCREASED
+    - SCORE_DECREASED
+    - PROFILE_UPDATED
+    - PROFILE_UPDATED_C1
+    - PROFILE_UPDATED_C2
+    - PROFILE_UPDATED_C3
+    - PROFILE_UPDATED_C4
+    - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
+    - GENDER_UPDATED
+    - DATE_OF_BIRTH_UPDATED
+    - COUNTRY_LOCATION_UPDATED
+    - PLACE_OF_BIRTH_UPDATED
+    - NATIONALITY_UPDATED
+    - REGISTERED_COUNTRY_UPDATED
+    - IMO_NUMBER_UPDATED
+  Filter:
+    type: object
+    description: Filter the response
+    properties:
+      query:
+        type: string
+        description: "A query filter expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing \nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved \ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nThe query examples:\n\n* \"query\": \"example=='TE!ST'\"\n* \"query\": \"example==\\\\\"TE'ST\\\\\"\"\n* \"query\": \"example=='TE\\\\\\\\'ST'\"\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single \nor double quotes.\n\nExample:\n\n* \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
+      sort:
+        type: array
+        description: The sort critieria to apply to the query
+        items:
+          $ref: '#/definitions/SortCriterion'
+      pagination:
+        $ref: '#/definitions/Pagination'
+responses:
+  Unauthorized:
+    description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+  UnsupportedMediaType:
+    description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+  CannotReturnResponse:
+    description: Cannot return response
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  TooManyRequests:
+    description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+  BadRequest:
+    description: Bad request
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+  UnexpectedError:
+    description: Unexpected error
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/Error'
+externalDocs:
+  description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
+  url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
+x-tagGroups:
+- name: Upcoming Features and Changes
+  tags:
+  - upcoming
+- name: Zero Footprint Screening
+  tags:
+  - zfs
+- name: Case Management and Audit
+  tags:
+  - api-info
+  - reference
+  - group
+  - case
+  - audit
+  - media-check
+  - client-watchlist
+  - user
+  - passport-check
+  - linked-cases
+  - case-rating
+  - smart-filter
+  - reporting

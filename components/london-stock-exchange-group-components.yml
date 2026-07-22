@@ -1,0 +1,30 @@
+generated: '2026-06-20'
+method: searched
+source: https://ui.refinitiv.com (npm @refinitiv-ui scope, github.com/Refinitiv/refinitiv-ui)
+description: >-
+  LSEG publishes the Element Framework (EF) - an official library of embeddable
+  web components for building financial applications that match the LSEG
+  Workspace look and feel. Distributed on npm under the @refinitiv-ui scope,
+  developed in the open at github.com/Refinitiv/refinitiv-ui.
+families:
+  - family: Element Framework elements
+    description: Core catalog of financial UI web components (charts, grids, dialogs, forms)
+    loader: "@refinitiv-ui/elements"
+    npm: https://www.npmjs.com/package/@refinitiv-ui/elements
+    docs: https://ui.refinitiv.com
+  - family: Grid components
+    description: High-performance data grid components (efx-grid) for market data displays
+    loader: "@refinitiv-ui/efx-grid"
+    npm: https://www.npmjs.com/package/@refinitiv-ui/efx-grid
+  - family: Themes
+    description: Official Halo theme matching LSEG Workspace styling
+    loader: "@refinitiv-ui/halo-theme"
+    npm: https://www.npmjs.com/package/@refinitiv-ui/halo-theme
+  - family: Framework support
+    description: Core runtime, i18n/translate, phrasebook, polyfills and shared utilities
+    loader: "@refinitiv-ui/core"
+    npm: https://www.npmjs.com/package/@refinitiv-ui/core
+repository: https://github.com/Refinitiv/refinitiv-ui
+notes: >-
+  These components target LSEG data-and-analytics application development
+  broadly; there is no World-Check One-specific embeddable component library.

@@ -1,0 +1,87 @@
+generated: '2026-06-20'
+method: derived
+source: openapi/_original/lseg-world-check-one-openapi-original.yml (242 definitions)
+description: >-
+  Entity-relationship graph of the World-Check One screening domain, derived
+  from the OpenAPI definitions and id-reference fields.
+entities:
+  - name: Case
+    description: A screening case for an entity name (individual, organisation, or vessel)
+    ids: [caseId, caseSystemId]
+  - name: Result
+    description: A screening match returned from the World-Check database for a case
+    ids: [resultId, referenceId]
+  - name: Group
+    description: Organisational unit that owns cases; carries case templates and resolution toolkits
+    ids: [groupId]
+  - name: CaseTemplate
+    description: Per-group definition of secondary fields and custom fields for new cases
+  - name: ResolutionToolkit
+    description: Per-group, per-provider-type resolution statuses, risks, and reasons used to resolve results
+  - name: User
+    description: Client-account user that cases can be assigned to
+    ids: [userId]
+  - name: AuditEvent
+    description: Audit trail entry recorded against a case
+    ids: [auditEventId]
+  - name: Report
+    description: Asynchronously generated case report
+    ids: [reportId]
+  - name: MediaCheckArticle
+    description: Adverse-media news article surfaced by MediaCheck for a case
+    ids: [articleId]
+  - name: Profile
+    description: World-Check reference profile (PEP details, identity documents)
+    ids: [profileId]
+  - name: Record
+    description: World-Check reference record
+    ids: [recordId]
+  - name: Watchlist
+    description: Client-maintained custom watchlist source
+    ids: [identifier]
+relationships:
+  - from: Group
+    to: Case
+    kind: has_many
+    via: groupId
+  - from: Case
+    to: Result
+    kind: has_many
+    via: caseSystemId
+  - from: Case
+    to: AuditEvent
+    kind: has_many
+    via: caseSystemId
+  - from: Case
+    to: MediaCheckArticle
+    kind: has_many
+    via: caseSystemId
+  - from: Case
+    to: User
+    kind: belongs_to
+    via: assignee
+  - from: Case
+    to: Case
+    kind: has_many
+    via: relationshipType
+    notes: Linked cases (parent/child and custom relationship types)
+  - from: Case
+    to: Report
+    kind: has_many
+    via: caseSystemId
+  - from: Group
+    to: CaseTemplate
+    kind: has_one
+    via: groupId
+  - from: Group
+    to: ResolutionToolkit
+    kind: has_many
+    via: groupId
+  - from: Result
+    to: Profile
+    kind: belongs_to
+    via: referenceId
+  - from: Profile
+    to: Record
+    kind: has_many
+    via: recordId
