@@ -4,6 +4,19 @@ description: London Stock Exchange Group plc is a United Kingdom-based stock exc
   in the City of London, England. LSEG provides capital markets, data and analytics, risk management, and post-trade services
   including the World-Check screening platform for KYC and anti-money-laundering due diligence.
 type: Index
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/london-stock-exchange-group.png
 tags:
   - Financial
