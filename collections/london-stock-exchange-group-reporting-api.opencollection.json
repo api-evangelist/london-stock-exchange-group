@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Reporting API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reporting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Submit request for async report based on the given filter conditions and return the 'reportId'.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reports",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Submit request for async report based on the given filter conditions and return the 'reportId'."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the report status for the given report ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reports/:reportId/status",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report ID for which the status needs to be fetched."
+              }
+            ]
+          },
+          "docs": "Get the report status for the given report ID."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Download the report for given report ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reports/:reportId",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report ID for which the report needs to be fetched."
+              }
+            ]
+          },
+          "docs": "Download the report for given report ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

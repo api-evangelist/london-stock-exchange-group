@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Case-Rating API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Case-Rating",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve a case rating",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/rating",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a case."
+              }
+            ]
+          },
+          "docs": "Retrieve the case rating in the case provided in the request path.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Update a case rating",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/cases/:caseSystemId/rating",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a case."
+              }
+            ]
+          },
+          "docs": "Update the case rating in the case provided in the request path.\nThe request contains a detailed reason to make it easier to resolve a case based on screening results.\nThe reason is not a required field in the request.\n\n**Example HTTP request**\n\n```\n    {\n      \"caseRating\": \"HIGH\",\n      \"reason\": \"The reason\"\n    }\n```\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

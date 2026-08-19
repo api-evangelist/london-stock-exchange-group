@@ -1,0 +1,468 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Media-Check API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Media-Check",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve MediaCheck results",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a Case."
+              }
+            ]
+          },
+          "docs": "Retrieve MediaCheck headlines results by the case ID.\n\nThe retrieval of MediaCheck headlines results may require a number of steps depending on the size of the headline result set.\n\n1. Initially the API consumer does basic search of MediaCheck news articles by specifying initial filters and facets to return.\n2. Later the API consumer may invoke the endpoint several times in order to scroll the results page by page or\nto narrow down the results by selecting specific facet values.\n\nInitial search "
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve article metadata by the article IDs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/metadata",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case"
+              }
+            ]
+          },
+          "docs": "Retrieve Media Check headlines results by the article IDs.\n\n**Example HTTP request**\n\n```\n    {\n      \"articleIds\":[\n        \"articleID1\",\n        \"articleID2\",\n        \"articleID3\"\n      ]\n    }\n```\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve article metadata by the article ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/:articleId/metadata",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case"
+              },
+              {
+                "name": "articleId",
+                "value": "",
+                "type": "path",
+                "description": "MediaCheck news article ID"
+              }
+            ]
+          },
+          "docs": "Retrieve Media Check headlines results by the article ID.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve MediaCheck news articles content",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/content",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case"
+              },
+              {
+                "name": "enableHighlight",
+                "value": "",
+                "type": "query",
+                "description": "Flag to enable terms highlight"
+              },
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Terms to highlight"
+              }
+            ]
+          },
+          "docs": "Retrieve MediaCheck news articles content and summary by the given caseSystemId and list of article IDs.\n\n**Example HTTP request**\n\n```\n    {\n      \"articleIds\":[\n        \"articleID1\",\n        \"articleID2\",\n        \"articleID3\"\n      ]\n    }\n```\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve content of single MediaCheck news article.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/:articleId/content",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case"
+              },
+              {
+                "name": "articleId",
+                "value": "",
+                "type": "path",
+                "description": "MediaCheck news article ID"
+              },
+              {
+                "name": "enableHighlight",
+                "value": "",
+                "type": "query",
+                "description": "Flag to enable terms highlight"
+              },
+              {
+                "name": "context",
+                "value": "",
+                "type": "query",
+                "description": "Terms to highlight"
+              }
+            ]
+          },
+          "docs": "Retrieve content of single MediaCheck news article by the given caseSystemId and article ID."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Mark all MediaCheck news articles as reviewed for a case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/review",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              }
+            ]
+          },
+          "docs": "Marks all news articles as reviewed for the Case identified by the given caseSystemId."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve all articles attached to the case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/attach",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              }
+            ]
+          },
+          "docs": "Retrieve Media Check results by the article attached to the case."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Attach articles to a case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/attach",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              }
+            ]
+          },
+          "docs": "Attach articles to a case identified by the given caseSystemId."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Detach articles from a case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/attach",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              }
+            ]
+          },
+          "docs": "Detach articles from a case identified by the given caseSystemId."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Detach single article from a case.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/:articleId/attach",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              },
+              {
+                "name": "articleId",
+                "value": "",
+                "type": "path",
+                "description": "MediaCheck news article ID."
+              }
+            ]
+          },
+          "docs": "Detach single article from a case identified by the given caseSystemId."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve mediacheck risk definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/mediacheck/risks",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves a list of mediacheck risk definitions.\n\nThe mediacheck risk definitions are used when attaching mediacheck articles to a case.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve MediaCheck article duplicates.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/results/duplicates",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a Case."
+              }
+            ]
+          },
+          "docs": "Retrieve article duplicates by specifying article deduplicationHash.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

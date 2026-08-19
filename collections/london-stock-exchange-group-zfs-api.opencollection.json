@@ -1,0 +1,242 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Zfs API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Zfs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get all the top-level groups with their immediate descendants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get all the top-level groups with their immediate descendants"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a specified group including its immediate descendants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group ID under which we wish to retrieve children groups"
+              }
+            ]
+          },
+          "docs": "Get a specified group including its immediate descendants"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the CaseTemplate for the given Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId/caseTemplate",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group ID under which we wish to manage Cases and perform screening"
+              }
+            ]
+          },
+          "docs": "Get the CaseTemplate for the given Group, used for constructing a Case\n\n**Available secondary fields:**\n<details>\n  <summary>Click here to expand</summary>\n\n  | Type ID   | NAME                    | VALUE                     |\n  |--|-||\n  | SFCT_1    | GENDER                  | MALE, FEMALE, UNSPECIFIED |\n  | SFCT_2    | DATE OF BIRTH           | DATE                      |\n  | SFCT_3    | COUNTRY LOCATION        | COUNTRY CODE              |\n  | SFCT_4    | PLACE OF BIRTH          | COUNTRY COD"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Perform synchronous screening for a new case",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/screeningRequest",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Perform synchronous screening for a new case.\n\nThis endpoint can perform a synchronous screening for a set of valid case details and, if provided,\nset the ongoing screening (OGS) state for the given provider types. The supported provider types for setting\nthe OGS state are WATCHLIST and MEDIA_CHECK. They both can be set to either INITIAL (OGS disabled) or ONGOING\n(OGS enabled) state. You cannot set the OGS state when using Zero Footprint Screening (ZFS) groups.\n\nThe returned result collection co"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get Map of country codes and country names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/countries",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get Map of ISO-3166-1 alpha-3 country codes and country names in English"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a record by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/records/:id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Record identifier."
+              }
+            ]
+          },
+          "docs": "Get a record by its ID.\n\nThis service returns a specific subclass of 'Entity', depending on its particular 'RecordEntityType' discriminator\nfield. Please note in the context of World-Check One, 'Record' and 'Entity' are synonymous concepts.\n\nFor 'Zero Footprint Screening (ZFS)', this endpoint should be called on the dedicated 'ZFS' gateway host.\n\nThe 'Entity' subclasses corresponding to each type of entity are:\n\n* 'COUNTRY' : 'CountryEntity'\n* 'INDIVIDUAL' : 'IndividualEntity'\n* 'ORGANISATION' :"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Create or update a provider source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/reference/providers/sources/:identifier",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for this provider source. Has to be alphanumeric."
+              }
+            ]
+          },
+          "docs": "Create or update a provider source for uploading entity records to. An example usage would be for a client watchlist.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Maintain your Watchlist data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reference/watchlist",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Maintain your Watchlist data using the following supported entity actions.\n\n* entityCreateOrUpdate - Add a new entity to your Watchlist or replace if it already exists.\n\n* entityDelete - Mark the given entity as deleted in your Watchlist.\n\n* entitySupersede - Supersede enables you to redirect matches against your superseded entity to a new entity. This\nis useful if you want to redirect users with existing matches against an old entity to a newer / more accurate\nversion of those entities.\n\n* enti"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

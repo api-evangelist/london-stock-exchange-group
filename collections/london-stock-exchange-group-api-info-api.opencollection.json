@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Api-Info",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get information about the Public API.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/apiInfo",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get information about the version of the Public API, a link to the documentation, and a date and time that can be used to verify the 'Date' header."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

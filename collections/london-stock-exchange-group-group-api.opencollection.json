@@ -1,0 +1,190 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange LSEG World-Check One Api-Info Group API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get all the top-level groups with their immediate descendants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get all the top-level groups with their immediate descendants"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a specified group including its immediate descendants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group ID under which we wish to retrieve children groups"
+              }
+            ]
+          },
+          "docs": "Get a specified group including its immediate descendants"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the CaseTemplate for the given Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId/caseTemplate",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "Group ID under which we wish to manage Cases and perform screening"
+              }
+            ]
+          },
+          "docs": "Get the CaseTemplate for the given Group, used for constructing a Case\n\n**Available secondary fields:**\n<details>\n  <summary>Click here to expand</summary>\n\n  | Type ID   | NAME                    | VALUE                     |\n  |--|-||\n  | SFCT_1    | GENDER                  | MALE, FEMALE, UNSPECIFIED |\n  | SFCT_2    | DATE OF BIRTH           | DATE                      |\n  | SFCT_3    | COUNTRY LOCATION        | COUNTRY CODE              |\n  | SFCT_4    | PLACE OF BIRTH          | COUNTRY COD"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the ResolutionToolkit for the given Group.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId/resolutionToolkit",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Group to which the resolution toolkit belongs."
+              }
+            ]
+          },
+          "docs": "Get the ResolutionToolkit for the given Group, used to construct a valid resolution request(s) on the results\nfor a Case belonging to the given Group `groupId`.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get all the ResolutionToolkits for the given Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId/resolutionToolkits",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Group to which the resolution toolkits belong."
+              }
+            ]
+          },
+          "docs": "Get the ResolutionToolkits for the given Group for all enabled provider types, used to construct a valid\nresolution request(s) on the results for a Case belonging to the given Group `groupId`.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the ResolutionToolkit for a specific provider type for the given Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/:groupId/resolutionToolkits/:providerType",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "groupId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the Group to which the resolution toolkit belongs."
+              },
+              {
+                "name": "providerType",
+                "value": "",
+                "type": "path",
+                "description": "Provider type for which the resolution toolkit applies."
+              }
+            ]
+          },
+          "docs": "Get the ResolutionToolkit for a specific provider type the given Group, used to construct a valid resolution request(s) on the results\nfor a Case belonging to the given Group `groupId`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

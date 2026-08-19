@@ -1,0 +1,244 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Reference API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get Map of country codes and country names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/countries",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get Map of ISO-3166-1 alpha-3 country codes and country names in English"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get Map of nationality codes and nationality names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/nationalities",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get Map of ISO-3166-1 alpha-3 nationality codes and nationality names in English"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a list of available providers and their sources.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/providers",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get a list of all available providers and their sources."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get identity document location types data set definition.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/identityDocumentLocationTypes"
+          },
+          "docs": "Get each identity document location type log, that refers to a specific country and entity type."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieves all search filters that are accessible to the User.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/searchFilters",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves all search filters that are accessible to the User."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a profile by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/profile/:id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}`\n\nGet a profile by its ID.\n\nThis service returns a specific subclass of 'Entity', depending on its particular 'ProfileEntityType' discriminator\nfield. Please note in the context of World-Check One, 'Profile' and 'Entity' are synonymous concepts.\n\nFor 'Zero Footprint Screening (ZFS)', this endpoint should be called on the dedicated 'ZFS' gateway host.\n\nThe `Entity` subclasses corresponding to each type of"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a record by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reference/records/:id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Record identifier."
+              }
+            ]
+          },
+          "docs": "Get a record by its ID.\n\nThis service returns a specific subclass of 'Entity', depending on its particular 'RecordEntityType' discriminator\nfield. Please note in the context of World-Check One, 'Record' and 'Entity' are synonymous concepts.\n\nFor 'Zero Footprint Screening (ZFS)', this endpoint should be called on the dedicated 'ZFS' gateway host.\n\nThe 'Entity' subclasses corresponding to each type of entity are:\n\n* 'COUNTRY' : 'CountryEntity'\n* 'INDIVIDUAL' : 'IndividualEntity'\n* 'ORGANISATION' :"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieves PEP details by the given profile ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reference/profile/:id/pep",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Profile identifier."
+              }
+            ]
+          },
+          "docs": "Warning: This endpoint is deprecated due to migration to a new one: `/reference/records/{id}/pep`\n\nRetrieves detailed information for \"Politically Exposed Person (PEP)\" category by given profile ID.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieves PEP details by the given record ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reference/records/:id/pep",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Record identifier."
+              }
+            ]
+          },
+          "docs": "Retrieves detailed information for \"Politically Exposed Person (PEP)\" category by given record ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

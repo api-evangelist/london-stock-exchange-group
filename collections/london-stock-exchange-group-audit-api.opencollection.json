@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Audit API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/cases/:caseSystemId/auditEvents",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case"
+              }
+            ]
+          },
+          "docs": "Return all audit events related to cases visible to the current user. To get all audit events initial request \nwith no payload should be provided. However, please note that when audit is requested without any date range for eventDate in the query, \nit returns audit data for the last 168 hours by default. Also, caller may filter and sort the response by:\n\n**eventDate**: The time when the Audit Event was created (ISO 8601 format excluding Week and Ordinal dates)\n\n       e.g. eventDate>=2010-07-28T"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/auditEvents/:auditEventId",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for the Case."
+              },
+              {
+                "name": "auditEventId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the audit event."
+              }
+            ]
+          },
+          "docs": "Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

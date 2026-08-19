@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Smart-Filter API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Smart-Filter",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Retrieve smart filter on a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/smartFilter",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a case."
+              }
+            ]
+          },
+          "docs": "Retrieve the smart filter state on the case provided in the request path.\nThe request body should be empty for the case provided in the request path ('caseSystemId').\nThe case should be created with enabled mediacheck provider.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Enable smart filter on a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/smartFilter",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a case."
+              }
+            ]
+          },
+          "docs": "Update the smart filter state on the case provided in the request path.\nThe group setting \"Allow users to enable/disable the Smart Filter\" should be equal to true to have the ability to update the smart filter state on the case.\nThe request body should be empty for the case provided in the request path ('caseSystemId').\nThe case should be created with enabled mediacheck provider. If the smart filter has already enabled then the smart filter status will not be updated.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Disable smart filter on a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/cases/:caseSystemId/mediacheck/smartFilter",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "caseSystemId",
+                "value": "",
+                "type": "path",
+                "description": "System generated ID for a case."
+              }
+            ]
+          },
+          "docs": "Update the smart filter state on the case provided in the request path.\nThe group setting \"Allow users to enable/disable the Smart Filter\" should be equal to true to have the ability to update the smart filter state on the case.\nThe request body should be empty for the case provided in the request path ('caseSystemId').\nThe case should be created with enabled mediacheck provider. If the smart filter has already disabled then the smart filter status will not be updated.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1895 @@
+{
+  "item": [
+    {
+      "id": "3a42d1bd-2a60-4198-89f3-987ee591df06",
+      "name": "Linked-Cases",
+      "description": {
+        "content": "Operations for the linked cases domain.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2a7155ea-186b-47e6-9946-c342e5a38efa",
+          "name": "London Stock Exchange Group Retrieve the list of case relationships",
+          "request": {
+            "name": "London Stock Exchange Group Retrieve the list of case relationships",
+            "description": {
+              "content": "Retrieve the list of case relationships with cases linked to it.\n\nRelationship type strategies examples:\n\n * `primary-to-subcase` : declares `caseSystemId` as a primary case and lists cases linked to it with\n                          `primary-to-subcase` relationship type.\n * `subcase-to-primary` : declares `caseSystemId` as a subcase and lists cases linked to it with\n                          `subcase-to-primary` relationship type.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cases",
+                ":caseSystemId",
+                "relationship",
+                ":relationshipType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "caseSystemId",
+                  "description": "(Required) System generated ID for a Case"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>,<string>",
+                  "key": "relationshipType",
+                  "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                "key": "Content-Length",
+                "value": "<integer>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6f1f683d-9661-42b2-b4a5-e5393b7b76e0",
+              "name": "Response containing the list of relationships between cases",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pagination\": {\n    \"currentPage\": 2807,\n    \"itemsPerPage\": 3671,\n    \"totalItems\": 7948\n  },\n  \"totalResultCount\": 5973,\n  \"results\": [\n    {\n      \"sourceCaseSystemId\": \"string\",\n      \"targetCaseSystemId\": \"string\",\n      \"relationshipType\": \"PRIMARY_TO_SUBCASE\"\n    },\n    {\n      \"sourceCaseSystemId\": \"string\",\n      \"targetCaseSystemId\": \"string\",\n      \"relationshipType\": \"PRIMARY_TO_SUBCASE\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20bae981-d1e6-471f-a208-7bcac3c4a1c9",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c8564ea-192c-4213-bfd5-6bc938f2b7bc",
+              "name": "The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2f2af1d2-1c07-43cd-9297-ffb26dbc61d1",
+              "name": "Cannot return response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9c077f2b-ebb1-4c85-8f08-7022a2d79f40",
+              "name": "For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3b359f69-8995-430a-ac37-c274232276be",
+              "name": "The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c69dd90c-2405-4cdc-9cdd-d03a22c5d2f0",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>,<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases. Multiple comma separated values allowed"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50d975b7-02b1-4e4e-976b-592994ae45f1",
+          "name": "London Stock Exchange Group Create links between cases",
+          "request": {
+            "name": "London Stock Exchange Group Create links between cases",
+            "description": {
+              "content": "Create links between cases based on relationship type strategy(`relationshipType`).\n\n**Note:** There is a maximum number of World-Check One relationships between cases:\n* Maximum 500 primary cases are allowed per a subcase. \n* Maximum 50 subcases are allowed per a primary case.\n\nRelationship type strategies examples:\n\n * `primary-to-subcase` : declares `caseSystemId` as a primary case and cases listed in `linkedCasesRequest`\n                          as subcases which will be linked to a primary case.\n * `subcase-to-primary` : declares `caseSystemId` as a subcase and cases listed in `linkedCasesRequest`\n                          as primary cases which will be linked to a subcase.\n\n**Example HTTP request**\n\n```\n    {\n      \"relatedCaseSystemIds\":[\n        \"Case System ID 1\",\n        \"Case System ID 2\",\n      ]\n    }\n```\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cases",
+                ":caseSystemId",
+                "relationship",
+                ":relationshipType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "caseSystemId",
+                  "description": "(Required) System generated ID for a case."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "relationshipType",
+                  "description": "(Required) Relationship type between cases."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                "key": "Content-Length",
+                "value": "<integer>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"relatedCaseSystemIds\": [\n    \"<string>\"\n  ],\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b8061082-1592-480f-896b-799376e200c2",
+              "name": "Links between cases have been created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c7138aa9-de4f-42c3-8f27-78a7fe1b6bbc",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3feecc47-980d-4e99-a5c8-ca4456163c39",
+              "name": "The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "07da0e4a-e734-46af-8a82-e737d1b06d24",
+              "name": "Cannot return response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0a5099a-5cdb-440d-9cbd-73afc4a0328f",
+              "name": "For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0407344f-e991-413a-afb3-8a63814340fa",
+              "name": "The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "63b8d4ff-b6d8-4106-b4d7-b011beced9a4",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1bc656c-0192-47db-aec1-52caa028a93c",
+          "name": "London Stock Exchange Group Delete links between cases",
+          "request": {
+            "name": "London Stock Exchange Group Delete links between cases",
+            "description": {
+              "content": "Unlink cases based on relationship type strategy(`relationshipType`).\n\nRelationship type strategies examples:\n\n * `primary-to-subcase` : declares `caseSystemId` as a primary case and cases listed in `linkedCasesRequest`\n                          as subcases which will be unlinked from a primary case.\n * `subcase-to-primary` : declares `caseSystemId` as a subcase and cases listed in `linkedCasesRequest`\n                          as primary cases which will be unlinked from a subcase.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cases",
+                ":caseSystemId",
+                "relationship",
+                ":relationshipType"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "caseSystemId",
+                  "description": "(Required) System generated ID for a Case."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "relationshipType",
+                  "description": "(Required) Relationship type between cases."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                "key": "Content-Length",
+                "value": "<integer>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"relatedCaseSystemIds\": [\n    \"<string>\"\n  ],\n  \"note\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b1027f6-299b-4d09-91db-617db84d789e",
+              "name": "Links between cases have been deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3163e6b9-c753-448f-b9d5-a78f1edd299d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66892d7b-9ba1-4007-a781-944e15c7feb0",
+              "name": "The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6067a126-8025-46d0-810e-cf86f0a30428",
+              "name": "Cannot return response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94f12002-3beb-4aed-8eb4-c0d4d56a306e",
+              "name": "For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e2274a1f-ff09-4d62-a677-33ef706f93f9",
+              "name": "The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9567fb80-b5a7-4a6c-82e5-2eb09bde81ae",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "relationship",
+                    ":relationshipType"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for a Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "relationshipType",
+                      "description": "(Required) Relationship type between cases."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-worldcheck.refinitiv.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0b65e2eb-5bb1-4dfb-9d95-c5a68bf3f42a",
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Linked-Cases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.\nThe API provides, among other features:\n- The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.\n- The ability to retrieve results of the screening process from the World-Check database\n- The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.\n- The ability to submit request for reports.\n- The ability to fetch the status of the report requests and download the completed reports.\n> © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. 'LSEG' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.\n\n\nContact Support:\n Name: LSEG World-Check One API Q&A\n Email: c3r.api1@lseg.com",
+      "type": "text/plain"
+    }
+  }
+}

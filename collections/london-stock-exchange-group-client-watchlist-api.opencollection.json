@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Client-Watchlist API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Client-Watchlist",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Create or update a provider source",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/reference/providers/sources/:identifier",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "identifier",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for this provider source. Has to be alphanumeric."
+              }
+            ]
+          },
+          "docs": "Create or update a provider source for uploading entity records to. An example usage would be for a client watchlist.\n"
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Maintain your Watchlist data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/reference/watchlist",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Maintain your Watchlist data using the following supported entity actions.\n\n* entityCreateOrUpdate - Add a new entity to your Watchlist or replace if it already exists.\n\n* entityDelete - Mark the given entity as deleted in your Watchlist.\n\n* entitySupersede - Supersede enables you to redirect matches against your superseded entity to a new entity. This\nis useful if you want to redirect users with existing matches against an old entity to a newer / more accurate\nversion of those entities.\n\n* enti"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

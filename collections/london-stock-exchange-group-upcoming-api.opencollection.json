@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Upcoming API",
+    "version": "2.61.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Upcoming",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the report status for all active reports by pagination params.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reports/status",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "currentPage",
+                "value": "",
+                "type": "query",
+                "description": "Current page number."
+              },
+              {
+                "name": "itemsPerPage",
+                "value": "",
+                "type": "query",
+                "description": "Report items per page."
+              }
+            ]
+          },
+          "docs": "Get the report status for all active reports by pagination params."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Get the error details for the given 'reportId'.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/reports/:reportId/error",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Report ID for which the status needs to be fetched."
+              }
+            ]
+          },
+          "docs": "Get the error details for the given 'reportId'."
+        },
+        {
+          "info": {
+            "name": "London Stock Exchange Group Cancel the report request for the given report ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/reports/:reportId",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the report to be cancelled."
+              }
+            ]
+          },
+          "docs": "Cancel the report request for the given report ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

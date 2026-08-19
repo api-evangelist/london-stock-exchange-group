@@ -1,0 +1,1131 @@
+{
+  "item": [
+    {
+      "id": "6fcfb1e2-e1f9-4659-88b3-71f9f81a7bbf",
+      "name": "Audit",
+      "description": {
+        "content": "Operations for the audit domain.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "817c4d33-9cd7-42c3-881e-533de2c1c2f9",
+          "name": "London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId",
+          "request": {
+            "name": "London Stock Exchange Group Get a filtered list of AuditEvents for a Case by its caseSystemId",
+            "description": {
+              "content": "Return all audit events related to cases visible to the current user. To get all audit events initial request \nwith no payload should be provided. However, please note that when audit is requested without any date range for eventDate in the query, \nit returns audit data for the last 168 hours by default. Also, caller may filter and sort the response by:\n\n**eventDate**: The time when the Audit Event was created (ISO 8601 format excluding Week and Ordinal dates)\n\n       e.g. eventDate>=2010-07-28T22:25:51Z;eventDate<2015-07-28T22:25:51Z\n\n**actionType**: Signifies the event links to a Case object.\n          Please refer to ``ActionType`` object for detailed description.\n\n       e.g. actionType=='ASSIGN_CASE'\n            actionType=in=('ASSIGN_CASE', 'NEW_MATCH')\n\n\n**actionedByUserId**: Identifier of the User who created this audit event.\n           Please refer to ``AuditEvent/properties/actionedByUserId`` for detailed description.\n\n       e.g. actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5\n\n\n**The above criteria can also be combined**\n\n       e.g. eventDate>=20120915T155300;eventDate<=2015-07-28T22:25:51Z;actionType=='NEW_MATCH'\n            actionedByUserId==663b4481-5b45-40a4-8b76-54ef805beea5;eventDate>=2010-07-28T22:25:51Z\n\n**Please note that the above examples are only for the ``query`` part of the Filter**\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cases",
+                ":caseSystemId",
+                "auditEvents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "caseSystemId",
+                  "description": "(Required) System generated ID for the Case"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                "key": "Content-Length",
+                "value": "<integer>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "944168e6-e531-404d-9b58-4dc71f3cef70",
+              "name": "Collection of audit events in relation to a particular case",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalResultCount\": 6570,\n  \"query\": \"string\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\",\n    \"totalItems\": 8951\n  },\n  \"results\": [\n    {\n      \"id\": \"string\",\n      \"objectId\": \"string\",\n      \"entityType\": \"CASE\",\n      \"eventDate\": \"1990-07-03T00:57:20.496Z\",\n      \"actionType\": \"CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE\",\n      \"actionedByUserId\": \"string\",\n      \"actionedByUserName\": \"string\",\n      \"details\": {\n        \"detailsType\": \"ChildCaseMove\"\n      },\n      \"sourceType\": \"UNKNOWN\",\n      \"note\": \"string\",\n      \"auditEventToDate\": \"1982-04-19T12:32:25.613Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"objectId\": \"string\",\n      \"entityType\": \"CASE\",\n      \"eventDate\": \"1955-05-04T22:31:24.857Z\",\n      \"actionType\": \"CHANGE_CASE_OWNER\",\n      \"actionedByUserId\": \"string\",\n      \"actionedByUserName\": \"string\",\n      \"details\": {\n        \"detailsType\": \"AssignCaseToUserAuditDetails\"\n      },\n      \"sourceType\": \"DESKTOP\",\n      \"note\": \"string\",\n      \"auditEventToDate\": \"1994-10-22T19:23:46.414Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8bcfa29-1ebc-4058-aba7-68b5d6699262",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab91e14d-3869-4dfa-b3d7-b6f2ed576e7d",
+              "name": "The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "43ca1daf-0720-49d1-9c61-13b76ffa5e8c",
+              "name": "Cannot return response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bfda2fdd-6100-4184-b151-ff288e5142f2",
+              "name": "For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e08bbba4-6715-4a3b-802b-58763f15715b",
+              "name": "The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "237694f0-50e4-4db3-aca5-f1c97f8dd8b5",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details)",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The media type of the request (e.g., 'application/json')",
+                    "key": "Content-Type",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The length of the request body in octets (8-bit bytes)",
+                    "key": "Content-Length",
+                    "value": "<integer>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"sort\": [\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    },\n    {\n      \"columnName\": \"<string>\",\n      \"order\": \"<string>\"\n    }\n  ],\n  \"pagination\": {\n    \"currentPage\": \"<integer>\",\n    \"itemsPerPage\": \"<integer>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fa90c620-d7a4-4cc8-a9cc-80f415c4c989",
+          "name": "London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.",
+          "request": {
+            "name": "London Stock Exchange Group Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.",
+            "description": {
+              "content": "Retrieves the audit event with the given 'auditEventId' belonging to the case identified by the given 'caseSystemId'.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cases",
+                ":caseSystemId",
+                "auditEvents",
+                ":auditEventId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "caseSystemId",
+                  "description": "(Required) System generated ID for the Case."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "auditEventId",
+                  "description": "(Required) ID of the audit event."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b21c7f4-cab8-4ef7-81fb-dc1a6dc8cf9d",
+              "name": "Details about the desired audit event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"objectId\": \"string\",\n  \"entityType\": \"CASE\",\n  \"eventDate\": \"1978-09-30T12:38:27.034Z\",\n  \"actionType\": \"NEW_PARENT_CASE\",\n  \"actionedByUserId\": \"string\",\n  \"actionedByUserName\": \"string\",\n  \"details\": {\n    \"detailsType\": \"AssignCaseToUserAuditDetails\"\n  },\n  \"sourceType\": \"DESKTOP_BATCH\",\n  \"note\": \"string\",\n  \"auditEventToDate\": \"2008-03-25T19:48:31.958Z\",\n  \"matchEvents\": [\n    {\n      \"providerType\": \"WATCHLIST\",\n      \"referenceId\": \"string\",\n      \"matchedTerms\": [\n        {\n          \"term\": \"string\",\n          \"type\": \"DBA\"\n        },\n        {\n          \"term\": \"string\",\n          \"type\": \"MAIDEN\"\n        }\n      ],\n      \"categories\": [\n        \"string\"\n      ],\n      \"matchedDate\": \"1979-06-20T16:19:45.507Z\",\n      \"score\": 2827.306488609156,\n      \"matchEventType\": \"REVIEW_REQUIRED_ALERT\",\n      \"matchStatus\": \"string\",\n      \"alertDate\": \"2009-06-30T18:20:22.580Z\",\n      \"actionTypes\": [\n        \"AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE\",\n        \"PROFILE_UPDATED_C3\"\n      ]\n    },\n    {\n      \"providerType\": \"MEDIA_CHECK\",\n      \"referenceId\": \"string\",\n      \"matchedTerms\": [\n        {\n          \"term\": \"string\",\n          \"type\": \"LANG_VARIATION\"\n        },\n        {\n          \"term\": \"string\",\n          \"type\": \"FKA\"\n        }\n      ],\n      \"categories\": [\n        \"string\"\n      ],\n      \"matchedDate\": \"1982-02-24T19:35:33.757Z\",\n      \"score\": 9054.326097470977,\n      \"matchEventType\": \"AUTO_RESOLVED\",\n      \"matchStatus\": \"string\",\n      \"alertDate\": \"1986-06-07T15:59:38.991Z\",\n      \"actionTypes\": [\n        \"PROFILE_UPDATED_C3\",\n        \"PROFILE_UPDATED_C4\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d33a8eb2-86ba-4b77-9dac-ab001b10a5b6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98241828-faff-4857-9065-d52e50613897",
+              "name": "The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "56ed8326-7bf5-4ef6-8b80-f5f7c47e814c",
+              "name": "Cannot return response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17365396-7163-49d3-94d9-6c0c7c77d082",
+              "name": "For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b74ba907-6ce2-4022-b2b4-72b1ee13cae5",
+              "name": "The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c9a5509b-35b8-4872-8cc1-50ca9e3e4d06",
+              "name": "Unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cases",
+                    ":caseSystemId",
+                    "auditEvents",
+                    ":auditEventId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "caseSystemId",
+                      "description": "(Required) System generated ID for the Case."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "auditEventId",
+                      "description": "(Required) ID of the audit event."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) The authorization credentials including 'keyId', 'algorithm', 'headers', 'signature' (see 'Security and Authentication details' documentation section for more details).",
+                    "key": "Authorization",
+                    "value": "string"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time at which the message was originated in 'RFC 1123' format.",
+                    "key": "Date",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  },\n  {\n    \"error\": \"string\",\n    \"cause\": \"string\",\n    \"objectId\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api-worldcheck.refinitiv.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "37f5537a-8e07-4d9e-b143-ec4a4a736e3c",
+    "name": "London Stock Exchange Group LSEG World-Check One Api-Info Audit API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The World-Check One API enables developers to integrate the next generation of LSEG screening capabilities into existing workflows and internal systems (such as CRMs) in order to help streamline the processes for on-boarding, KYC and third party due diligence.\nThe API provides, among other features:\n- The ability to screen entity names, with or without secondary fields such as date of birth for individuals. These names are called “cases” within the World-Check One system.\n- The ability to retrieve results of the screening process from the World-Check database\n- The ability to flag cases for Ongoing Screening, and retrieve the World-Check results from the Ongoing Screening process.\n- The ability to submit request for reports.\n- The ability to fetch the status of the report requests and download the completed reports.\n> © 2018 - 2023 LSEG. All rights reserved. Republication or redistribution of LSEG content, including by framing or similar means, is prohibited without the prior written consent of LSEG. 'LSEG' and the LSEG logo are registered trademarks and trademarks of LSEG and its affiliated companies.\n\n\nContact Support:\n Name: LSEG World-Check One API Q&A\n Email: c3r.api1@lseg.com",
+      "type": "text/plain"
+    }
+  }
+}
