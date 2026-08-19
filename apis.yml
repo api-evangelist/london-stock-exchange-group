@@ -27,7 +27,7 @@ tags:
 url: https://raw.githubusercontent.com/api-evangelist/london-stock-exchange-group/refs/heads/main/apis.yml
 created: '2024-04-14'
 modified: '2026-07-22'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
   - aid: london-stock-exchange-group:lseg-world-check-one-case-api
     name: LSEG World-Check One Case API
