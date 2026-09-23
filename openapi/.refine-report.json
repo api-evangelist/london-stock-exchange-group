@@ -1,21 +1,7 @@
 {
   "provider": "london-stock-exchange-group",
   "sources": [
-    "london-stock-exchange-group-api-info-api-openapi.yml",
-    "london-stock-exchange-group-audit-api-openapi.yml",
-    "london-stock-exchange-group-case-api-openapi.yml",
-    "london-stock-exchange-group-case-rating-api-openapi.yml",
-    "london-stock-exchange-group-client-watchlist-api-openapi.yml",
-    "london-stock-exchange-group-group-api-openapi.yml",
-    "london-stock-exchange-group-linked-cases-api-openapi.yml",
-    "london-stock-exchange-group-media-check-api-openapi.yml",
-    "london-stock-exchange-group-passport-check-api-openapi.yml",
-    "london-stock-exchange-group-reference-api-openapi.yml",
-    "london-stock-exchange-group-reporting-api-openapi.yml",
-    "london-stock-exchange-group-smart-filter-api-openapi.yml",
-    "london-stock-exchange-group-upcoming-api-openapi.yml",
-    "london-stock-exchange-group-user-api-openapi.yml",
-    "london-stock-exchange-group-zfs-api-openapi.yml"
+    "_original/lseg-world-check-one-openapi-original.yml"
   ],
   "outputs": [
     "london-stock-exchange-group-api-info-api-openapi.yml",
@@ -37,6 +23,26 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "lseg-world-check-one-openapi-original.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "london-stock-exchange-group-api-info-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-audit-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-case-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-case-rating-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-client-watchlist-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-group-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-linked-cases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-media-check-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-passport-check-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-reference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-reporting-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-smart-filter-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-upcoming-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-user-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "london-stock-exchange-group-zfs-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
