@@ -179,8 +179,27 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   responses:
-    BadRequest:
-      description: Bad request
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    Conflict:
+      description: Conflict error.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnexpectedError:
+      description: Unexpected error
       content:
         application/json:
           schema:
@@ -205,10 +224,8 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Conflict:
-      description: Conflict error.
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -220,23 +237,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
   schemas:
     ReportProgressStatus:
       type: string
@@ -263,37 +263,6 @@ components:
       - WAITING
       - UNKNOWN
       - CANCELLED
-    ReportSummary:
-      type: object
-      required:
-      - processedCount
-      - progressPercentage
-      properties:
-        processedCount:
-          type: integer
-          description: Represents number of records processed.
-          format: int32
-        progressPercentage:
-          type: integer
-          description: Represents progress percentage of records processed.
-          format: int32
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    ReportType:
-      type: string
-      description: The type of report.
-      enum:
-      - CASE_DOSSIER
     AsyncReportRequest:
       type: object
       description: "A model contains 'query', 'filter', 'reportFilter', 'customAttributes' expression, which is written in a superset of the Atom Feed Item Query Language (FIQL).\n\nThe FIQL is documented in <https://tools.ietf.org/html/draft-nottingham-atompub-fiql-00>,\nand the superset supported by the WC1 API documented in <https://github.com/jirutka/rsql-parser>.\n\nRSQL/FIQL parser contains some reserved characters:\n\n`'\"' | \"'\" | \"(\" | \")\" | \";\" | \",\" | \"=\" | \"!\" | \"~\" | \"<\" | \">\"`\n\nIf there are reserved characters or white spaces in the query expression, they must be escaped by enclosing\nthem in single or double quotes. If you need to use both single and double quotes inside an argument, then\nyou must escape one of them using `\\` (backslash). If you want to use `\\` literally, then double it as `\\\\`.\nBackslash has a special meaning only inside a quoted argument, not in unquoted argument. Using reserved\ncharacters or white spaces without escaping can lead to parsing and execution errors.\n\nArgument can be a single value, or multiple values in parenthesis separated by comma. Value that does not\ncontain any reserved character or a white space can be unquoted, other arguments must be enclosed in single\nor double quotes.\n\n**Example:**\n  * \"query\": \"example1=='TE\\\\\\\\'ST', example2==TEST\"\n"
@@ -337,6 +306,11 @@ components:
         sort:
         - columnName: caseId
           order: ASCENDING
+    ReportType:
+      type: string
+      description: The type of report.
+      enum:
+      - CASE_DOSSIER
     ReportStatus:
       type: object
       required:
@@ -383,6 +357,32 @@ components:
         summary:
           processedCount: 13.0
           progressPercentage: 50.0
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    ReportSummary:
+      type: object
+      required:
+      - processedCount
+      - progressPercentage
+      properties:
+        processedCount:
+          type: integer
+          description: Represents number of records processed.
+          format: int32
+        progressPercentage:
+          type: integer
+          description: Represents progress percentage of records processed.
+          format: int32
     SortCriterion:
       type: object
       description: Sort specification

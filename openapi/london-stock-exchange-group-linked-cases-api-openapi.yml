@@ -296,23 +296,53 @@ paths:
         description: Related case system IDs.
         required: true
 components:
+  responses:
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    CannotReturnResponse:
+      description: Cannot return response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   schemas:
-    PaginationResponseDetails:
-      type: object
-      description: Pagination details.
-      properties:
-        currentPage:
-          type: integer
-          description: The current page
-          format: int32
-        itemsPerPage:
-          type: integer
-          description: The number of items per page
-          format: int32
-        totalItems:
-          type: integer
-          description: Total number of items available
-          format: int64
     CaseRelationshipResponse:
       type: object
       description: The result set of relationships between cases.
@@ -329,24 +359,35 @@ components:
           description: List of relationship identifiers
           items:
             $ref: '#/components/schemas/RelationshipIdentifiers'
-    RelationshipIdentifiers:
+    PaginationResponseDetails:
       type: object
-      description: Relationship identifer between cases
+      description: Pagination details.
       properties:
-        sourceCaseSystemId:
-          type: string
-          description: CaseSystemId declared as source (primary) case
-          maxLength: 192
-        targetCaseSystemId:
-          type: string
-          description: CaseSystemId declared as target (subcase) case
-          maxLength: 192
-        relationshipType:
-          type: string
-          description: Relationship type between cases.
-          enum:
-          - SUBCASE_TO_PRIMARY
-          - PRIMARY_TO_SUBCASE
+        currentPage:
+          type: integer
+          description: The current page
+          format: int32
+        itemsPerPage:
+          type: integer
+          description: The number of items per page
+          format: int32
+        totalItems:
+          type: integer
+          description: Total number of items available
+          format: int64
+    Pagination:
+      type: object
+      description: Inbound - the pagination to apply to the query.
+      required:
+      - currentPage
+      - itemsPerPage
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        itemsPerPage:
+          type: integer
+          format: int32
     LinkedCasesRequest:
       type: object
       required:
@@ -389,65 +430,24 @@ components:
         pagination:
           description: Pagination details
           $ref: '#/components/schemas/Pagination'
-    Pagination:
+    RelationshipIdentifiers:
       type: object
-      description: Inbound - the pagination to apply to the query.
-      required:
-      - currentPage
-      - itemsPerPage
+      description: Relationship identifer between cases
       properties:
-        currentPage:
-          type: integer
-          format: int32
-        itemsPerPage:
-          type: integer
-          format: int32
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    CannotReturnResponse:
-      description: Cannot return response
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+        sourceCaseSystemId:
+          type: string
+          description: CaseSystemId declared as source (primary) case
+          maxLength: 192
+        targetCaseSystemId:
+          type: string
+          description: CaseSystemId declared as target (subcase) case
+          maxLength: 192
+        relationshipType:
+          type: string
+          description: Relationship type between cases.
+          enum:
+          - SUBCASE_TO_PRIMARY
+          - PRIMARY_TO_SUBCASE
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

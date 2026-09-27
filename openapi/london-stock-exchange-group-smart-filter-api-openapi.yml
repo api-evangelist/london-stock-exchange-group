@@ -163,8 +163,14 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   responses:
-    BadRequest:
-      description: Bad request
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnexpectedError:
+      description: Unexpected error
       content:
         application/json:
           schema:
@@ -189,12 +195,8 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -206,9 +208,19 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
   schemas:
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
     SmartFilterResponse:
       description: 'Retrieved smart filter state on a Case.
 
@@ -222,18 +234,6 @@ components:
             The default value fetched from the group setting "Allow users to enable/disable the Smart Filter".
 
             '
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

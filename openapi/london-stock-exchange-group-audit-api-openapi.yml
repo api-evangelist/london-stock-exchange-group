@@ -152,6 +152,40 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   schemas:
+    MatchActionType:
+      type: string
+      description: The matched action type enumeration.
+      enum:
+      - DATA_ISSUE
+      - RESULT_NOT_FOUND
+      - SCORE_INCREASED
+      - SCORE_DECREASED
+      - PROFILE_UPDATED
+      - PROFILE_UPDATED_C1
+      - PROFILE_UPDATED_C2
+      - PROFILE_UPDATED_C3
+      - PROFILE_UPDATED_C4
+      - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
+      - GENDER_UPDATED
+      - DATE_OF_BIRTH_UPDATED
+      - COUNTRY_LOCATION_UPDATED
+      - PLACE_OF_BIRTH_UPDATED
+      - NATIONALITY_UPDATED
+      - REGISTERED_COUNTRY_UPDATED
+      - IMO_NUMBER_UPDATED
+    Pagination:
+      type: object
+      description: Inbound - the pagination to apply to the query.
+      required:
+      - currentPage
+      - itemsPerPage
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        itemsPerPage:
+          type: integer
+          format: int32
     ProviderType:
       type: string
       description: Provider Type Enumeration
@@ -174,35 +208,61 @@ components:
             $ref: '#/components/schemas/SortCriterion'
         pagination:
           $ref: '#/components/schemas/Pagination'
-    Error:
+    AuditMatchEvent:
       type: object
+      description: Represents a match that was found on the Case during screening.
       required:
-      - error
-      - cause
+      - providerType
+      - referenceId
+      - matchedTerms
+      - categories
+      - matchedDate
+      - score
+      - matchEventType
+      - matchStatus
       properties:
-        error:
+        providerType:
+          description: The provider type.
+          $ref: '#/components/schemas/ProviderType'
+        referenceId:
           type: string
-        cause:
+          description: The reference ID of the matched Entity.
+          maxLength: 255
+        matchedTerms:
+          type: array
+          description: The matched terms.
+          items:
+            $ref: '#/components/schemas/AuditMatchTerm'
+        categories:
+          type: array
+          description: Sources for the result/match.
+          uniqueItems: true
+          items:
+            type: string
+        matchedDate:
           type: string
-        objectId:
+          description: Date on which the result was matched.
+          format: date-time
+        alertDate:
           type: string
-    MatchEventType:
-      type: string
-      description: The matched event type enumeration.
-      enum:
-      - UNRESOLVED
-      - AUTO_RESOLVED
-      - REVIEW_REQUIRED
-      - REVIEW_REQUIRED_ALERT
-    PaginationResponse:
-      type: object
-      description: Outbound - used to describe paginated partial result sets
-      allOf:
-      - $ref: '#/components/schemas/Pagination'
-      - properties:
-          totalItems:
-            type: integer
-            format: int64
+          description: Date on which the result was auto resolved, 'null' otherwise.
+          format: date-time
+        actionTypes:
+          type: array
+          description: Action type for the case indicating why the action was taken (reasons for an action).
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/MatchActionType'
+        score:
+          type: number
+          description: The score of the result term.
+          format: double
+        matchEventType:
+          description: The case match event type.
+          $ref: '#/components/schemas/MatchEventType'
+        matchStatus:
+          type: string
+          description: Last resolution status of the match.
     AuditEventActionType:
       type: string
       description: Type of action that caused the audit event to be created.
@@ -266,244 +326,6 @@ components:
       - CHANGED_CASE_MEDIA_CHECK_OGS_PREFERENCE
       - CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
       - CHANGE_CASE_RATING
-    SearchResponse:
-      type: object
-      description: Common fields used in search responses.  These fields are included in response types, and objects of this type are not returned directly.
-      required:
-      - totalResultCount
-      properties:
-        query:
-          type: string
-        sort:
-          type: array
-          description: The sort critieria to apply to the query
-          items:
-            $ref: '#/components/schemas/SortCriterion'
-        pagination:
-          $ref: '#/components/schemas/PaginationResponse'
-        totalResultCount:
-          type: integer
-          format: int64
-    Pagination:
-      type: object
-      description: Inbound - the pagination to apply to the query.
-      required:
-      - currentPage
-      - itemsPerPage
-      properties:
-        currentPage:
-          type: integer
-          format: int32
-        itemsPerPage:
-          type: integer
-          format: int32
-    AuditMatchEvent:
-      type: object
-      description: Represents a match that was found on the Case during screening.
-      required:
-      - providerType
-      - referenceId
-      - matchedTerms
-      - categories
-      - matchedDate
-      - score
-      - matchEventType
-      - matchStatus
-      properties:
-        providerType:
-          description: The provider type.
-          $ref: '#/components/schemas/ProviderType'
-        referenceId:
-          type: string
-          description: The reference ID of the matched Entity.
-          maxLength: 255
-        matchedTerms:
-          type: array
-          description: The matched terms.
-          items:
-            $ref: '#/components/schemas/AuditMatchTerm'
-        categories:
-          type: array
-          description: Sources for the result/match.
-          uniqueItems: true
-          items:
-            type: string
-        matchedDate:
-          type: string
-          description: Date on which the result was matched.
-          format: date-time
-        alertDate:
-          type: string
-          description: Date on which the result was auto resolved, 'null' otherwise.
-          format: date-time
-        actionTypes:
-          type: array
-          description: Action type for the case indicating why the action was taken (reasons for an action).
-          uniqueItems: true
-          items:
-            $ref: '#/components/schemas/MatchActionType'
-        score:
-          type: number
-          description: The score of the result term.
-          format: double
-        matchEventType:
-          description: The case match event type.
-          $ref: '#/components/schemas/MatchEventType'
-        matchStatus:
-          type: string
-          description: Last resolution status of the match.
-    MatchedNameType:
-      type: string
-      description: The matched name type enumeration.
-      enum:
-      - PRIMARY
-      - AKA
-      - AKAENHANCED
-      - FKA
-      - DBA
-      - MAIDEN
-      - LANG_VARIATION
-      - PREVIOUS
-      - VEHICLE_ID
-      - LOW_QUALITY_AKA
-      - NATIVE_AKA
-      - DOCUMENT_ID
-    SortCriterion:
-      type: object
-      description: Sort specification
-      properties:
-        columnName:
-          type: string
-          description: The field to sort on
-        order:
-          type: string
-          description: The sort order
-          enum:
-          - ASCENDING
-          - DESCENDING
-    AuditMatchTerm:
-      type: object
-      description: The Case match details.
-      required:
-      - term
-      - type
-      properties:
-        term:
-          type: string
-          description: The matched term.
-          maxLength: 255
-        type:
-          description: The matched name type.
-          $ref: '#/components/schemas/MatchedNameType'
-    AuditEventSourceType:
-      type: string
-      description: 'Enumeration of available audit event sources types.
-
-
-        Possible types of audit event sources are:
-
-
-        * DESKTOP - Signifies the event is originating from DESKTOP/UI
-
-        * DESKTOP_BULK - Signifies the event is originating from DESKTOP/UI Bulk actions
-
-        * API - Signifies the event is originating from API
-
-        * API_BULK - Signifies the event is originating from API Bulk actions
-
-        * DESKTOP_BATCH - Signifies the event is originating from DESKTOP/UI Batch screening
-
-        * API_BATCH - Signifies the event is originating from API Batch screening via saveAndScreen endpoint
-
-        * OGS - Signifies the event is originating from ongoing screening
-
-        * UNKNOWN - Signifies the event source is unknown
-
-        '
-      enum:
-      - DESKTOP
-      - DESKTOP_BULK
-      - API
-      - API_BULK
-      - DESKTOP_BATCH
-      - API_BATCH
-      - OGS
-      - UNKNOWN
-    MatchActionType:
-      type: string
-      description: The matched action type enumeration.
-      enum:
-      - DATA_ISSUE
-      - RESULT_NOT_FOUND
-      - SCORE_INCREASED
-      - SCORE_DECREASED
-      - PROFILE_UPDATED
-      - PROFILE_UPDATED_C1
-      - PROFILE_UPDATED_C2
-      - PROFILE_UPDATED_C3
-      - PROFILE_UPDATED_C4
-      - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
-      - GENDER_UPDATED
-      - DATE_OF_BIRTH_UPDATED
-      - COUNTRY_LOCATION_UPDATED
-      - PLACE_OF_BIRTH_UPDATED
-      - NATIONALITY_UPDATED
-      - REGISTERED_COUNTRY_UPDATED
-      - IMO_NUMBER_UPDATED
-    AuditEventDetailsResponse:
-      type: object
-      description: Audit event response object.
-      allOf:
-      - $ref: '#/components/schemas/AuditEvent'
-      - type: object
-        properties:
-          matchEvents:
-            type: array
-            description: A Set of [AuditMatchEvent](#AuditMatchEvent) that is included only for the [ScreenCaseAuditDetails](#ScreenCaseAuditDetails) 'detailsType'.
-            uniqueItems: true
-            items:
-              $ref: '#/components/schemas/AuditMatchEvent'
-      example:
-        id: Audit ID
-        objectId: Object ID
-        eventDate: Event date
-        actionedByUserId: Actioned by User ID
-        actionedByUserName: Actioned by User Name
-        note: Note
-        entityType: CASE
-        actionType: CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
-        sourceType: API
-        auditEventToDate: null
-        details:
-        - detailsType: ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
-          casePreferenceType: MEDIA_CHECK_SMART_FILTER
-          status: false
-          dateTimeModification: 2022-05-15 15:03:24.984000+00:00
-        matchEvents:
-        - providerType: WATCHLIST
-          referenceId: e_tr_wc_1234567
-          matchedTerms:
-          - term: Maxym
-            type: PRIMARY
-          categories:
-          - PEP
-          matchedDate: 2022-05-15 15:03:24.984000+00:00
-          alertDate: null
-          actionTypes: null
-          score: 0.8979323846
-          matchEventType: UNRESOLVED
-          matchStatus: UNRESOLVED
-    AuditSearchResponse:
-      type: object
-      description: Audit Search Response Object
-      allOf:
-      - $ref: '#/components/schemas/SearchResponse'
-      - type: object
-        properties:
-          results:
-            type: array
-            items:
-              $ref: '#/components/schemas/AuditEvent'
     AuditEvent:
       type: object
       description: Abstract audit event object
@@ -553,6 +375,155 @@ components:
           description: Unused field to represent the date and time of the last event for a continuous series of OGS audit events with zero matches. The value is in ISO 8601 format excluding Week and Ordinal dates.
         details:
           $ref: '#/components/schemas/AbstractAuditDetails'
+    AuditEventSourceType:
+      type: string
+      description: 'Enumeration of available audit event sources types.
+
+
+        Possible types of audit event sources are:
+
+
+        * DESKTOP - Signifies the event is originating from DESKTOP/UI
+
+        * DESKTOP_BULK - Signifies the event is originating from DESKTOP/UI Bulk actions
+
+        * API - Signifies the event is originating from API
+
+        * API_BULK - Signifies the event is originating from API Bulk actions
+
+        * DESKTOP_BATCH - Signifies the event is originating from DESKTOP/UI Batch screening
+
+        * API_BATCH - Signifies the event is originating from API Batch screening via saveAndScreen endpoint
+
+        * OGS - Signifies the event is originating from ongoing screening
+
+        * UNKNOWN - Signifies the event source is unknown
+
+        '
+      enum:
+      - DESKTOP
+      - DESKTOP_BULK
+      - API
+      - API_BULK
+      - DESKTOP_BATCH
+      - API_BATCH
+      - OGS
+      - UNKNOWN
+    MatchEventType:
+      type: string
+      description: The matched event type enumeration.
+      enum:
+      - UNRESOLVED
+      - AUTO_RESOLVED
+      - REVIEW_REQUIRED
+      - REVIEW_REQUIRED_ALERT
+    AuditEntityType:
+      type: string
+      description: Entity type of the object that the audit event belongs to.
+      enum:
+      - CASE
+    PaginationResponse:
+      type: object
+      description: Outbound - used to describe paginated partial result sets
+      allOf:
+      - $ref: '#/components/schemas/Pagination'
+      - properties:
+          totalItems:
+            type: integer
+            format: int64
+    AuditSearchResponse:
+      type: object
+      description: Audit Search Response Object
+      allOf:
+      - $ref: '#/components/schemas/SearchResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/AuditEvent'
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    AuditEventDetailsResponse:
+      type: object
+      description: Audit event response object.
+      allOf:
+      - $ref: '#/components/schemas/AuditEvent'
+      - type: object
+        properties:
+          matchEvents:
+            type: array
+            description: A Set of [AuditMatchEvent](#AuditMatchEvent) that is included only for the [ScreenCaseAuditDetails](#ScreenCaseAuditDetails) 'detailsType'.
+            uniqueItems: true
+            items:
+              $ref: '#/components/schemas/AuditMatchEvent'
+      example:
+        id: Audit ID
+        objectId: Object ID
+        eventDate: Event date
+        actionedByUserId: Actioned by User ID
+        actionedByUserName: Actioned by User Name
+        note: Note
+        entityType: CASE
+        actionType: CHANGED_CASE_MEDIA_CHECK_SMART_FILTER_PREFERENCE
+        sourceType: API
+        auditEventToDate: null
+        details:
+        - detailsType: ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
+          casePreferenceType: MEDIA_CHECK_SMART_FILTER
+          status: false
+          dateTimeModification: 2022-05-15 15:03:24.984000+00:00
+        matchEvents:
+        - providerType: WATCHLIST
+          referenceId: e_tr_wc_1234567
+          matchedTerms:
+          - term: Maxym
+            type: PRIMARY
+          categories:
+          - PEP
+          matchedDate: 2022-05-15 15:03:24.984000+00:00
+          alertDate: null
+          actionTypes: null
+          score: 0.8979323846
+          matchEventType: UNRESOLVED
+          matchStatus: UNRESOLVED
+    AuditMatchTerm:
+      type: object
+      description: The Case match details.
+      required:
+      - term
+      - type
+      properties:
+        term:
+          type: string
+          description: The matched term.
+          maxLength: 255
+        type:
+          description: The matched name type.
+          $ref: '#/components/schemas/MatchedNameType'
+    SortCriterion:
+      type: object
+      description: Sort specification
+      properties:
+        columnName:
+          type: string
+          description: The field to sort on
+        order:
+          type: string
+          description: The sort order
+          enum:
+          - ASCENDING
+          - DESCENDING
     AbstractAuditDetails:
       type: object
       description: Abstract case audit event details object
@@ -589,12 +560,58 @@ components:
           - DeleteAttachedMediaCheckResultsAuditDetails
           - ChangedCaseMediaCheckOgsPreferenceAuditDetails
           - ChangedCaseMediaCheckSmartFilterPreferenceAuditDetails
-    AuditEntityType:
+    MatchedNameType:
       type: string
-      description: Entity type of the object that the audit event belongs to.
+      description: The matched name type enumeration.
       enum:
-      - CASE
+      - PRIMARY
+      - AKA
+      - AKAENHANCED
+      - FKA
+      - DBA
+      - MAIDEN
+      - LANG_VARIATION
+      - PREVIOUS
+      - VEHICLE_ID
+      - LOW_QUALITY_AKA
+      - NATIVE_AKA
+      - DOCUMENT_ID
+    SearchResponse:
+      type: object
+      description: Common fields used in search responses.  These fields are included in response types, and objects of this type are not returned directly.
+      required:
+      - totalResultCount
+      properties:
+        query:
+          type: string
+        sort:
+          type: array
+          description: The sort critieria to apply to the query
+          items:
+            $ref: '#/components/schemas/SortCriterion'
+        pagination:
+          $ref: '#/components/schemas/PaginationResponse'
+        totalResultCount:
+          type: integer
+          format: int64
   responses:
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
@@ -623,23 +640,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

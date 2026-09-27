@@ -173,8 +173,14 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   responses:
-    BadRequest:
-      description: Bad request
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnexpectedError:
+      description: Unexpected error
       content:
         application/json:
           schema:
@@ -199,12 +205,8 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -216,28 +218,7 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
   schemas:
-    PaginationDetails:
-      type: object
-      required:
-      - currentPage
-      - itemsPerPage
-      - totalItems
-      properties:
-        currentPage:
-          type: integer
-          description: Represents the current page number of the case dossier report.
-          format: int32
-        itemsPerPage:
-          type: integer
-          description: Represents the items per page in case dossier report.
-          format: int32
-        totalItems:
-          type: integer
-          description: Represents the total item count in case dossier report.
-          format: int64
     ReportProgressStatus:
       type: string
       description: 'The real-time progress status of report during download.
@@ -263,76 +244,6 @@ components:
       - WAITING
       - UNKNOWN
       - CANCELLED
-    ReportError:
-      type: object
-      required:
-      - objectId
-      - objectType
-      - errorDescription
-      properties:
-        objectId:
-          type: string
-          description: Id of the object which has failed to process.
-        objectType:
-          type: string
-          description: The type of the object that failed to process.
-        errorDescription:
-          type: string
-          description: The details about the error.
-    PaginatedReportStatusesResponse:
-      type: object
-      required:
-      - paginationDetails
-      - reports
-      properties:
-        paginationDetails:
-          $ref: '#/components/schemas/PaginationDetails'
-        reports:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportStatus'
-      example:
-        paginationDetails:
-          currentPage: 1
-          itemsPerPage: 1
-          totalItems: 1
-        reports:
-        - reportId: Report ID
-          reportName: Report Name
-          progressStatus: COMPLETED
-          reportType: CASE_DOSSIER
-          startDate: 2019-08-28 10:05:15+00:00
-          completionDate: null
-          deletionDate: null
-          summary:
-            processedCount: 13.0
-            progressPercentage: 50.0
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    ReportSummary:
-      type: object
-      required:
-      - processedCount
-      - progressPercentage
-      properties:
-        processedCount:
-          type: integer
-          description: Represents number of records processed.
-          format: int32
-        progressPercentage:
-          type: integer
-          description: Represents progress percentage of records processed.
-          format: int32
     ReportType:
       type: string
       description: The type of report.
@@ -398,6 +309,95 @@ components:
         - objectId: Error ID
           objectType: Error Type
           errorDescription: Error Description
+    ReportSummary:
+      type: object
+      required:
+      - processedCount
+      - progressPercentage
+      properties:
+        processedCount:
+          type: integer
+          description: Represents number of records processed.
+          format: int32
+        progressPercentage:
+          type: integer
+          description: Represents progress percentage of records processed.
+          format: int32
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    ReportError:
+      type: object
+      required:
+      - objectId
+      - objectType
+      - errorDescription
+      properties:
+        objectId:
+          type: string
+          description: Id of the object which has failed to process.
+        objectType:
+          type: string
+          description: The type of the object that failed to process.
+        errorDescription:
+          type: string
+          description: The details about the error.
+    PaginationDetails:
+      type: object
+      required:
+      - currentPage
+      - itemsPerPage
+      - totalItems
+      properties:
+        currentPage:
+          type: integer
+          description: Represents the current page number of the case dossier report.
+          format: int32
+        itemsPerPage:
+          type: integer
+          description: Represents the items per page in case dossier report.
+          format: int32
+        totalItems:
+          type: integer
+          description: Represents the total item count in case dossier report.
+          format: int64
+    PaginatedReportStatusesResponse:
+      type: object
+      required:
+      - paginationDetails
+      - reports
+      properties:
+        paginationDetails:
+          $ref: '#/components/schemas/PaginationDetails'
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportStatus'
+      example:
+        paginationDetails:
+          currentPage: 1
+          itemsPerPage: 1
+          totalItems: 1
+        reports:
+        - reportId: Report ID
+          reportName: Report Name
+          progressStatus: COMPLETED
+          reportType: CASE_DOSSIER
+          startDate: 2019-08-28 10:05:15+00:00
+          completionDate: null
+          deletionDate: null
+          summary:
+            processedCount: 13.0
+            progressPercentage: 50.0
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

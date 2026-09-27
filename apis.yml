@@ -31,6 +31,12 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/london-stock-exchange-group.png
 tags:
+  - Finance
+  - Stock Exchange
+  - Market Data
+  - KYC
+  - Compliance
+tags_raw:
   - Financial
   - Stock Exchange
   - Market Data

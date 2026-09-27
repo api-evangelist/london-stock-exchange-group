@@ -372,7 +372,65 @@ paths:
         500:
           $ref: '#/components/responses/UnexpectedError'
 components:
+  responses:
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    CannotReturnResponse:
+      description: Cannot return response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
   schemas:
+    TypeAvailableSelected:
+      type: object
+      description: Represents a type and also tells whether it is available and whether it should be selected by default
+      properties:
+        selected:
+          type: boolean
+          default: false
+        type:
+          type: string
+        available:
+          type: boolean
+          default: false
     ProviderType:
       type: string
       description: Provider Type Enumeration
@@ -381,6 +439,284 @@ components:
       - PASSPORT_CHECK
       - CLIENT_WATCHLIST
       - MEDIA_CHECK
+    CaseTemplateResponse:
+      type: object
+      description: Case template, containing metadata required by the client to construct a valid Case
+      required:
+      - groupScreeningType
+      - groupId
+      properties:
+        groupScreeningType:
+          $ref: '#/components/schemas/GroupScreeningType'
+        groupId:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDefinition'
+        secondaryFieldsByProvider:
+          type: object
+          description: 'Mapping from ProviderType to SecondaryFieldsByEntity which contains all secondary fields that is available
+
+            for that ProviderType.
+
+            '
+          additionalProperties:
+            $ref: '#/components/schemas/SecondaryFieldsByEntity'
+        nameTransposition:
+          description: The indication of whether name transposition screening is available and selected.
+          $ref: '#/components/schemas/TypeAvailableSelected'
+        mandatoryProviderTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderType'
+      example:
+        groupScreeningType: CASE_MANAGEMENT_AUDIT
+        groupId: Group Id
+        customFields:
+        - typeId: Custom Field Id
+          fieldValueType: TEXT
+          fieldRequired: true
+        secondaryFieldsByProvider:
+          watchlist:
+            secondaryFieldsByEntity:
+              individual:
+              - typeId: GENDER_TYPE_ID
+                fieldFormat: GENDER
+              - typeId: DATE_OF_BIRTH_TYPE_ID
+                fieldFormat: DATE
+              - typeId: PLACE_OF_BIRTH_TYPE_ID
+                fieldFormat: COUNTRY
+              organisation:
+              - typeId: REGISTERED_COUNTRY_TYPE_ID
+                fieldFormat: COUNTRY
+              - typeId: REGISTERED_TEXT_TYPE_ID
+                fieldFormat: DOCUMENT_ID
+              - typeId: REGISTERED_COUNTRY_TYPE_ID
+                fieldFormat: DOCUMENT_ID_COUNTRY
+              - typeId: REGISTERED_TEXT_TYPE_ID
+                fieldFormat: DOCUMENT_ID_TYPE
+              vessel:
+              - typeId: IMO_NUMBER_TYPE_ID
+                fieldFormat: TEXT
+                regExp: '[0-9]{7}'
+          passport-check:
+            secondaryFieldsByEntity:
+              individual:
+              - typeId: PASSPORT_GENDER_TYPE_ID
+                fieldFormat: GENDER
+              - typeId: PASSPORT_ID_NUMBER
+                fieldFormat: TEXT
+    FieldDefinition:
+      type: object
+      description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
+
+        Field data when creating or updating a Case. Extends [AbstractField](#AbstractField).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/AbstractField'
+      - type: object
+        required:
+        - fieldValueType
+        - label
+        properties:
+          fieldValueType:
+            $ref: '#/components/schemas/FieldValueType'
+          fieldRequired:
+            type: boolean
+            description: Indicates whether this field is required
+            default: false
+          label:
+            type: string
+            description: Human-readable label for this field
+            maxLength: 1000
+          regExp:
+            type: string
+            description: Optional regular expression which applies to fields where fieldValueType is TEXT
+            maxLength: 255
+    ResolutionRules:
+      type: object
+      description: A collection of [StatusRules] (#StatusRule) keyed by Status ID.
+      additionalProperties:
+        type: object
+        $ref: '#/components/schemas/StatusRule'
+    StatusRule:
+      type: object
+      description: Represents the rules that should be applied when resolving a Result with a specific Status.
+      required:
+      - reasons
+      - remarkRequired
+      - reasonRequired
+      - risks
+      properties:
+        reasons:
+          type: array
+          description: The IDs for the Reasons that can be used when resolving a Result with a specific Status.
+          items:
+            type: string
+        remarkRequired:
+          type: boolean
+          description: Flag indicating whether a remark is required when resolving a Result with a specific Status.
+        reasonRequired:
+          type: boolean
+          description: Flag indicating whether a reason is required when resolving a Result with a specific Status.
+        risks:
+          type: array
+          description: The IDs for the Risks that can be used when resolving a Result with a specific Status.
+          items:
+            type: string
+    SecondaryFieldsByEntity:
+      type: object
+      description: Wrapper which contains secondary fields grouped by CaseEntityType.
+      required:
+      - secondaryFieldsByEntity
+      properties:
+        secondaryFieldsByEntity:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FieldDefinition'
+    Group:
+      type: object
+      description: Structure of Groups accessible by user
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Group ID
+          maxLength: 255
+        parentId:
+          type: string
+          description: Parent Group ID
+          maxLength: 255
+        name:
+          type: string
+          description: Name for the Group
+          maxLength: 255
+        hasChildren:
+          type: boolean
+          default: false
+        children:
+          type: array
+          description: Child groups
+          items:
+            $ref: '#/components/schemas/Group'
+        status:
+          $ref: '#/components/schemas/StatusType'
+      example:
+        id: Group Id
+        parentId: Parent Group ID
+        name: John Smith
+        hasChildren: true
+        children: []
+        status: ACTIVE
+    ResolutionStatusType:
+      type: string
+      description: Enumeration of resolution Status types.
+      enum:
+      - POSITIVE
+      - POSSIBLE
+      - 'FALSE'
+      - UNSPECIFIED
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    StatusType:
+      type: string
+      description: Enumeration of Status types
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DELETED
+    ResolutionField:
+      type: object
+      description: Represents the ID, label and type for a Status, a Risk or a Reason.
+      required:
+      - id
+      - label
+      properties:
+        id:
+          type: string
+          description: The ID for the resolution label.
+        label:
+          type: string
+          description: The label for the resolution label.
+        type:
+          $ref: '#/components/schemas/ResolutionStatusType'
+    AbstractField:
+      type: object
+      description: Generic Field representing a Custom Field or a Secondary Field.
+      required:
+      - typeId
+      properties:
+        typeId:
+          type: string
+          description: Type Identifier of this Field
+          maxLength: 255
+    GroupScreeningType:
+      type: string
+      description: Group screening type enumeration
+      enum:
+      - CASE_MANAGEMENT_AUDIT
+      - ZERO_FOOTPRINT
+    FieldValueType:
+      type: string
+      description: 'Enumerated value formats for a secondary / custom field.
+
+
+        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
+
+        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
+
+        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
+
+        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
+
+        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
+
+        - TEXT is a string.
+
+        '
+      enum:
+      - COUNTRY
+      - DATE
+      - GENDER
+      - PASSPORT_DOCUMENT_TYPE
+      - STATE
+      - TEXT
+    ResolutionFields:
+      type: object
+      description: Describes all resolution fields (statuses, risks and reasons) in detail.
+      required:
+      - statuses
+      - risks
+      - reasons
+      properties:
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
+        risks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
     ResolutionToolkitResponse:
       type: object
       description: Resolution toolkit settings applicable for a Group.
@@ -464,342 +800,6 @@ components:
             risks:
             - RISK_ID_4: null
             - RISK_ID_2: null
-    ResolutionStatusType:
-      type: string
-      description: Enumeration of resolution Status types.
-      enum:
-      - POSITIVE
-      - POSSIBLE
-      - 'FALSE'
-      - UNSPECIFIED
-    ResolutionRules:
-      type: object
-      description: A collection of [StatusRules] (#StatusRule) keyed by Status ID.
-      additionalProperties:
-        type: object
-        $ref: '#/components/schemas/StatusRule'
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    StatusType:
-      type: string
-      description: Enumeration of Status types
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DELETED
-    GroupScreeningType:
-      type: string
-      description: Group screening type enumeration
-      enum:
-      - CASE_MANAGEMENT_AUDIT
-      - ZERO_FOOTPRINT
-    TypeAvailableSelected:
-      type: object
-      description: Represents a type and also tells whether it is available and whether it should be selected by default
-      properties:
-        selected:
-          type: boolean
-          default: false
-        type:
-          type: string
-        available:
-          type: boolean
-          default: false
-    FieldValueType:
-      type: string
-      description: 'Enumerated value formats for a secondary / custom field.
-
-
-        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
-
-        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
-
-        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
-
-        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
-
-        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
-
-        - TEXT is a string.
-
-        '
-      enum:
-      - COUNTRY
-      - DATE
-      - GENDER
-      - PASSPORT_DOCUMENT_TYPE
-      - STATE
-      - TEXT
-    FieldDefinition:
-      type: object
-      description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
-
-        Field data when creating or updating a Case. Extends [AbstractField](#AbstractField).
-
-        '
-      allOf:
-      - $ref: '#/components/schemas/AbstractField'
-      - type: object
-        required:
-        - fieldValueType
-        - label
-        properties:
-          fieldValueType:
-            $ref: '#/components/schemas/FieldValueType'
-          fieldRequired:
-            type: boolean
-            description: Indicates whether this field is required
-            default: false
-          label:
-            type: string
-            description: Human-readable label for this field
-            maxLength: 1000
-          regExp:
-            type: string
-            description: Optional regular expression which applies to fields where fieldValueType is TEXT
-            maxLength: 255
-    ResolutionFields:
-      type: object
-      description: Describes all resolution fields (statuses, risks and reasons) in detail.
-      required:
-      - statuses
-      - risks
-      - reasons
-      properties:
-        statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-        risks:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-        reasons:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-    AbstractField:
-      type: object
-      description: Generic Field representing a Custom Field or a Secondary Field.
-      required:
-      - typeId
-      properties:
-        typeId:
-          type: string
-          description: Type Identifier of this Field
-          maxLength: 255
-    CaseTemplateResponse:
-      type: object
-      description: Case template, containing metadata required by the client to construct a valid Case
-      required:
-      - groupScreeningType
-      - groupId
-      properties:
-        groupScreeningType:
-          $ref: '#/components/schemas/GroupScreeningType'
-        groupId:
-          type: string
-        customFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldDefinition'
-        secondaryFieldsByProvider:
-          type: object
-          description: 'Mapping from ProviderType to SecondaryFieldsByEntity which contains all secondary fields that is available
-
-            for that ProviderType.
-
-            '
-          additionalProperties:
-            $ref: '#/components/schemas/SecondaryFieldsByEntity'
-        nameTransposition:
-          description: The indication of whether name transposition screening is available and selected.
-          $ref: '#/components/schemas/TypeAvailableSelected'
-        mandatoryProviderTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderType'
-      example:
-        groupScreeningType: CASE_MANAGEMENT_AUDIT
-        groupId: Group Id
-        customFields:
-        - typeId: Custom Field Id
-          fieldValueType: TEXT
-          fieldRequired: true
-        secondaryFieldsByProvider:
-          watchlist:
-            secondaryFieldsByEntity:
-              individual:
-              - typeId: GENDER_TYPE_ID
-                fieldFormat: GENDER
-              - typeId: DATE_OF_BIRTH_TYPE_ID
-                fieldFormat: DATE
-              - typeId: PLACE_OF_BIRTH_TYPE_ID
-                fieldFormat: COUNTRY
-              organisation:
-              - typeId: REGISTERED_COUNTRY_TYPE_ID
-                fieldFormat: COUNTRY
-              - typeId: REGISTERED_TEXT_TYPE_ID
-                fieldFormat: DOCUMENT_ID
-              - typeId: REGISTERED_COUNTRY_TYPE_ID
-                fieldFormat: DOCUMENT_ID_COUNTRY
-              - typeId: REGISTERED_TEXT_TYPE_ID
-                fieldFormat: DOCUMENT_ID_TYPE
-              vessel:
-              - typeId: IMO_NUMBER_TYPE_ID
-                fieldFormat: TEXT
-                regExp: '[0-9]{7}'
-          passport-check:
-            secondaryFieldsByEntity:
-              individual:
-              - typeId: PASSPORT_GENDER_TYPE_ID
-                fieldFormat: GENDER
-              - typeId: PASSPORT_ID_NUMBER
-                fieldFormat: TEXT
-    StatusRule:
-      type: object
-      description: Represents the rules that should be applied when resolving a Result with a specific Status.
-      required:
-      - reasons
-      - remarkRequired
-      - reasonRequired
-      - risks
-      properties:
-        reasons:
-          type: array
-          description: The IDs for the Reasons that can be used when resolving a Result with a specific Status.
-          items:
-            type: string
-        remarkRequired:
-          type: boolean
-          description: Flag indicating whether a remark is required when resolving a Result with a specific Status.
-        reasonRequired:
-          type: boolean
-          description: Flag indicating whether a reason is required when resolving a Result with a specific Status.
-        risks:
-          type: array
-          description: The IDs for the Risks that can be used when resolving a Result with a specific Status.
-          items:
-            type: string
-    Group:
-      type: object
-      description: Structure of Groups accessible by user
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: Group ID
-          maxLength: 255
-        parentId:
-          type: string
-          description: Parent Group ID
-          maxLength: 255
-        name:
-          type: string
-          description: Name for the Group
-          maxLength: 255
-        hasChildren:
-          type: boolean
-          default: false
-        children:
-          type: array
-          description: Child groups
-          items:
-            $ref: '#/components/schemas/Group'
-        status:
-          $ref: '#/components/schemas/StatusType'
-      example:
-        id: Group Id
-        parentId: Parent Group ID
-        name: John Smith
-        hasChildren: true
-        children: []
-        status: ACTIVE
-    SecondaryFieldsByEntity:
-      type: object
-      description: Wrapper which contains secondary fields grouped by CaseEntityType.
-      required:
-      - secondaryFieldsByEntity
-      properties:
-        secondaryFieldsByEntity:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/FieldDefinition'
-    ResolutionField:
-      type: object
-      description: Represents the ID, label and type for a Status, a Risk or a Reason.
-      required:
-      - id
-      - label
-      properties:
-        id:
-          type: string
-          description: The ID for the resolution label.
-        label:
-          type: string
-          description: The label for the resolution label.
-        type:
-          $ref: '#/components/schemas/ResolutionStatusType'
-  responses:
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    CannotReturnResponse:
-      description: Cannot return response
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

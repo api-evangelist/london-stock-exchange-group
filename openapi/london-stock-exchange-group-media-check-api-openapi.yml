@@ -819,13 +819,133 @@ paths:
         required: true
 components:
   schemas:
-    MediaCheckDuplicatesRequest:
+    MediaCheckResultResolution:
+      description: Resolution details for news articles attached to a case.
       type: object
-      description: Request containing deduplication hash to retrieve article duplicatates.
       properties:
-        deduplicationHash:
-          description: Hash string containing deduplication configuration.
+        risk:
           type: string
+          description: Definition of Media Check attached article risk level
+          example: HIGH
+        reason:
+          description: Free text reason provided when attaching a news article to a case
+          type: string
+          example: It looks like the case we are looking for
+        reviewDate:
+          description: Date when a news article was attached to a case
+          type: string
+          format: date-time
+    MediaCheckRegularFacetResponse:
+      type: object
+      properties:
+        drilldownKey:
+          description: Key of the facet that used for navigation
+          type: string
+        facetLabel:
+          description: Label of the facet
+          type: string
+        articleCount:
+          description: Number of articles within the facet
+          type: integer
+          format: int64
+    MediaCheckRegularFacetRequest:
+      type: object
+      description: Facets for MediaCheckResultsRequest
+      properties:
+        limit:
+          minimum: 1
+          maximum: 100
+          description: Maximum number of items to return
+          type: integer
+          format: int32
+    MediaCheckPublicationDateRange:
+      type: object
+      description: Date range when the article was published.
+      properties:
+        min:
+          type: string
+          format: date-time
+          description: Start date and time the article was published in ISO 8601 format excluding Week and Ordinal dates.
+        max:
+          type: string
+          format: date-time
+          description: End date and time when the article was published in ISO 8601 format excluding Week and Ordinal dates.
+    MediaCheckPageReference:
+      type: string
+      description: A string token that can be used to paginate across the headline result set.
+      example: eNqrVirOLypRslLycw2PD/GP9/dxUdJRyixJzS0OSC0KSExPVbIyMtBRKkotSy0qBnJKikpTdZQyMkuc80vzgBotLIGwFgA6Vxb3
+    MediaCheckPublicationDateFacetRequest:
+      type: object
+      description: Publication date facet request for navigation by search results through publication date.
+    MediaCheckDetachArticlesRequest:
+      type: object
+      description: Articles to detach.
+      required:
+      - articleIds
+      properties:
+        articleIds:
+          type: array
+          description: 'MediaCheck articles IDs.
+
+            Request may contain up to 200 articles.
+
+            '
+          uniqueItems: true
+          minItems: 1
+          maxItems: 200
+          items:
+            type: string
+    MediaCheckResultsResponse:
+      type: object
+      properties:
+        pageReferences:
+          description: Contains references that allows pagination across headline results for a case.
+          $ref: '#/components/schemas/MediaCheckResultsPaginationResponse'
+        results:
+          description: Response for Media Check results for a case.
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaCheckResult'
+        totalResultCount:
+          description: Total number of found news articles
+          type: integer
+          format: int64
+          example: 89898
+        facets:
+          description: Contains facets available for navigation. Use facet's `drilldownKey` to select a facet
+          $ref: '#/components/schemas/MediaCheckFacetsResponse'
+    ResultsMediaCheckResolutionResponse:
+      type: object
+      properties:
+        resolutions:
+          description: Response for Media Check results resolutions.
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultsMediaCheckResolution'
+    MediaCheckResultsPagination:
+      description: 'Allows users to paginate across the full list of articles returned as part of the result set.
+
+
+        The object should have either pageReference field or sort + itemsPerPage fields defined.
+
+        '
+      type: object
+      properties:
+        itemsPerPage:
+          minimum: 1
+          maximum: 100
+          default: 100
+          description: The number of news article headlines returned per page.
+          type: integer
+          format: int32
+        sort:
+          type: string
+          enum:
+          - NEW_TO_OLD
+          - OLD_TO_NEW
+          default: NEW_TO_OLD
+        pageReference:
+          $ref: '#/components/schemas/MediaCheckPageReference'
     MediaCheckFacetsResponse:
       type: object
       description: Facets for article navigation. Use facet's `drilldownKey` to select a facet
@@ -856,41 +976,78 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MediaCheckPublicationDatesFacetResponse'
-    MediaCheckRegularFacetRequest:
+    MediaCheckDuplicatesRequest:
       type: object
-      description: Facets for MediaCheckResultsRequest
+      description: Request containing deduplication hash to retrieve article duplicatates.
       properties:
-        limit:
-          minimum: 1
-          maximum: 100
-          description: Maximum number of items to return
-          type: integer
-          format: int32
-    Error:
+        deduplicationHash:
+          description: Hash string containing deduplication configuration.
+          type: string
+    MediaCheckArticleContent:
       type: object
+      description: MediaCheck news article content
+      properties:
+        content:
+          description: Contents of the MediaCheck news article
+          type: string
+        copyrightHolder:
+          description: Copyright holder of MediaCheck news article
+          type: string
+        copyrightNotice:
+          description: Copyright notice of the MediaCheck news article
+          type: string
+    ResultsMediaCheckResolution:
+      description: Response with Media Check results for a case
+      type: object
+      properties:
+        articleId:
+          description: Media Check news article ID.
+          type: string
+        errorCodes:
+          type: array
+          description: Errors generated by validation.
+          items:
+            $ref: '#/components/schemas/Error'
+    ArticlesReviewDate:
+      type: object
+      description: Date and time when all articles were reviewed.
       required:
-      - error
-      - cause
+      - dateReviewed
       properties:
-        error:
+        dateReviewed:
           type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    MediaCheckPageReference:
-      type: string
-      description: A string token that can be used to paginate across the headline result set.
-      example: eNqrVirOLypRslLycw2PD/GP9/dxUdJRyixJzS0OSC0KSExPVbIyMtBRKkotSy0qBnJKikpTdZQyMkuc80vzgBotLIGwFgA6Vxb3
-    MediaCheckPublicationDatesFacetResponse:
+          format: date-time
+          description: Case modification date and time.
+      example:
+        dateReviewed: 2019-05-14 11:55:19.038000+00:00
+    MediaCheckResult:
+      description: Response with Media Check results for a case
       type: object
-      allOf:
-      - $ref: '#/components/schemas/MediaCheckRegularFacetResponse'
-      - properties:
-          selectedCount:
-            type: integer
-            description: Number of articles that are both within `baseFilter.publicationDate` range and this facet's range
-            format: int64
+      properties:
+        resolution:
+          description: Case resolution information for Media Check headline result set.
+          $ref: '#/components/schemas/MediaCheckResultResolution'
+        articleSummary:
+          description: Media Check news article summary.
+          $ref: '#/components/schemas/MediaCheckArticleSummary'
+    MediaCheckArticlesMetadataRequest:
+      type: object
+      description: Definition of MediaCheck news articles content request
+      required:
+      - articleIds
+      properties:
+        articleIds:
+          uniqueItems: true
+          maxItems: 200
+          minItems: 1
+          type: array
+          description: 'MediaCheck articles IDs.
+
+            Request may contain up to 200 articles.
+
+            '
+          items:
+            type: string
     ResultsMediaCheckResolutionRequest:
       type: object
       description: 'Articles to attach.
@@ -922,48 +1079,31 @@ components:
           maxItems: 200
           items:
             type: string
-    MediaCheckResultsContentResponse:
+    MediaCheckPublicationDatesFacetResponse:
       type: object
-      description: Response with MediCheck news articles content
+      allOf:
+      - $ref: '#/components/schemas/MediaCheckRegularFacetResponse'
+      - properties:
+          selectedCount:
+            type: integer
+            description: Number of articles that are both within `baseFilter.publicationDate` range and this facet's range
+            format: int64
+    RiskDefinition:
+      type: string
+      description: Definition of Media Check attached article risk level
+      example: HIGH
+    Error:
+      type: object
+      required:
+      - error
+      - cause
       properties:
-        results:
-          type: array
-          description: MediaCheck news article content and summary
-          items:
-            $ref: '#/components/schemas/MediaCheckResultsContent'
-      example:
-        results:
-        - articleContent:
-            content: Article content
-            copyrightHolder: Copyright holder
-            copyrightNotice: Copyright notice
-          articleSummary:
-            articleId: am2_newsroom_nNRAazy6q1|20191002T112015,757+0000
-            articleFound: true
-            contentType: newsroom
-            language: English
-            publicationDate: '2019-10-02T11:20:18.498Z'
-            publication:
-              code: DEUEUR
-              name: Publication name
-              status: null
-              description: null
-              languages: []
-              regions:
-              - Europe
-              publicationTypes: []
-              sectors: []
-            author: null
-            topics:
-            - Article Topic
-            countries:
-            - Netherlands
-            - Russia
-            title: Article title
-            snippet: ''
-            wordCount: 1655
-            phases:
-            - Article Phase
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
     MediaCheckBaseFilter:
       description: Used to filter news search results.
       type: object
@@ -1023,177 +1163,6 @@ components:
           - STRICT
           - COMPOSITE
           - DISABLED
-    MediaCheckDetachArticlesRequest:
-      type: object
-      description: Articles to detach.
-      required:
-      - articleIds
-      properties:
-        articleIds:
-          type: array
-          description: 'MediaCheck articles IDs.
-
-            Request may contain up to 200 articles.
-
-            '
-          uniqueItems: true
-          minItems: 1
-          maxItems: 200
-          items:
-            type: string
-    MediaCheckResultsRequest:
-      type: object
-      properties:
-        drilldownKeys:
-          type: array
-          description: Drill down keys for facet navigation.
-          items:
-            type: string
-        baseFilter:
-          $ref: '#/components/schemas/MediaCheckBaseFilter'
-        pagination:
-          $ref: '#/components/schemas/MediaCheckResultsPagination'
-        facets:
-          $ref: '#/components/schemas/MediaCheckFacetsRequest'
-    MediaCheckArticlesMetadataResponse:
-      type: object
-      properties:
-        results:
-          description: Response for Media Check results for a case.
-          type: array
-          items:
-            $ref: '#/components/schemas/MediaCheckResult'
-    MediaCheckContentRequest:
-      type: object
-      description: Definition of MediaCheck news articles content request
-      required:
-      - articleIds
-      properties:
-        articleIds:
-          maxItems: 200
-          minItems: 1
-          uniqueItems: true
-          type: array
-          description: 'MediaCheck articles IDs.
-
-            Request may contain up to 200 unique articles.
-
-            '
-          items:
-            type: string
-    MediaCheckResultsPagination:
-      description: 'Allows users to paginate across the full list of articles returned as part of the result set.
-
-
-        The object should have either pageReference field or sort + itemsPerPage fields defined.
-
-        '
-      type: object
-      properties:
-        itemsPerPage:
-          minimum: 1
-          maximum: 100
-          default: 100
-          description: The number of news article headlines returned per page.
-          type: integer
-          format: int32
-        sort:
-          type: string
-          enum:
-          - NEW_TO_OLD
-          - OLD_TO_NEW
-          default: NEW_TO_OLD
-        pageReference:
-          $ref: '#/components/schemas/MediaCheckPageReference'
-    MediaCheckRegularFacetResponse:
-      type: object
-      properties:
-        drilldownKey:
-          description: Key of the facet that used for navigation
-          type: string
-        facetLabel:
-          description: Label of the facet
-          type: string
-        articleCount:
-          description: Number of articles within the facet
-          type: integer
-          format: int64
-    MediaCheckResultsContent:
-      type: object
-      description: Response with MediaCheck news articles content and summary
-      properties:
-        articleContent:
-          description: MediaCheck news article content
-          $ref: '#/components/schemas/MediaCheckArticleContent'
-        articleSummary:
-          description: MediaCheck news article summary
-          $ref: '#/components/schemas/MediaCheckArticleSummary'
-    MediaCheckResultsResponse:
-      type: object
-      properties:
-        pageReferences:
-          description: Contains references that allows pagination across headline results for a case.
-          $ref: '#/components/schemas/MediaCheckResultsPaginationResponse'
-        results:
-          description: Response for Media Check results for a case.
-          type: array
-          items:
-            $ref: '#/components/schemas/MediaCheckResult'
-        totalResultCount:
-          description: Total number of found news articles
-          type: integer
-          format: int64
-          example: 89898
-        facets:
-          description: Contains facets available for navigation. Use facet's `drilldownKey` to select a facet
-          $ref: '#/components/schemas/MediaCheckFacetsResponse'
-    ResultsMediaCheckResolution:
-      description: Response with Media Check results for a case
-      type: object
-      properties:
-        articleId:
-          description: Media Check news article ID.
-          type: string
-        errorCodes:
-          type: array
-          description: Errors generated by validation.
-          items:
-            $ref: '#/components/schemas/Error'
-    RiskDefinition:
-      type: string
-      description: Definition of Media Check attached article risk level
-      example: HIGH
-    MediaCheckResultResolution:
-      description: Resolution details for news articles attached to a case.
-      type: object
-      properties:
-        risk:
-          type: string
-          description: Definition of Media Check attached article risk level
-          example: HIGH
-        reason:
-          description: Free text reason provided when attaching a news article to a case
-          type: string
-          example: It looks like the case we are looking for
-        reviewDate:
-          description: Date when a news article was attached to a case
-          type: string
-          format: date-time
-    MediaCheckPublicationDateRange:
-      type: object
-      description: Date range when the article was published.
-      properties:
-        min:
-          type: string
-          format: date-time
-          description: Start date and time the article was published in ISO 8601 format excluding Week and Ordinal dates.
-        max:
-          type: string
-          format: date-time
-          description: End date and time when the article was published in ISO 8601 format excluding Week and Ordinal dates.
-    MediaCheckPublicationDateFacetRequest:
-      type: object
-      description: Publication date facet request for navigation by search results through publication date.
     MediaCheckResultsPaginationResponse:
       description: 'Contains references that allows pagination across headline results for a case.
 
@@ -1213,6 +1182,122 @@ components:
           $ref: '#/components/schemas/MediaCheckPageReference'
         previous:
           $ref: '#/components/schemas/MediaCheckPageReference'
+    MediaCheckResultsContentResponse:
+      type: object
+      description: Response with MediCheck news articles content
+      properties:
+        results:
+          type: array
+          description: MediaCheck news article content and summary
+          items:
+            $ref: '#/components/schemas/MediaCheckResultsContent'
+      example:
+        results:
+        - articleContent:
+            content: Article content
+            copyrightHolder: Copyright holder
+            copyrightNotice: Copyright notice
+          articleSummary:
+            articleId: am2_newsroom_nNRAazy6q1|20191002T112015,757+0000
+            articleFound: true
+            contentType: newsroom
+            language: English
+            publicationDate: '2019-10-02T11:20:18.498Z'
+            publication:
+              code: DEUEUR
+              name: Publication name
+              status: null
+              description: null
+              languages: []
+              regions:
+              - Europe
+              publicationTypes: []
+              sectors: []
+            author: null
+            topics:
+            - Article Topic
+            countries:
+            - Netherlands
+            - Russia
+            title: Article title
+            snippet: ''
+            wordCount: 1655
+            phases:
+            - Article Phase
+    MediaCheckArticlesMetadataResponse:
+      type: object
+      properties:
+        results:
+          description: Response for Media Check results for a case.
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaCheckResult'
+    MediaCheckFacetsRequest:
+      type: object
+      description: Facets for MediaCheckResultsRequest
+      properties:
+        publicationType:
+          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
+        topicPhase:
+          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
+        geography:
+          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
+        topic:
+          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
+        country:
+          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
+        publicationDate:
+          $ref: '#/components/schemas/MediaCheckPublicationDateFacetRequest'
+    MediaCheckPublicationDetails:
+      description: News article publisher details.
+      type: object
+      properties:
+        code:
+          description: Unique source code used to identify the publisher.
+          type: string
+          example: LSEG
+        countries:
+          description: List of countries the publisher covers
+          type: array
+          items:
+            type: string
+            example: USA
+        description:
+          description: Publisher description
+          type: string
+          example: Fast, accurate verbatim transcripts
+        languages:
+          description: List of languages the publisher covers.
+          type: array
+          items:
+            type: string
+            example: English
+        name:
+          description: Publisher Name.
+          type: string
+          example: LSEG
+        publicationTypes:
+          description: Publication type.
+          type: array
+          items:
+            type: string
+            example: Broadcast
+        regions:
+          description: List of regions the publisher covers.
+          type: array
+          items:
+            type: string
+            example: North America
+        sectors:
+          description: List of sectors the publisher covers.
+          type: array
+          items:
+            type: string
+            example: Government
+        status:
+          description: Status of the publisher, i.e. active / archived (discontinued).
+          type: string
+          example: active
     MediaCheckArticleSummary:
       description: 'MediaCheck news article summary
 
@@ -1286,134 +1371,66 @@ components:
           items:
             type: string
             example: Conviction
-    ArticlesReviewDate:
-      type: object
-      description: Date and time when all articles were reviewed.
-      required:
-      - dateReviewed
-      properties:
-        dateReviewed:
-          type: string
-          format: date-time
-          description: Case modification date and time.
-      example:
-        dateReviewed: 2019-05-14 11:55:19.038000+00:00
-    MediaCheckPublicationDetails:
-      description: News article publisher details.
+    MediaCheckResultsRequest:
       type: object
       properties:
-        code:
-          description: Unique source code used to identify the publisher.
-          type: string
-          example: LSEG
-        countries:
-          description: List of countries the publisher covers
+        drilldownKeys:
           type: array
+          description: Drill down keys for facet navigation.
           items:
             type: string
-            example: USA
-        description:
-          description: Publisher description
-          type: string
-          example: Fast, accurate verbatim transcripts
-        languages:
-          description: List of languages the publisher covers.
-          type: array
-          items:
-            type: string
-            example: English
-        name:
-          description: Publisher Name.
-          type: string
-          example: LSEG
-        publicationTypes:
-          description: Publication type.
-          type: array
-          items:
-            type: string
-            example: Broadcast
-        regions:
-          description: List of regions the publisher covers.
-          type: array
-          items:
-            type: string
-            example: North America
-        sectors:
-          description: List of sectors the publisher covers.
-          type: array
-          items:
-            type: string
-            example: Government
-        status:
-          description: Status of the publisher, i.e. active / archived (discontinued).
-          type: string
-          example: active
-    MediaCheckFacetsRequest:
+        baseFilter:
+          $ref: '#/components/schemas/MediaCheckBaseFilter'
+        pagination:
+          $ref: '#/components/schemas/MediaCheckResultsPagination'
+        facets:
+          $ref: '#/components/schemas/MediaCheckFacetsRequest'
+    MediaCheckResultsContent:
       type: object
-      description: Facets for MediaCheckResultsRequest
+      description: Response with MediaCheck news articles content and summary
       properties:
-        publicationType:
-          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
-        topicPhase:
-          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
-        geography:
-          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
-        topic:
-          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
-        country:
-          $ref: '#/components/schemas/MediaCheckRegularFacetRequest'
-        publicationDate:
-          $ref: '#/components/schemas/MediaCheckPublicationDateFacetRequest'
-    MediaCheckResult:
-      description: Response with Media Check results for a case
-      type: object
-      properties:
-        resolution:
-          description: Case resolution information for Media Check headline result set.
-          $ref: '#/components/schemas/MediaCheckResultResolution'
+        articleContent:
+          description: MediaCheck news article content
+          $ref: '#/components/schemas/MediaCheckArticleContent'
         articleSummary:
-          description: Media Check news article summary.
+          description: MediaCheck news article summary
           $ref: '#/components/schemas/MediaCheckArticleSummary'
-    ResultsMediaCheckResolutionResponse:
-      type: object
-      properties:
-        resolutions:
-          description: Response for Media Check results resolutions.
-          type: array
-          items:
-            $ref: '#/components/schemas/ResultsMediaCheckResolution'
-    MediaCheckArticlesMetadataRequest:
+    MediaCheckContentRequest:
       type: object
       description: Definition of MediaCheck news articles content request
       required:
       - articleIds
       properties:
         articleIds:
-          uniqueItems: true
           maxItems: 200
           minItems: 1
+          uniqueItems: true
           type: array
           description: 'MediaCheck articles IDs.
 
-            Request may contain up to 200 articles.
+            Request may contain up to 200 unique articles.
 
             '
           items:
             type: string
-    MediaCheckArticleContent:
-      type: object
-      description: MediaCheck news article content
-      properties:
-        content:
-          description: Contents of the MediaCheck news article
-          type: string
-        copyrightHolder:
-          description: Copyright holder of MediaCheck news article
-          type: string
-        copyrightNotice:
-          description: Copyright notice of the MediaCheck news article
-          type: string
   responses:
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
@@ -1442,23 +1459,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
