@@ -697,6 +697,139 @@ paths:
         required: true
 components:
   schemas:
+    Event:
+      type: object
+      description: Event related to Entity.
+      required:
+      - type
+      properties:
+        address:
+          description: Address related to Entity.
+          $ref: '#/components/schemas/Address'
+        allegedAddresses:
+          type: array
+          description: Alleged addresses list.
+          items:
+            $ref: '#/components/schemas/Address'
+        day:
+          type: integer
+          description: The day of the month on which the event occurred.
+          format: int32
+        fullDate:
+          type: string
+          description: A text representation of the date according 'ISO 8601' standard when the event occurred.
+        month:
+          type: integer
+          description: The month of the year in which the event occurred.
+          format: int32
+        type:
+          description: State representing the event in relation to an individual.
+          $ref: '#/components/schemas/EventType'
+        year:
+          type: integer
+          description: The year in which the event occurred.
+          format: int32
+    Detail:
+      type: object
+      properties:
+        detailType:
+          type: string
+          description: Detail Type Enumeration
+          default: UNKNOWN
+          enum:
+          - BIOGRAPHY
+          - FUNDING
+          - IDENTIFICATION
+          - NOTE
+          - REPORTS
+          - REGULATION
+          - SANCTION
+          - UNKNOWN
+        text:
+          type: string
+        title:
+          type: string
+          maxLength: 255
+    EntityType:
+      type: string
+      description: Entity type of the case.
+      enum:
+      - INDIVIDUAL
+      - ORGANISATION
+      - VESSEL
+      - COUNTRY
+    ContactDetail:
+      type: object
+      required:
+      - contactDetailType
+      properties:
+        contactDetailType:
+          type: string
+          description: Contact Detail Type Enumeration
+          enum:
+          - EMAIL
+          - FAX
+          - URL
+          - VOICE
+        country:
+          $ref: '#/components/schemas/Country'
+        detail:
+          type: string
+    WatchlistDataSet:
+      type: object
+      properties:
+        entityCreateOrUpdate:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+        entityDelete:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityDelete'
+        entitySupersede:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySupersede'
+        entityPurge:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityPurge'
+    Group:
+      type: object
+      description: Structure of Groups accessible by user
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: Group ID
+          maxLength: 255
+        parentId:
+          type: string
+          description: Parent Group ID
+          maxLength: 255
+        name:
+          type: string
+          description: Name for the Group
+          maxLength: 255
+        hasChildren:
+          type: boolean
+          default: false
+        children:
+          type: array
+          description: Child groups
+          items:
+            $ref: '#/components/schemas/Group'
+        status:
+          $ref: '#/components/schemas/StatusType'
+      example:
+        id: Group Id
+        parentId: Parent Group ID
+        name: John Smith
+        hasChildren: true
+        children: []
+        status: ACTIVE
     UserSummary:
       type: object
       required:
@@ -739,6 +872,562 @@ components:
           type: string
           description: User's last login date and time in 'UTC' timezone.
           format: date-time
+    AbstractResolution:
+      type: object
+      description: Abstract resolution object
+      properties:
+        statusId:
+          type: string
+          description: 'Unique status ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+            status IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+            '
+          maxLength: 255
+        riskId:
+          type: string
+          description: 'Unique risk ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+            risk IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+            '
+          maxLength: 255
+        reasonId:
+          type: string
+          description: 'Unique reason ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
+
+            reason IDs and their details via `groups/{group_id}/resolutionToolkit`.
+
+            '
+          maxLength: 255
+        resolutionRemark:
+          type: string
+          description: Resolution remark added when resolving this Result.
+          maxLength: 1000
+    TypeAvailableSelected:
+      type: object
+      description: Represents a type and also tells whether it is available and whether it should be selected by default
+      properties:
+        selected:
+          type: boolean
+          default: false
+        type:
+          type: string
+        available:
+          type: boolean
+          default: false
+    IdentityDocument:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/Entity'
+        expiryDate:
+          type: string
+        issueDate:
+          type: string
+        issuer:
+          type: string
+        locationType:
+          $ref: '#/components/schemas/IdentityDocumentLocationType'
+        number:
+          type: string
+        type:
+          type: string
+    EntitySupersede:
+      type: object
+      required:
+      - entityId
+      - supersedingEntityId
+      properties:
+        entityId:
+          type: string
+        supersedingEntityId:
+          type: string
+    Name:
+      type: object
+      required:
+      - fullName
+      - type
+      properties:
+        fullName:
+          type: string
+        givenName:
+          type: string
+        languageCode:
+          $ref: '#/components/schemas/LanguageCode'
+        lastName:
+          type: string
+        originalScript:
+          type: string
+        prefix:
+          type: string
+        suffix:
+          type: string
+        type:
+          type: string
+          description: Watchlist Profile Name Type enumeration
+          enum:
+          - PRIMARY
+          - AKA
+          - AKAENHANCED
+          - FKA
+          - DBA
+          - MAIDEN
+          - LANG_VARIATION
+          - PREVIOUS
+          - VEHICLE_ID
+          - LOW_QUALITY_AKA
+          - NATIVE_AKA
+    LanguageCode:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    ScreeningResultCollection:
+      type: object
+      description: Contains an array of Watchlist Screening Result objects from a synchronous screening operation.
+      required:
+      - results
+      - name
+      - providerTypes
+      - groupId
+      - entityType
+      properties:
+        caseId:
+          type: string
+          maxLength: 512
+          description: 'Case ID provided by the client or else generated by the system for the client. No case ID will be returned
+
+            when using Zero Footprint Screening (ZFS) and it should not be specified in the request either.
+
+            '
+        name:
+          type: string
+          maxLength: 1000
+          description: Name to screen for this case.
+        providerTypes:
+          type: array
+          description: 'Provider Types required to Screen this case.
+
+            For Zero Footprint Screening (ZFS), only `WATCHLIST` is supported.
+
+            '
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ProviderType'
+        customFields:
+          description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
+
+            `groups/{groupId}/caseTemplate`. Custom fields cannot be used with Zero Footprint Screening (ZFS).
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        secondaryFields:
+          description: 'Case Secondary Fields. Available secondary fields and their definitions can be obtained via
+
+            `groups/{groupId}/caseTemplate`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+        groupId:
+          type: string
+          maxLength: 255
+          description: 'Group identifier owning this case.
+
+            The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
+
+            '
+        entityType:
+          type: string
+          description: Case Entity Type Enumeration
+          enum:
+          - INDIVIDUAL
+          - ORGANISATION
+          - VESSEL
+          - UNSPECIFIED
+        caseSystemId:
+          type: string
+          maxLength: 192
+          description: System generated ID for the Case
+        caseScreeningState:
+          description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+            By default, value will be set from account settings.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+        lifecycleState:
+          type: string
+          description: Case Lifecycle State Enumeration
+          enum:
+          - ARCHIVED
+          - UNARCHIVED
+        creator:
+          $ref: '#/components/schemas/UserSummary'
+        modifier:
+          $ref: '#/components/schemas/UserSummary'
+        assignee:
+          $ref: '#/components/schemas/UserSummary'
+        creationDate:
+          type: string
+          format: date-time
+          description: Case creation date and time
+        modificationDate:
+          type: string
+          format: date-time
+          description: Case modification date and time
+        nameTransposition:
+          type: boolean
+          description: Flag indicating whether name transposition is enabled for the case.
+        outstandingActions:
+          type: boolean
+          description: Flag indicating outstanding actions on a Case
+        lastScreenedDatesByProviderType:
+          type: object
+          description: Case screenings date and time by provider type.
+          additionalProperties:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: Date and time by Provider Type.
+        lastIndexDatesByProviderType:
+          type: object
+          description: 'Case index date and time by provider type. Represents date and time that should be used during  ZFS screening as
+
+            starting point to not lose any results. Available only for ZFS screening.
+
+            '
+          additionalProperties:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: Date and time by Provider Type.
+        providerTypeDetails:
+          $ref: '#/components/schemas/ProviderTypeDetails'
+        results:
+          description: Contains the Screening Result objects of the screening.
+          type: array
+          items:
+            $ref: '#/components/schemas/Result'
+    AbstractField:
+      type: object
+      description: Generic Field representing a Custom Field or a Secondary Field.
+      required:
+      - typeId
+      properties:
+        typeId:
+          type: string
+          description: Type Identifier of this Field
+          maxLength: 255
+    AccelusUserLoginAccountStatus:
+      type: string
+      description: The status of the User login account.
+      enum:
+      - NOT_REGISTERED
+      - REGISTERED
+      - FIRST_TIME_LOGIN_COMPLETED
+    TranslatedEntity:
+      type: object
+      description: Representation of translated entity.
+      properties:
+        translationDisclaimer:
+          type: string
+          description: Disclaimer for Translation Response.
+        details:
+          type: array
+          description: A collection of translated entity details.
+          items:
+            $ref: '#/components/schemas/Detail'
+    ProviderSource:
+      type: object
+      required:
+      - abbreviation
+      - identifier
+      - name
+      - providerSourceStatus
+      - type
+      properties:
+        abbreviation:
+          type: string
+          description: Abbreviated form of this source's `name`.
+        creationDate:
+          type: string
+          format: date-time
+        identifier:
+          type: string
+          description: An alphanumeric value
+        importIdentifier:
+          type: string
+        name:
+          type: string
+          description: Full name of this source.
+          maxLength: 255
+        provider:
+          description: Provider for this source.
+          $ref: '#/components/schemas/Provider'
+        providerSourceStatus:
+          type: string
+          description: Provider Source Status Enumeration
+          enum:
+          - ACTIVE
+          - DELETED
+          - HIDDEN
+        regionOfAuthority:
+          type: string
+        subscriptionCategory:
+          type: string
+          description: Subscription Category Type Enumeration
+          default: STANDARD
+          enum:
+          - PREMIUM
+          - STANDARD
+        modificationDate:
+          type: string
+          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
+          format: date-time
+        description:
+          type: string
+          description: Description of the source.
+        type:
+          $ref: '#/components/schemas/ProviderSourceType'
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    StatusType:
+      type: string
+      description: Enumeration of Status types
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DELETED
+    MatchedTerm:
+      type: object
+      description: Matched term of a Result.
+      properties:
+        term:
+          type: string
+        type:
+          type: string
+          description: Enumeration of available matched types. Includes DOCUMENT_ID unlike NameType.
+          enum:
+          - PRIMARY
+          - AKA
+          - AKAENHANCED
+          - FKA
+          - DBA
+          - MAIDEN
+          - LANG_VARIATION
+          - PREVIOUS
+          - VEHICLE_ID
+          - LOW_QUALITY_AKA
+          - NATIVE_AKA
+          - DOCUMENT_ID
+        isPartOfUpdatedResults:
+          type: boolean
+          description: "The flag indicating whether the matched term is still relevant to the case after changes to either \ncase details or admin settings or record details. Please note this field must not be used for filtering \nongoing screening updates.\n"
+    NewCase:
+      type: object
+      description: Defines Case data that can be sent when creating a new Case. Extends [AbstractCase](#AbstractCase).
+      allOf:
+      - $ref: '#/components/schemas/AbstractCase'
+      - type: object
+        required:
+        - name
+        - groupId
+        - entityType
+        properties:
+          groupId:
+            type: string
+            maxLength: 255
+            description: 'Group identifier owning this case.
+
+              The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
+
+              '
+          entityType:
+            type: string
+            description: Case Entity Type Enumeration
+            enum:
+            - INDIVIDUAL
+            - ORGANISATION
+            - VESSEL
+            - UNSPECIFIED
+        example:
+          name: John Smith
+          caseId: Client Case Id
+          groupId: Client Group Id
+          entityType: INDIVIDUAL
+          providerTypes:
+          - WATCHLIST
+          customFields:
+          - typeId: Custom Field Id 1
+            value: Reference ID 1234567
+          - typeId: Custom Field Id 2
+            value: Deal Id 1234567
+          secondaryFields:
+          - typeId: SFCT_1
+            value: MALE
+          - typeId: SFCT_2
+            dateTimeValue: '1990-11-20'
+    FieldDefinition:
+      type: object
+      description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
+
+        Field data when creating or updating a Case. Extends [AbstractField](#AbstractField).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/AbstractField'
+      - type: object
+        required:
+        - fieldValueType
+        - label
+        properties:
+          fieldValueType:
+            $ref: '#/components/schemas/FieldValueType'
+          fieldRequired:
+            type: boolean
+            description: Indicates whether this field is required
+            default: false
+          label:
+            type: string
+            description: Human-readable label for this field
+            maxLength: 1000
+          regExp:
+            type: string
+            description: Optional regular expression which applies to fields where fieldValueType is TEXT
+            maxLength: 255
+    CaseTemplateResponse:
+      type: object
+      description: Case template, containing metadata required by the client to construct a valid Case
+      required:
+      - groupScreeningType
+      - groupId
+      properties:
+        groupScreeningType:
+          $ref: '#/components/schemas/GroupScreeningType'
+        groupId:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldDefinition'
+        secondaryFieldsByProvider:
+          type: object
+          description: 'Mapping from ProviderType to SecondaryFieldsByEntity which contains all secondary fields that is available
+
+            for that ProviderType.
+
+            '
+          additionalProperties:
+            $ref: '#/components/schemas/SecondaryFieldsByEntity'
+        nameTransposition:
+          description: The indication of whether name transposition screening is available and selected.
+          $ref: '#/components/schemas/TypeAvailableSelected'
+        mandatoryProviderTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderType'
+      example:
+        groupScreeningType: CASE_MANAGEMENT_AUDIT
+        groupId: Group Id
+        customFields:
+        - typeId: Custom Field Id
+          fieldValueType: TEXT
+          fieldRequired: true
+        secondaryFieldsByProvider:
+          watchlist:
+            secondaryFieldsByEntity:
+              individual:
+              - typeId: GENDER_TYPE_ID
+                fieldFormat: GENDER
+              - typeId: DATE_OF_BIRTH_TYPE_ID
+                fieldFormat: DATE
+              - typeId: PLACE_OF_BIRTH_TYPE_ID
+                fieldFormat: COUNTRY
+              organisation:
+              - typeId: REGISTERED_COUNTRY_TYPE_ID
+                fieldFormat: COUNTRY
+              - typeId: REGISTERED_TEXT_TYPE_ID
+                fieldFormat: DOCUMENT_ID
+              - typeId: REGISTERED_COUNTRY_TYPE_ID
+                fieldFormat: DOCUMENT_ID_COUNTRY
+              - typeId: REGISTERED_TEXT_TYPE_ID
+                fieldFormat: DOCUMENT_ID_TYPE
+              vessel:
+              - typeId: IMO_NUMBER_TYPE_ID
+                fieldFormat: TEXT
+                regExp: '[0-9]{7}'
+          passport-check:
+            secondaryFieldsByEntity:
+              individual:
+              - typeId: PASSPORT_GENDER_TYPE_ID
+                fieldFormat: GENDER
+              - typeId: PASSPORT_ID_NUMBER
+                fieldFormat: TEXT
+    Image:
+      type: object
+      required:
+      - uri
+      properties:
+        caption:
+          type: string
+        height:
+          type: integer
+          format: int32
+        imageUseCode:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          items:
+            type: string
+        width:
+          type: integer
+          format: int32
+    EntityPurge:
+      type: object
+      required:
+      - entityId
+      properties:
+        entityId:
+          type: string
+        purgedDate:
+          type: string
+          format: date-time
+    ProviderTypeDetails:
+      type: object
+      description: Details about the specific provider type.
+      required:
+      - mediaCheck
+      properties:
+        mediaCheck:
+          $ref: '#/components/schemas/MediaCheckCaseDetails'
+    GroupScreeningType:
+      type: string
+      description: Group screening type enumeration
+      enum:
+      - CASE_MANAGEMENT_AUDIT
+      - ZERO_FOOTPRINT
     Entity:
       type: object
       description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
@@ -884,131 +1573,74 @@ components:
           allOf:
           - $ref: '#/components/schemas/TranslatedEntity'
           x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
-    LanguageCode:
+    MediaCheckCaseDetails:
       type: object
+      description: Details about the Media-Check settings on a case (e.g., smart filter).
+      required:
+      - smartFilter
+      properties:
+        smartFilter:
+          type: boolean
+          description: 'Flag indicating whether smart filter state on the case.
+
+            The default value fetched from the group setting "Allow users to enable/disable the Smart Filter".
+
+            '
+    WatchlistResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    FieldValueType:
+      type: string
+      description: 'Enumerated value formats for a secondary / custom field.
+
+
+        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
+
+        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
+
+        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
+
+        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
+
+        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
+
+        - TEXT is a string.
+
+        '
+      enum:
+      - COUNTRY
+      - DATE
+      - GENDER
+      - PASSPORT_DOCUMENT_TYPE
+      - STATE
+      - TEXT
+    Country:
+      type: object
+      required:
+      - code
+      - name
       properties:
         code:
           type: string
         name:
           type: string
-    Review:
+    Resolution:
       type: object
-      description: Review details of a Result.
-      properties:
-        reviewRequired:
-          type: boolean
-          description: Flag to indicate Review Required after re-screening the CASE for this result.
-        reviewRequiredDate:
-          type: string
-          format: date-time
-          description: Represents the date and time when this Result was last flagged for review.
-        reviewRemark:
-          type: string
-          description: Review remark added when reviewing this Result.
-          maxLength: 2000
-        reviewDate:
-          type: string
-          format: date-time
-          description: Represents the date and time when this Result was last reviewed.
-    Event:
-      type: object
-      description: Event related to Entity.
-      required:
-      - type
-      properties:
-        address:
-          description: Address related to Entity.
-          $ref: '#/components/schemas/Address'
-        allegedAddresses:
-          type: array
-          description: Alleged addresses list.
-          items:
-            $ref: '#/components/schemas/Address'
-        day:
-          type: integer
-          description: The day of the month on which the event occurred.
-          format: int32
-        fullDate:
-          type: string
-          description: A text representation of the date according 'ISO 8601' standard when the event occurred.
-        month:
-          type: integer
-          description: The month of the year in which the event occurred.
-          format: int32
-        type:
-          description: State representing the event in relation to an individual.
-          $ref: '#/components/schemas/EventType'
-        year:
-          type: integer
-          description: The year in which the event occurred.
-          format: int32
-    IdentityDocument:
-      type: object
-      properties:
-        entity:
-          $ref: '#/components/schemas/Entity'
-        expiryDate:
-          type: string
-        issueDate:
-          type: string
-        issuer:
-          type: string
-        locationType:
-          $ref: '#/components/schemas/IdentityDocumentLocationType'
-        number:
-          type: string
-        type:
-          type: string
-    TypeAvailableSelected:
-      type: object
-      description: Represents a type and also tells whether it is available and whether it should be selected by default
-      properties:
-        selected:
-          type: boolean
-          default: false
-        type:
-          type: string
-        available:
-          type: boolean
-          default: false
-    ScreeningRequest:
-      type: object
-      description: Defines Case data that can be sent when creating a synchronous screening request for a new Case. Extends [NewCase](#NewCase).
+      description: Resolution details of a Result.
       allOf:
-      - $ref: '#/components/schemas/NewCase'
+      - $ref: '#/components/schemas/AbstractResolution'
       - type: object
         properties:
-          startScreeningDate:
+          resolutionDate:
             type: string
             format: date-time
-            description: "The starting date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
-          endScreeningDate:
-            type: string
-            format: date-time
-            description: "The ending date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
-        example:
-          name: John Smith
-          caseId: Client Case Id
-          groupId: Client Group Id
-          entityType: INDIVIDUAL
-          providerTypes:
-          - WATCHLIST
-          - MEDIA_CHECK
-          caseScreeningState:
-            WATCHLIST: INITIAL
-            MEDIA_CHECK: ONGOING
-          startScreeningDate: 2020-08-01 15:00:00.003000+00:00
-          endScreeningDate: 2021-08-02 15:00:00.003000+00:00
-          customFields:
-          - typeId: Custom Field Id 1
-            value: Reference ID 1234567
-          - typeId: Custom Field Id 2
-            value: Deal Id 1234567
-          secondaryFields:
-          - typeId: SFCT_1
-            value: MALE
-          - typeId: SFCT_2
-            dateTimeValue: '1990-11-20'
+            description: Represents the date and time when this Result was last resolved.
     ProviderType:
       type: string
       description: Provider Type Enumeration
@@ -1017,74 +1649,24 @@ components:
       - PASSPORT_CHECK
       - CLIENT_WATCHLIST
       - MEDIA_CHECK
-    CaseTemplateResponse:
+    IdentityDocumentLocationType:
       type: object
-      description: Case template, containing metadata required by the client to construct a valid Case
-      required:
-      - groupScreeningType
-      - groupId
+      description: 'Represents the type of identity document location that includes the type of document, name, country
+
+        and what type of entity it belongs to.
+
+        '
       properties:
-        groupScreeningType:
-          $ref: '#/components/schemas/GroupScreeningType'
-        groupId:
+        country:
+          $ref: '#/components/schemas/Country'
+        name:
           type: string
-        customFields:
+        type:
+          type: string
+        entityTypes:
           type: array
           items:
-            $ref: '#/components/schemas/FieldDefinition'
-        secondaryFieldsByProvider:
-          type: object
-          description: 'Mapping from ProviderType to SecondaryFieldsByEntity which contains all secondary fields that is available
-
-            for that ProviderType.
-
-            '
-          additionalProperties:
-            $ref: '#/components/schemas/SecondaryFieldsByEntity'
-        nameTransposition:
-          description: The indication of whether name transposition screening is available and selected.
-          $ref: '#/components/schemas/TypeAvailableSelected'
-        mandatoryProviderTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderType'
-      example:
-        groupScreeningType: CASE_MANAGEMENT_AUDIT
-        groupId: Group Id
-        customFields:
-        - typeId: Custom Field Id
-          fieldValueType: TEXT
-          fieldRequired: true
-        secondaryFieldsByProvider:
-          watchlist:
-            secondaryFieldsByEntity:
-              individual:
-              - typeId: GENDER_TYPE_ID
-                fieldFormat: GENDER
-              - typeId: DATE_OF_BIRTH_TYPE_ID
-                fieldFormat: DATE
-              - typeId: PLACE_OF_BIRTH_TYPE_ID
-                fieldFormat: COUNTRY
-              organisation:
-              - typeId: REGISTERED_COUNTRY_TYPE_ID
-                fieldFormat: COUNTRY
-              - typeId: REGISTERED_TEXT_TYPE_ID
-                fieldFormat: DOCUMENT_ID
-              - typeId: REGISTERED_COUNTRY_TYPE_ID
-                fieldFormat: DOCUMENT_ID_COUNTRY
-              - typeId: REGISTERED_TEXT_TYPE_ID
-                fieldFormat: DOCUMENT_ID_TYPE
-              vessel:
-              - typeId: IMO_NUMBER_TYPE_ID
-                fieldFormat: TEXT
-                regExp: '[0-9]{7}'
-          passport-check:
-            secondaryFieldsByEntity:
-              individual:
-              - typeId: PASSPORT_GENDER_TYPE_ID
-                fieldFormat: GENDER
-              - typeId: PASSPORT_ID_NUMBER
-                fieldFormat: TEXT
+            $ref: '#/components/schemas/EntityType'
     AbstractAssociate:
       type: object
       description: 'The `AbstractAssociate` subclasses corresponding to each type of entity are:
@@ -1244,365 +1826,6 @@ components:
           uniqueItems: true
           items:
             type: string
-    AbstractCase:
-      type: object
-      description: "Defines Case data that can be sent when creating or updating a Case.\n\nNote that availability and definitions of 'customFields' and 'secondaryFields' should be obtained via\n`groups/{groupId}/caseTemplate` before creating or updating a Case. Following are some example JSON segments\nfor secondary fields using unreal 'typeId's for illustrative purposes.\n\n- Example INDIVIDUAL secondary fields\n      1. GENDER\n         ```\n          {\n            \"typeId\":\"SFCT_1\",\n            \"value\":\"MALE\"\n          }\n         ```\n      2. DATE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\":\"1990-12-20\"\n          }\n         ```\n         or\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\": {\n              \"timelinePrecision\": \"ON\",\n              \"pointInTimePrecision\": \"DAY\",\n              \"utcDateTime\": 316310400000,\n              \"timeZone\": null\n            }\n          }\n         ```\n      3. COUNTRY_OF_RESIDENCE\n         ```\n          {\n            \"typeId\":\"SFCT_3\",\n            \"value\":\"GBR\"\n          }\n         ```\n      4. PLACE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_4\",\n            \"value\":\"GBR\"\n          }\n         ```\n      5. NATIONALITY\n         ```\n          {\n            \"typeId\":\"SFCT_5\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example ORGANISATION secondary fields\n      1. REGISTERED_COUNTRY\n         ```\n          {\n            \"typeId\":\"SFCT_6\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example VESSEL secondary fields\n      1. IMO_NUMBER\n         ```\n          {\n            \"typeId\":\"SFCT_7\",\n            \"value\":\"1234567\"\n          }\n         ```\n"
-      properties:
-        caseId:
-          type: string
-          maxLength: 512
-          description: 'Case ID provided by the Client or else generated by the system for the Client.
-
-            This field is not applicable for ''Zero Footprint Screening (ZFS)''.
-
-            '
-        name:
-          type: string
-          description: Name to screen for this Case.
-          maxLength: 1000
-        providerTypes:
-          type: array
-          description: 'Provider Types required to Screen this Case.
-
-            For ''Zero Footprint Screening (ZFS)'', only ''WATCHLIST'' is supported.
-
-            '
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/ProviderType'
-        caseScreeningState:
-          type: object
-          description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
-
-            Supported ProviderTypes: [WATCHLIST], [MEDIA_CHECK]. By default, value will be set from account settings.
-
-            This field is not applicable for Zero Footprint Screening (ZFS).
-
-            '
-          additionalProperties:
-            type: string
-        customFields:
-          description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
-
-            `groups/{groupId}/caseTemplate`. Custom fields cannot be used with ''Zero Footprint Screening (ZFS)''.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-        secondaryFields:
-          description: 'Case Secondary Fields. Available secondary fields and their definitions can be obtained via
-
-            `groups/{groupId}/caseTemplate`.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-        nameTransposition:
-          type: boolean
-          description: Flag indicating whether name transposition is enabled for the case.
-      example:
-        caseId: Client Case Id
-        name: John Smith
-        providerTypes:
-        - WATCHLIST
-        caseScreeningState:
-          WATCHLIST: INITIAL
-          MEDIA_CHECK: ONGOING
-        customFields:
-        - typeId: Custom Field Id 1
-          value: Reference ID 1234567
-        - typeId: Custom Field Id 2
-          value: Deal Id 1234567
-        secondaryFields:
-        - typeId: SFCT_1
-          value: MALE
-        - typeId: SFCT_2
-          dateTimeValue: '1990-11-20'
-        nameTransposition: true
-    FieldDefinition:
-      type: object
-      description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
-
-        Field data when creating or updating a Case. Extends [AbstractField](#AbstractField).
-
-        '
-      allOf:
-      - $ref: '#/components/schemas/AbstractField'
-      - type: object
-        required:
-        - fieldValueType
-        - label
-        properties:
-          fieldValueType:
-            $ref: '#/components/schemas/FieldValueType'
-          fieldRequired:
-            type: boolean
-            description: Indicates whether this field is required
-            default: false
-          label:
-            type: string
-            description: Human-readable label for this field
-            maxLength: 1000
-          regExp:
-            type: string
-            description: Optional regular expression which applies to fields where fieldValueType is TEXT
-            maxLength: 255
-    ProviderSourceTypeCategoryDetail:
-      type: object
-      properties:
-        description:
-          type: string
-        identifier:
-          type: string
-          maxLength: 255
-        name:
-          type: string
-          maxLength: 255
-    MatchedTerm:
-      type: object
-      description: Matched term of a Result.
-      properties:
-        term:
-          type: string
-        type:
-          type: string
-          description: Enumeration of available matched types. Includes DOCUMENT_ID unlike NameType.
-          enum:
-          - PRIMARY
-          - AKA
-          - AKAENHANCED
-          - FKA
-          - DBA
-          - MAIDEN
-          - LANG_VARIATION
-          - PREVIOUS
-          - VEHICLE_ID
-          - LOW_QUALITY_AKA
-          - NATIVE_AKA
-          - DOCUMENT_ID
-        isPartOfUpdatedResults:
-          type: boolean
-          description: "The flag indicating whether the matched term is still relevant to the case after changes to either \ncase details or admin settings or record details. Please note this field must not be used for filtering \nongoing screening updates.\n"
-    Result:
-      type: object
-      description: 'Result found after performing a synchronous screening of a Case.
-
-        This contains the abstract case screening result details plus includes identity documents and important events
-
-        '
-      allOf:
-      - $ref: '#/components/schemas/AbstractScreeningResult'
-      - type: object
-        required:
-        - referenceId
-        properties:
-          primaryName:
-            type: string
-            description: The primary name associated with the Result
-            maxLength: 255
-          events:
-            type: array
-            description: List of dates of births and deaths
-            items:
-              $ref: '#/components/schemas/Event'
-          countryLinks:
-            type: array
-            description: Country links for the Screening Result
-            items:
-              $ref: '#/components/schemas/CountryLink'
-          identityDocuments:
-            type: array
-            description: List of identity documents from the Result
-            items:
-              $ref: '#/components/schemas/IdentityDocument'
-          category:
-            type: string
-            description: 'The category of the Result, i.e. `POLITICAL - INDIVIDUAL`, `INDIVIDUAL`, `DIPLOMAT`, `TERRORISM`, `CRIME - NARCOTICS`,
-
-              `CRIME - ORGANIZED`, `CRIME - OTHER`, `CRIME - NARCOTICS`, `CRIME - FINANCIAL` etc.
-
-              '
-            maxLength: 255
-          providerType:
-            type: string
-            description: Provider Type Enumeration
-            enum:
-            - WATCHLIST
-            - PASSPORT_CHECK
-            - CLIENT_WATCHLIST
-            - MEDIA_CHECK
-          gender:
-            type: string
-            description: Gender Type Enumeration
-            default: UNKNOWN
-            enum:
-            - MALE
-            - FEMALE
-            - UNKNOWN
-          entityCreationDate:
-            type: string
-            format: date-time
-            description: Entity creation date of the result.
-          entityModificationDate:
-            type: string
-            format: date-time
-            description: Entity modification date of the result.
-          pepStatus:
-            type: string
-            description: The PEP Status of the result.
-            enum:
-            - ACTIVE
-            - INACTIVE
-            - UNKNOWN
-            - NOT_AVAILABLE
-          actionTypes:
-            type: array
-            description: Reasons for pending alerts.
-            items:
-              type: string
-              enum:
-              - DATA_ISSUE
-              - RESULT_NOT_FOUND
-              - SCORE_INCREASED
-              - SCORE_DECREASED
-              - PROFILE_UPDATED
-              - PROFILE_UPDATED_C1
-              - PROFILE_UPDATED_C2
-              - PROFILE_UPDATED_C3
-              - PROFILE_UPDATED_C4
-              - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
-              - GENDER_UPDATED
-              - DATE_OF_BIRTH_UPDATED
-              - COUNTRY_LOCATION_UPDATED
-              - PLACE_OF_BIRTH_UPDATED
-              - NATIONALITY_UPDATED
-              - REGISTERED_COUNTRY_UPDATED
-              - IMO_NUMBER_UPDATED
-    ProviderTypeDetails:
-      type: object
-      description: Details about the specific provider type.
-      required:
-      - mediaCheck
-      properties:
-        mediaCheck:
-          $ref: '#/components/schemas/MediaCheckCaseDetails'
-    CountryLink:
-      type: object
-      required:
-      - country
-      - type
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
-        countryText:
-          type: string
-        type:
-          type: string
-          description: Country Link Type Enumeration
-          enum:
-          - NATIONALITY
-          - OPERATESIN
-          - POB
-          - POD
-          - REGISTEREDIN
-          - RESIDENT
-          - VESSELFLAG
-          - LOCATION
-    ProviderSourceType:
-      type: object
-      properties:
-        category:
-          $ref: '#/components/schemas/ProviderSourceTypeCategoryDetail'
-        identifier:
-          type: string
-        name:
-          type: string
-    AccelusUserLoginAccountStatus:
-      type: string
-      description: The status of the User login account.
-      enum:
-      - NOT_REGISTERED
-      - REGISTERED
-      - FIRST_TIME_LOGIN_COMPLETED
-    SecondaryFieldResult:
-      type: object
-      description: 'Belongs to a Result and provides the details of the comparison of the Case''s secondary field with the corresponding
-
-        field in the reference data. Extends [AbstractField](#AbstractField).
-
-        '
-      allOf:
-      - $ref: '#/components/schemas/AbstractField'
-      - type: object
-        required:
-        - field
-        - fieldResult
-        properties:
-          field:
-            description: Matched [Field] (#Field) data. Deprecated in favor of matchedValue and matchedDateTimeValue.
-            $ref: '#/components/schemas/Field'
-          submittedValue:
-            type: string
-            description: Submitted value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
-            maxLength: 1000
-          submittedDateTimeValue:
-            type: string
-            format: date-time
-            maxLength: 255
-            description: Submitted date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
-          matchedValue:
-            type: string
-            description: Matched value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
-            maxLength: 1000
-          matchedDateTimeValue:
-            type: string
-            format: date-time
-            maxLength: 255
-            description: Matched date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
-          fieldResult:
-            type: string
-            description: Field result enumeration
-            enum:
-            - LINKED
-            - MATCHED
-            - NOT_MATCHED
-            - NOT_RUN
-            - UNKNOWN
-    Weblink:
-      type: object
-      properties:
-        caption:
-          type: string
-        uri:
-          type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
-          items:
-            type: string
-    EntitySupersede:
-      type: object
-      required:
-      - entityId
-      - supersedingEntityId
-      properties:
-        entityId:
-          type: string
-        supersedingEntityId:
-          type: string
-    Resolution:
-      type: object
-      description: Resolution details of a Result.
-      allOf:
-      - $ref: '#/components/schemas/AbstractResolution'
-      - type: object
-        properties:
-          resolutionDate:
-            type: string
-            format: date-time
-            description: Represents the date and time when this Result was last resolved.
     EventType:
       type: string
       description: Event Type Enumeration.
@@ -1620,23 +1843,8 @@ components:
       - PRIVATISATION_DATE
       - REGISTRATION_DATE
       - REPORTED_DOB
-    SecondaryFieldsByEntity:
+    Weblink:
       type: object
-      description: Wrapper which contains secondary fields grouped by CaseEntityType.
-      required:
-      - secondaryFieldsByEntity
-      properties:
-        secondaryFieldsByEntity:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/FieldDefinition'
-    FileMeta:
-      type: object
-      required:
-      - caption
-      - uri
       properties:
         caption:
           type: string
@@ -1644,304 +1852,9 @@ components:
           type: string
         tags:
           type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
           items:
             type: string
-    EntityType:
-      type: string
-      description: Entity type of the case.
-      enum:
-      - INDIVIDUAL
-      - ORGANISATION
-      - VESSEL
-      - COUNTRY
-    ProviderSource:
-      type: object
-      required:
-      - abbreviation
-      - identifier
-      - name
-      - providerSourceStatus
-      - type
-      properties:
-        abbreviation:
-          type: string
-          description: Abbreviated form of this source's `name`.
-        creationDate:
-          type: string
-          format: date-time
-        identifier:
-          type: string
-          description: An alphanumeric value
-        importIdentifier:
-          type: string
-        name:
-          type: string
-          description: Full name of this source.
-          maxLength: 255
-        provider:
-          description: Provider for this source.
-          $ref: '#/components/schemas/Provider'
-        providerSourceStatus:
-          type: string
-          description: Provider Source Status Enumeration
-          enum:
-          - ACTIVE
-          - DELETED
-          - HIDDEN
-        regionOfAuthority:
-          type: string
-        subscriptionCategory:
-          type: string
-          description: Subscription Category Type Enumeration
-          default: STANDARD
-          enum:
-          - PREMIUM
-          - STANDARD
-        modificationDate:
-          type: string
-          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
-          format: date-time
-        description:
-          type: string
-          description: Description of the source.
-        type:
-          $ref: '#/components/schemas/ProviderSourceType'
-    MediaCheckCaseDetails:
-      type: object
-      description: Details about the Media-Check settings on a case (e.g., smart filter).
-      required:
-      - smartFilter
-      properties:
-        smartFilter:
-          type: boolean
-          description: 'Flag indicating whether smart filter state on the case.
-
-            The default value fetched from the group setting "Allow users to enable/disable the Smart Filter".
-
-            '
-    EntityPurge:
-      type: object
-      required:
-      - entityId
-      properties:
-        entityId:
-          type: string
-        purgedDate:
-          type: string
-          format: date-time
-    Group:
-      type: object
-      description: Structure of Groups accessible by user
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: Group ID
-          maxLength: 255
-        parentId:
-          type: string
-          description: Parent Group ID
-          maxLength: 255
-        name:
-          type: string
-          description: Name for the Group
-          maxLength: 255
-        hasChildren:
-          type: boolean
-          default: false
-        children:
-          type: array
-          description: Child groups
-          items:
-            $ref: '#/components/schemas/Group'
-        status:
-          $ref: '#/components/schemas/StatusType'
-      example:
-        id: Group Id
-        parentId: Parent Group ID
-        name: John Smith
-        hasChildren: true
-        children: []
-        status: ACTIVE
-    Field:
-      type: object
-      description: 'Holds the value of a Custom Field or a Secondary Field. Valid value type for this field is specified
-
-        in the corresponding FieldDefinition of CaseTemplateResponse. Extends [AbstractField](#AbstractField).
-
-        '
-      allOf:
-      - $ref: '#/components/schemas/AbstractField'
-      - type: object
-        properties:
-          value:
-            type: string
-            maxLength: 1000
-            description: Value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
-          dateTimeValue:
-            type: string
-            format: date-time
-            maxLength: 255
-            description: DateTime value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) `DATE`.
-    IdentityDocumentLocationType:
-      type: object
-      description: 'Represents the type of identity document location that includes the type of document, name, country
-
-        and what type of entity it belongs to.
-
-        '
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
-        name:
-          type: string
-        type:
-          type: string
-        entityTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityType'
-    ContactDetail:
-      type: object
-      required:
-      - contactDetailType
-      properties:
-        contactDetailType:
-          type: string
-          description: Contact Detail Type Enumeration
-          enum:
-          - EMAIL
-          - FAX
-          - URL
-          - VOICE
-        country:
-          $ref: '#/components/schemas/Country'
-        detail:
-          type: string
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    EntityUpdatedDates:
-      type: object
-      properties:
-        ageUpdated:
-          type: string
-          format: date-time
-        aliasesUpdated:
-          type: string
-          format: date-time
-        alternativeSpellingUpdated:
-          type: string
-          format: date-time
-        asOfDateUpdated:
-          type: string
-          format: date-time
-        categoryUpdated:
-          type: string
-          format: date-time
-        citizenshipsUpdated:
-          type: string
-          format: date-time
-        companiesUpdated:
-          type: string
-          format: date-time
-        deceasedUpdated:
-          type: string
-          format: date-time
-        dobsUpdated:
-          type: string
-          format: date-time
-        eiUpdated:
-          type: string
-          format: date-time
-        enteredUpdated:
-          type: string
-          format: date-time
-        externalSourcesUpdated:
-          type: string
-          format: date-time
-        firstNameUpdated:
-          type: string
-          format: date-time
-        foreignAliasUpdated:
-          type: string
-          format: date-time
-        furtherInformationUpdated:
-          type: string
-          format: date-time
-        idNumbersUpdated:
-          type: string
-          format: date-time
-        keywordsUpdated:
-          type: string
-          format: date-time
-        lastNameUpdated:
-          type: string
-          format: date-time
-        linkedToUpdated:
-          type: string
-          format: date-time
-        locationsUpdated:
-          type: string
-          format: date-time
-        lowQualityAliasesUpdated:
-          type: string
-          format: date-time
-        passportsUpdated:
-          type: string
-          format: date-time
-        placeOfBirthUpdated:
-          type: string
-          format: date-time
-        positionUpdated:
-          type: string
-          format: date-time
-        ssnUpdated:
-          type: string
-          format: date-time
-        subCategoryUpdated:
-          type: string
-          format: date-time
-        titleUpdated:
-          type: string
-          format: date-time
-        updatecategoryUpdated:
-          type: string
-          format: date-time
-        sicUpdated:
-          type: string
-          format: date-time
-    StatusType:
-      type: string
-      description: Enumeration of Status types
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DELETED
-    TranslatedEntity:
-      type: object
-      description: Representation of translated entity.
-      properties:
-        translationDisclaimer:
-          type: string
-          description: Disclaimer for Translation Response.
-        details:
-          type: array
-          description: A collection of translated entity details.
-          items:
-            $ref: '#/components/schemas/Detail'
     ActionDetail:
       type: object
       required:
@@ -1980,44 +1893,6 @@ components:
         text:
           type: string
         title:
-          type: string
-    Country:
-      type: object
-      required:
-      - code
-      - name
-      properties:
-        code:
-          type: string
-        name:
-          type: string
-    Detail:
-      type: object
-      properties:
-        detailType:
-          type: string
-          description: Detail Type Enumeration
-          default: UNKNOWN
-          enum:
-          - BIOGRAPHY
-          - FUNDING
-          - IDENTIFICATION
-          - NOTE
-          - REPORTS
-          - REGULATION
-          - SANCTION
-          - UNKNOWN
-        text:
-          type: string
-        title:
-          type: string
-          maxLength: 255
-    EntityDelete:
-      type: object
-      required:
-      - entityId
-      properties:
-        entityId:
           type: string
     AbstractScreeningResult:
       type: object
@@ -2120,6 +1995,21 @@ components:
           $ref: '#/components/schemas/Resolution'
         resultReview:
           $ref: '#/components/schemas/Review'
+    FileMeta:
+      type: object
+      required:
+      - caption
+      - uri
+      properties:
+        caption:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          items:
+            type: string
     Provider:
       type: object
       properties:
@@ -2132,86 +2022,185 @@ components:
           default: false
         name:
           type: string
-    AbstractField:
+    ScreeningRequest:
       type: object
-      description: Generic Field representing a Custom Field or a Secondary Field.
-      required:
-      - typeId
+      description: Defines Case data that can be sent when creating a synchronous screening request for a new Case. Extends [NewCase](#NewCase).
+      allOf:
+      - $ref: '#/components/schemas/NewCase'
+      - type: object
+        properties:
+          startScreeningDate:
+            type: string
+            format: date-time
+            description: "The starting date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
+          endScreeningDate:
+            type: string
+            format: date-time
+            description: "The ending date from which the records of the case in NameMatcher were indexed. \nThis field is only applicable for Zero Footprint Screening (ZFS).\n"
+        example:
+          name: John Smith
+          caseId: Client Case Id
+          groupId: Client Group Id
+          entityType: INDIVIDUAL
+          providerTypes:
+          - WATCHLIST
+          - MEDIA_CHECK
+          caseScreeningState:
+            WATCHLIST: INITIAL
+            MEDIA_CHECK: ONGOING
+          startScreeningDate: 2020-08-01 15:00:00.003000+00:00
+          endScreeningDate: 2021-08-02 15:00:00.003000+00:00
+          customFields:
+          - typeId: Custom Field Id 1
+            value: Reference ID 1234567
+          - typeId: Custom Field Id 2
+            value: Deal Id 1234567
+          secondaryFields:
+          - typeId: SFCT_1
+            value: MALE
+          - typeId: SFCT_2
+            dateTimeValue: '1990-11-20'
+    SecondaryFieldResult:
+      type: object
+      description: 'Belongs to a Result and provides the details of the comparison of the Case''s secondary field with the corresponding
+
+        field in the reference data. Extends [AbstractField](#AbstractField).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/AbstractField'
+      - type: object
+        required:
+        - field
+        - fieldResult
+        properties:
+          field:
+            description: Matched [Field] (#Field) data. Deprecated in favor of matchedValue and matchedDateTimeValue.
+            $ref: '#/components/schemas/Field'
+          submittedValue:
+            type: string
+            description: Submitted value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+            maxLength: 1000
+          submittedDateTimeValue:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: Submitted date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+          matchedValue:
+            type: string
+            description: Matched value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+            maxLength: 1000
+          matchedDateTimeValue:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: Matched date-time value for this Secondary Field. Used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+          fieldResult:
+            type: string
+            description: Field result enumeration
+            enum:
+            - LINKED
+            - MATCHED
+            - NOT_MATCHED
+            - NOT_RUN
+            - UNKNOWN
+    Address:
+      type: object
       properties:
-        typeId:
+        city:
           type: string
-          description: Type Identifier of this Field
+        country:
+          $ref: '#/components/schemas/Country'
+        postCode:
+          type: string
+        region:
+          type: string
+        street:
+          type: string
+    ProviderSourceTypeCategoryDetail:
+      type: object
+      properties:
+        description:
+          type: string
+        identifier:
+          type: string
           maxLength: 255
-    WatchlistResponse:
+        name:
+          type: string
+          maxLength: 255
+    Field:
       type: object
+      description: 'Holds the value of a Custom Field or a Secondary Field. Valid value type for this field is specified
+
+        in the corresponding FieldDefinition of CaseTemplateResponse. Extends [AbstractField](#AbstractField).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/AbstractField'
+      - type: object
+        properties:
+          value:
+            type: string
+            maxLength: 1000
+            description: Value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) other than `DATE`.
+          dateTimeValue:
+            type: string
+            format: date-time
+            maxLength: 255
+            description: DateTime value for this Field. To be used for fields with [FieldValueType] (#FieldValueType) `DATE`.
+    SecondaryFieldsByEntity:
+      type: object
+      description: Wrapper which contains secondary fields grouped by CaseEntityType.
       required:
-      - errors
+      - secondaryFieldsByEntity
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    GroupScreeningType:
-      type: string
-      description: Group screening type enumeration
-      enum:
-      - CASE_MANAGEMENT_AUDIT
-      - ZERO_FOOTPRINT
-    WatchlistDataSet:
+        secondaryFieldsByEntity:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/FieldDefinition'
+    AbstractCase:
       type: object
-      properties:
-        entityCreateOrUpdate:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entity'
-        entityDelete:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityDelete'
-        entitySupersede:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitySupersede'
-        entityPurge:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityPurge'
-    ScreeningResultCollection:
-      type: object
-      description: Contains an array of Watchlist Screening Result objects from a synchronous screening operation.
-      required:
-      - results
-      - name
-      - providerTypes
-      - groupId
-      - entityType
+      description: "Defines Case data that can be sent when creating or updating a Case.\n\nNote that availability and definitions of 'customFields' and 'secondaryFields' should be obtained via\n`groups/{groupId}/caseTemplate` before creating or updating a Case. Following are some example JSON segments\nfor secondary fields using unreal 'typeId's for illustrative purposes.\n\n- Example INDIVIDUAL secondary fields\n      1. GENDER\n         ```\n          {\n            \"typeId\":\"SFCT_1\",\n            \"value\":\"MALE\"\n          }\n         ```\n      2. DATE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\":\"1990-12-20\"\n          }\n         ```\n         or\n         ```\n          {\n            \"typeId\":\"SFCT_2\",\n            \"dateTimeValue\": {\n              \"timelinePrecision\": \"ON\",\n              \"pointInTimePrecision\": \"DAY\",\n              \"utcDateTime\": 316310400000,\n              \"timeZone\": null\n            }\n          }\n         ```\n      3. COUNTRY_OF_RESIDENCE\n         ```\n          {\n            \"typeId\":\"SFCT_3\",\n            \"value\":\"GBR\"\n          }\n         ```\n      4. PLACE_OF_BIRTH\n         ```\n          {\n            \"typeId\":\"SFCT_4\",\n            \"value\":\"GBR\"\n          }\n         ```\n      5. NATIONALITY\n         ```\n          {\n            \"typeId\":\"SFCT_5\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example ORGANISATION secondary fields\n      1. REGISTERED_COUNTRY\n         ```\n          {\n            \"typeId\":\"SFCT_6\",\n            \"value\":\"GBR\"\n          }\n         ```\n- Example VESSEL secondary fields\n      1. IMO_NUMBER\n         ```\n          {\n            \"typeId\":\"SFCT_7\",\n            \"value\":\"1234567\"\n          }\n         ```\n"
       properties:
         caseId:
           type: string
           maxLength: 512
-          description: 'Case ID provided by the client or else generated by the system for the client. No case ID will be returned
+          description: 'Case ID provided by the Client or else generated by the system for the Client.
 
-            when using Zero Footprint Screening (ZFS) and it should not be specified in the request either.
+            This field is not applicable for ''Zero Footprint Screening (ZFS)''.
 
             '
         name:
           type: string
+          description: Name to screen for this Case.
           maxLength: 1000
-          description: Name to screen for this case.
         providerTypes:
           type: array
-          description: 'Provider Types required to Screen this case.
+          description: 'Provider Types required to Screen this Case.
 
-            For Zero Footprint Screening (ZFS), only `WATCHLIST` is supported.
+            For ''Zero Footprint Screening (ZFS)'', only ''WATCHLIST'' is supported.
 
             '
           minItems: 1
           items:
             $ref: '#/components/schemas/ProviderType'
+        caseScreeningState:
+          type: object
+          description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
+
+            Supported ProviderTypes: [WATCHLIST], [MEDIA_CHECK]. By default, value will be set from account settings.
+
+            This field is not applicable for Zero Footprint Screening (ZFS).
+
+            '
+          additionalProperties:
+            type: string
         customFields:
           description: 'Case Custom Fields. Available custom fields and their definitions can be obtained via
 
-            `groups/{groupId}/caseTemplate`. Custom fields cannot be used with Zero Footprint Screening (ZFS).
+            `groups/{groupId}/caseTemplate`. Custom fields cannot be used with ''Zero Footprint Screening (ZFS)''.
 
             '
           type: array
@@ -2226,290 +2215,271 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Field'
-        groupId:
-          type: string
-          maxLength: 255
-          description: 'Group identifier owning this case.
-
-            The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
-
-            '
-        entityType:
-          type: string
-          description: Case Entity Type Enumeration
-          enum:
-          - INDIVIDUAL
-          - ORGANISATION
-          - VESSEL
-          - UNSPECIFIED
-        caseSystemId:
-          type: string
-          maxLength: 192
-          description: System generated ID for the Case
-        caseScreeningState:
-          description: 'Mapping from ProviderType to indicate whether Ongoing Screening is enabled for this Case on the specific ProviderType.
-
-            By default, value will be set from account settings.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-        lifecycleState:
-          type: string
-          description: Case Lifecycle State Enumeration
-          enum:
-          - ARCHIVED
-          - UNARCHIVED
-        creator:
-          $ref: '#/components/schemas/UserSummary'
-        modifier:
-          $ref: '#/components/schemas/UserSummary'
-        assignee:
-          $ref: '#/components/schemas/UserSummary'
-        creationDate:
-          type: string
-          format: date-time
-          description: Case creation date and time
-        modificationDate:
-          type: string
-          format: date-time
-          description: Case modification date and time
         nameTransposition:
           type: boolean
           description: Flag indicating whether name transposition is enabled for the case.
-        outstandingActions:
-          type: boolean
-          description: Flag indicating outstanding actions on a Case
-        lastScreenedDatesByProviderType:
-          type: object
-          description: Case screenings date and time by provider type.
-          additionalProperties:
-            type: string
-            format: date-time
-            maxLength: 255
-            description: Date and time by Provider Type.
-        lastIndexDatesByProviderType:
-          type: object
-          description: 'Case index date and time by provider type. Represents date and time that should be used during  ZFS screening as
+      example:
+        caseId: Client Case Id
+        name: John Smith
+        providerTypes:
+        - WATCHLIST
+        caseScreeningState:
+          WATCHLIST: INITIAL
+          MEDIA_CHECK: ONGOING
+        customFields:
+        - typeId: Custom Field Id 1
+          value: Reference ID 1234567
+        - typeId: Custom Field Id 2
+          value: Deal Id 1234567
+        secondaryFields:
+        - typeId: SFCT_1
+          value: MALE
+        - typeId: SFCT_2
+          dateTimeValue: '1990-11-20'
+        nameTransposition: true
+    Result:
+      type: object
+      description: 'Result found after performing a synchronous screening of a Case.
 
-            starting point to not lose any results. Available only for ZFS screening.
-
-            '
-          additionalProperties:
-            type: string
-            format: date-time
-            maxLength: 255
-            description: Date and time by Provider Type.
-        providerTypeDetails:
-          $ref: '#/components/schemas/ProviderTypeDetails'
-        results:
-          description: Contains the Screening Result objects of the screening.
-          type: array
-          items:
-            $ref: '#/components/schemas/Result'
-    FieldValueType:
-      type: string
-      description: 'Enumerated value formats for a secondary / custom field.
-
-
-        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
-
-        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
-
-        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
-
-        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
-
-        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
-
-        - TEXT is a string.
+        This contains the abstract case screening result details plus includes identity documents and important events
 
         '
-      enum:
-      - COUNTRY
-      - DATE
-      - GENDER
-      - PASSPORT_DOCUMENT_TYPE
-      - STATE
-      - TEXT
-    Name:
+      allOf:
+      - $ref: '#/components/schemas/AbstractScreeningResult'
+      - type: object
+        required:
+        - referenceId
+        properties:
+          primaryName:
+            type: string
+            description: The primary name associated with the Result
+            maxLength: 255
+          events:
+            type: array
+            description: List of dates of births and deaths
+            items:
+              $ref: '#/components/schemas/Event'
+          countryLinks:
+            type: array
+            description: Country links for the Screening Result
+            items:
+              $ref: '#/components/schemas/CountryLink'
+          identityDocuments:
+            type: array
+            description: List of identity documents from the Result
+            items:
+              $ref: '#/components/schemas/IdentityDocument'
+          category:
+            type: string
+            description: 'The category of the Result, i.e. `POLITICAL - INDIVIDUAL`, `INDIVIDUAL`, `DIPLOMAT`, `TERRORISM`, `CRIME - NARCOTICS`,
+
+              `CRIME - ORGANIZED`, `CRIME - OTHER`, `CRIME - NARCOTICS`, `CRIME - FINANCIAL` etc.
+
+              '
+            maxLength: 255
+          providerType:
+            type: string
+            description: Provider Type Enumeration
+            enum:
+            - WATCHLIST
+            - PASSPORT_CHECK
+            - CLIENT_WATCHLIST
+            - MEDIA_CHECK
+          gender:
+            type: string
+            description: Gender Type Enumeration
+            default: UNKNOWN
+            enum:
+            - MALE
+            - FEMALE
+            - UNKNOWN
+          entityCreationDate:
+            type: string
+            format: date-time
+            description: Entity creation date of the result.
+          entityModificationDate:
+            type: string
+            format: date-time
+            description: Entity modification date of the result.
+          pepStatus:
+            type: string
+            description: The PEP Status of the result.
+            enum:
+            - ACTIVE
+            - INACTIVE
+            - UNKNOWN
+            - NOT_AVAILABLE
+          actionTypes:
+            type: array
+            description: Reasons for pending alerts.
+            items:
+              type: string
+              enum:
+              - DATA_ISSUE
+              - RESULT_NOT_FOUND
+              - SCORE_INCREASED
+              - SCORE_DECREASED
+              - PROFILE_UPDATED
+              - PROFILE_UPDATED_C1
+              - PROFILE_UPDATED_C2
+              - PROFILE_UPDATED_C3
+              - PROFILE_UPDATED_C4
+              - AUTO_RESOLVED_FALSE_PREVIOUS_POSITIVE
+              - GENDER_UPDATED
+              - DATE_OF_BIRTH_UPDATED
+              - COUNTRY_LOCATION_UPDATED
+              - PLACE_OF_BIRTH_UPDATED
+              - NATIONALITY_UPDATED
+              - REGISTERED_COUNTRY_UPDATED
+              - IMO_NUMBER_UPDATED
+    EntityDelete:
       type: object
       required:
-      - fullName
+      - entityId
+      properties:
+        entityId:
+          type: string
+    Review:
+      type: object
+      description: Review details of a Result.
+      properties:
+        reviewRequired:
+          type: boolean
+          description: Flag to indicate Review Required after re-screening the CASE for this result.
+        reviewRequiredDate:
+          type: string
+          format: date-time
+          description: Represents the date and time when this Result was last flagged for review.
+        reviewRemark:
+          type: string
+          description: Review remark added when reviewing this Result.
+          maxLength: 2000
+        reviewDate:
+          type: string
+          format: date-time
+          description: Represents the date and time when this Result was last reviewed.
+    ProviderSourceType:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/ProviderSourceTypeCategoryDetail'
+        identifier:
+          type: string
+        name:
+          type: string
+    EntityUpdatedDates:
+      type: object
+      properties:
+        ageUpdated:
+          type: string
+          format: date-time
+        aliasesUpdated:
+          type: string
+          format: date-time
+        alternativeSpellingUpdated:
+          type: string
+          format: date-time
+        asOfDateUpdated:
+          type: string
+          format: date-time
+        categoryUpdated:
+          type: string
+          format: date-time
+        citizenshipsUpdated:
+          type: string
+          format: date-time
+        companiesUpdated:
+          type: string
+          format: date-time
+        deceasedUpdated:
+          type: string
+          format: date-time
+        dobsUpdated:
+          type: string
+          format: date-time
+        eiUpdated:
+          type: string
+          format: date-time
+        enteredUpdated:
+          type: string
+          format: date-time
+        externalSourcesUpdated:
+          type: string
+          format: date-time
+        firstNameUpdated:
+          type: string
+          format: date-time
+        foreignAliasUpdated:
+          type: string
+          format: date-time
+        furtherInformationUpdated:
+          type: string
+          format: date-time
+        idNumbersUpdated:
+          type: string
+          format: date-time
+        keywordsUpdated:
+          type: string
+          format: date-time
+        lastNameUpdated:
+          type: string
+          format: date-time
+        linkedToUpdated:
+          type: string
+          format: date-time
+        locationsUpdated:
+          type: string
+          format: date-time
+        lowQualityAliasesUpdated:
+          type: string
+          format: date-time
+        passportsUpdated:
+          type: string
+          format: date-time
+        placeOfBirthUpdated:
+          type: string
+          format: date-time
+        positionUpdated:
+          type: string
+          format: date-time
+        ssnUpdated:
+          type: string
+          format: date-time
+        subCategoryUpdated:
+          type: string
+          format: date-time
+        titleUpdated:
+          type: string
+          format: date-time
+        updatecategoryUpdated:
+          type: string
+          format: date-time
+        sicUpdated:
+          type: string
+          format: date-time
+    CountryLink:
+      type: object
+      required:
+      - country
       - type
       properties:
-        fullName:
-          type: string
-        givenName:
-          type: string
-        languageCode:
-          $ref: '#/components/schemas/LanguageCode'
-        lastName:
-          type: string
-        originalScript:
-          type: string
-        prefix:
-          type: string
-        suffix:
+        country:
+          $ref: '#/components/schemas/Country'
+        countryText:
           type: string
         type:
           type: string
-          description: Watchlist Profile Name Type enumeration
+          description: Country Link Type Enumeration
           enum:
-          - PRIMARY
-          - AKA
-          - AKAENHANCED
-          - FKA
-          - DBA
-          - MAIDEN
-          - LANG_VARIATION
-          - PREVIOUS
-          - VEHICLE_ID
-          - LOW_QUALITY_AKA
-          - NATIVE_AKA
-    NewCase:
-      type: object
-      description: Defines Case data that can be sent when creating a new Case. Extends [AbstractCase](#AbstractCase).
-      allOf:
-      - $ref: '#/components/schemas/AbstractCase'
-      - type: object
-        required:
-        - name
-        - groupId
-        - entityType
-        properties:
-          groupId:
-            type: string
-            maxLength: 255
-            description: 'Group identifier owning this case.
-
-              The group determines whether the case is screened as Zero Footprint Screnning (ZFS) or not.
-
-              '
-          entityType:
-            type: string
-            description: Case Entity Type Enumeration
-            enum:
-            - INDIVIDUAL
-            - ORGANISATION
-            - VESSEL
-            - UNSPECIFIED
-        example:
-          name: John Smith
-          caseId: Client Case Id
-          groupId: Client Group Id
-          entityType: INDIVIDUAL
-          providerTypes:
-          - WATCHLIST
-          customFields:
-          - typeId: Custom Field Id 1
-            value: Reference ID 1234567
-          - typeId: Custom Field Id 2
-            value: Deal Id 1234567
-          secondaryFields:
-          - typeId: SFCT_1
-            value: MALE
-          - typeId: SFCT_2
-            dateTimeValue: '1990-11-20'
-    AbstractResolution:
-      type: object
-      description: Abstract resolution object
-      properties:
-        statusId:
-          type: string
-          description: 'Unique status ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
-
-            status IDs and their details via `groups/{group_id}/resolutionToolkit`.
-
-            '
-          maxLength: 255
-        riskId:
-          type: string
-          description: 'Unique risk ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
-
-            risk IDs and their details via `groups/{group_id}/resolutionToolkit`.
-
-            '
-          maxLength: 255
-        reasonId:
-          type: string
-          description: 'Unique reason ID defined in Group''s resolution toolkit and used when resolving this Result. Get the available
-
-            reason IDs and their details via `groups/{group_id}/resolutionToolkit`.
-
-            '
-          maxLength: 255
-        resolutionRemark:
-          type: string
-          description: Resolution remark added when resolving this Result.
-          maxLength: 1000
-    Image:
-      type: object
-      required:
-      - uri
-      properties:
-        caption:
-          type: string
-        height:
-          type: integer
-          format: int32
-        imageUseCode:
-          type: string
-        uri:
-          type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
-          items:
-            type: string
-        width:
-          type: integer
-          format: int32
-    Address:
-      type: object
-      properties:
-        city:
-          type: string
-        country:
-          $ref: '#/components/schemas/Country'
-        postCode:
-          type: string
-        region:
-          type: string
-        street:
-          type: string
+          - NATIONALITY
+          - OPERATESIN
+          - POB
+          - POD
+          - REGISTEREDIN
+          - RESIDENT
+          - VESSELFLAG
+          - LOCATION
   responses:
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
     InactiveResource:
       description: For requests to a resource that is no longer available.
       content:
@@ -2523,10 +2493,8 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Forbidden:
-      description: Forbidden
+    UnexpectedError:
+      description: Unexpected error
       content:
         application/json:
           schema:
@@ -2551,6 +2519,38 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

@@ -296,13 +296,115 @@ paths:
         description: Related case system IDs.
         required: true
 components:
+  schemas:
+    RelationshipIdentifiers:
+      type: object
+      description: Relationship identifer between cases
+      properties:
+        sourceCaseSystemId:
+          type: string
+          description: CaseSystemId declared as source (primary) case
+          maxLength: 192
+        targetCaseSystemId:
+          type: string
+          description: CaseSystemId declared as target (subcase) case
+          maxLength: 192
+        relationshipType:
+          type: string
+          description: Relationship type between cases.
+          enum:
+          - SUBCASE_TO_PRIMARY
+          - PRIMARY_TO_SUBCASE
+    CaseRelationshipRequest:
+      type: object
+      description: Request to hold pagination details for listing case relationships.
+      properties:
+        pagination:
+          description: Pagination details
+          $ref: '#/components/schemas/Pagination'
+    Pagination:
+      type: object
+      description: Inbound - the pagination to apply to the query.
+      required:
+      - currentPage
+      - itemsPerPage
+      properties:
+        currentPage:
+          type: integer
+          format: int32
+        itemsPerPage:
+          type: integer
+          format: int32
+    PaginationResponseDetails:
+      type: object
+      description: Pagination details.
+      properties:
+        currentPage:
+          type: integer
+          description: The current page
+          format: int32
+        itemsPerPage:
+          type: integer
+          description: The number of items per page
+          format: int32
+        totalItems:
+          type: integer
+          description: Total number of items available
+          format: int64
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    CaseRelationshipResponse:
+      type: object
+      description: The result set of relationships between cases.
+      properties:
+        pagination:
+          description: Pagination details
+          $ref: '#/components/schemas/PaginationResponseDetails'
+        totalResultCount:
+          type: integer
+          description: The total results count
+          format: int64
+        results:
+          type: array
+          description: List of relationship identifiers
+          items:
+            $ref: '#/components/schemas/RelationshipIdentifiers'
+    LinkedCasesRequest:
+      type: object
+      required:
+      - relatedCaseSystemIds
+      properties:
+        relatedCaseSystemIds:
+          type: array
+          description: Related case system IDs.
+          uniqueItems: true
+          minItems: 1
+          maxItems: 25
+          items:
+            type: string
+        note:
+          type: string
+          maxLength: 1000
+          description: Note added by the user.
+      example:
+        relatedCaseSystemIds:
+        - relatedCaseSystemId1
+        - relatedCaseSystemId2
+        - relatedCaseSystemId3
+        note: Audit note
   responses:
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
     TooManyRequests:
       description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
     UnexpectedError:
       description: Unexpected error
       content:
@@ -329,6 +431,10 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
     BadRequest:
       description: Bad request
       content:
@@ -342,112 +448,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-  schemas:
-    CaseRelationshipResponse:
-      type: object
-      description: The result set of relationships between cases.
-      properties:
-        pagination:
-          description: Pagination details
-          $ref: '#/components/schemas/PaginationResponseDetails'
-        totalResultCount:
-          type: integer
-          description: The total results count
-          format: int64
-        results:
-          type: array
-          description: List of relationship identifiers
-          items:
-            $ref: '#/components/schemas/RelationshipIdentifiers'
-    PaginationResponseDetails:
-      type: object
-      description: Pagination details.
-      properties:
-        currentPage:
-          type: integer
-          description: The current page
-          format: int32
-        itemsPerPage:
-          type: integer
-          description: The number of items per page
-          format: int32
-        totalItems:
-          type: integer
-          description: Total number of items available
-          format: int64
-    Pagination:
-      type: object
-      description: Inbound - the pagination to apply to the query.
-      required:
-      - currentPage
-      - itemsPerPage
-      properties:
-        currentPage:
-          type: integer
-          format: int32
-        itemsPerPage:
-          type: integer
-          format: int32
-    LinkedCasesRequest:
-      type: object
-      required:
-      - relatedCaseSystemIds
-      properties:
-        relatedCaseSystemIds:
-          type: array
-          description: Related case system IDs.
-          uniqueItems: true
-          minItems: 1
-          maxItems: 25
-          items:
-            type: string
-        note:
-          type: string
-          maxLength: 1000
-          description: Note added by the user.
-      example:
-        relatedCaseSystemIds:
-        - relatedCaseSystemId1
-        - relatedCaseSystemId2
-        - relatedCaseSystemId3
-        note: Audit note
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    CaseRelationshipRequest:
-      type: object
-      description: Request to hold pagination details for listing case relationships.
-      properties:
-        pagination:
-          description: Pagination details
-          $ref: '#/components/schemas/Pagination'
-    RelationshipIdentifiers:
-      type: object
-      description: Relationship identifer between cases
-      properties:
-        sourceCaseSystemId:
-          type: string
-          description: CaseSystemId declared as source (primary) case
-          maxLength: 192
-        targetCaseSystemId:
-          type: string
-          description: CaseSystemId declared as target (subcase) case
-          maxLength: 192
-        relationshipType:
-          type: string
-          description: Relationship type between cases.
-          enum:
-          - SUBCASE_TO_PRIMARY
-          - PRIMARY_TO_SUBCASE
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

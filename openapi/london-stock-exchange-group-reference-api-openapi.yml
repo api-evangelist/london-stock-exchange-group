@@ -656,6 +656,325 @@ paths:
         description: Defines the sort order for retrieved PEP roles details.
 components:
   schemas:
+    Detail:
+      type: object
+      properties:
+        detailType:
+          type: string
+          description: Detail Type Enumeration
+          default: UNKNOWN
+          enum:
+          - BIOGRAPHY
+          - FUNDING
+          - IDENTIFICATION
+          - NOTE
+          - REPORTS
+          - REGULATION
+          - SANCTION
+          - UNKNOWN
+        text:
+          type: string
+        title:
+          type: string
+          maxLength: 255
+    AbstractSearchParameter:
+      type: object
+      description: "An abstract search parameter object that serves as the base for specific parameter types. \nIt has a discriminator based on the type field to distinguish between different parameter types.\n"
+      discriminator:
+        propertyName: type
+      required:
+      - fields
+      - type
+      - valueType
+      properties:
+        fields:
+          type: array
+          description: An array of field identifiers to which the configuration applies.
+          items:
+            type: string
+        type:
+          $ref: '#/components/schemas/SearchParameterType'
+        valueType:
+          $ref: '#/components/schemas/SearchParameterValueType'
+    ProviderDetail:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Provider'
+      - type: object
+        properties:
+          sources:
+            type: array
+            description: Sources that belong to this provider.
+            items:
+              $ref: '#/components/schemas/ProviderSource'
+    EntityType:
+      type: string
+      description: Entity type of the case.
+      enum:
+      - INDIVIDUAL
+      - ORGANISATION
+      - VESSEL
+      - COUNTRY
+    ContactDetail:
+      type: object
+      required:
+      - contactDetailType
+      properties:
+        contactDetailType:
+          type: string
+          description: Contact Detail Type Enumeration
+          enum:
+          - EMAIL
+          - FAX
+          - URL
+          - VOICE
+        country:
+          $ref: '#/components/schemas/Country'
+        detail:
+          type: string
+    IdentityDocument:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/Entity'
+        expiryDate:
+          type: string
+        issueDate:
+          type: string
+        issuer:
+          type: string
+        locationType:
+          $ref: '#/components/schemas/IdentityDocumentLocationType'
+        number:
+          type: string
+        type:
+          type: string
+    Name:
+      type: object
+      required:
+      - fullName
+      - type
+      properties:
+        fullName:
+          type: string
+        givenName:
+          type: string
+        languageCode:
+          $ref: '#/components/schemas/LanguageCode'
+        lastName:
+          type: string
+        originalScript:
+          type: string
+        prefix:
+          type: string
+        suffix:
+          type: string
+        type:
+          type: string
+          description: Watchlist Profile Name Type enumeration
+          enum:
+          - PRIMARY
+          - AKA
+          - AKAENHANCED
+          - FKA
+          - DBA
+          - MAIDEN
+          - LANG_VARIATION
+          - PREVIOUS
+          - VEHICLE_ID
+          - LOW_QUALITY_AKA
+          - NATIVE_AKA
+    RoleDetails:
+      type: object
+      description: Represents the role details.
+      properties:
+        title:
+          type: string
+          description: Role title.
+        level:
+          type: string
+          description: Role level.
+        position:
+          type: string
+          description: Individuals position.
+        biography:
+          type: string
+          description: Individuals biography.
+        status:
+          description: Role status.
+          $ref: '#/components/schemas/RoleStatusType'
+        roleTermStartDate:
+          type: string
+          format: date
+          description: Representation of term start date.
+        roleTermEndDate:
+          type: string
+          format: date
+          description: Representation of term end date.
+      example:
+        pepStatusUpdated: '2011-01-04'
+        pepRolesUpdated: '2021-01-04'
+    LanguageCode:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    SearchParameterValueType:
+      type: string
+      description: An enumeration of data types used for filter selected values.
+      enum:
+      - STRING
+      - DATE_TIME
+      - BOOLEAN
+    PepDetailsRequest:
+      type: object
+      description: A request containing defined the sort order for retrieved PEP roles details.
+      properties:
+        sort:
+          description: 'The sort criteria to apply to the response.
+
+
+            The list of supported fields:
+
+
+            * `status`
+
+            * `roleTermStartDate`
+
+            * `roleTermEndDate`
+
+            '
+          $ref: '#/components/schemas/SortCriterion'
+      example:
+        sort:
+          columnName: roleTermStartDate
+          order: ASCENDING
+    TranslatedEntity:
+      type: object
+      description: Representation of translated entity.
+      properties:
+        translationDisclaimer:
+          type: string
+          description: Disclaimer for Translation Response.
+        details:
+          type: array
+          description: A collection of translated entity details.
+          items:
+            $ref: '#/components/schemas/Detail'
+    ProviderSource:
+      type: object
+      required:
+      - abbreviation
+      - identifier
+      - name
+      - providerSourceStatus
+      - type
+      properties:
+        abbreviation:
+          type: string
+          description: Abbreviated form of this source's `name`.
+        creationDate:
+          type: string
+          format: date-time
+        identifier:
+          type: string
+          description: An alphanumeric value
+        importIdentifier:
+          type: string
+        name:
+          type: string
+          description: Full name of this source.
+          maxLength: 255
+        provider:
+          description: Provider for this source.
+          $ref: '#/components/schemas/Provider'
+        providerSourceStatus:
+          type: string
+          description: Provider Source Status Enumeration
+          enum:
+          - ACTIVE
+          - DELETED
+          - HIDDEN
+        regionOfAuthority:
+          type: string
+        subscriptionCategory:
+          type: string
+          description: Subscription Category Type Enumeration
+          default: STANDARD
+          enum:
+          - PREMIUM
+          - STANDARD
+        modificationDate:
+          type: string
+          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
+          format: date-time
+        description:
+          type: string
+          description: Description of the source.
+        type:
+          $ref: '#/components/schemas/ProviderSourceType'
+    SearchParameterType:
+      type: string
+      description: An enumeration of search parameter types used to categorize parameters.
+      enum:
+      - QUERY
+      - FILTER
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    Image:
+      type: object
+      required:
+      - uri
+      properties:
+        caption:
+          type: string
+        height:
+          type: integer
+          format: int32
+        imageUseCode:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          items:
+            type: string
+        width:
+          type: integer
+          format: int32
+    QuerySearchParameter:
+      type: object
+      description: Represents free text query parameters. Inherits from [AbstractSearchParameter](#AbstractSearchParameter).
+      allOf:
+      - $ref: '#/components/schemas/AbstractSearchParameter'
+    PepUpdatedDates:
+      type: object
+      description: Represents PEP details' state change dates.
+      properties:
+        pepStatusUpdated:
+          type: string
+          format: date
+          description: Last update date for PEP status.
+        pepRolesUpdated:
+          type: string
+          format: date
+          description: Last update date for PEP roles.
+      example:
+        pepStatusUpdated: '2011-01-04'
+        pepRolesUpdated: '2021-01-04'
     Entity:
       type: object
       description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
@@ -801,20 +1120,16 @@ components:
           allOf:
           - $ref: '#/components/schemas/TranslatedEntity'
           x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
-    LanguageCode:
+    Country:
       type: object
+      required:
+      - code
+      - name
       properties:
         code:
           type: string
         name:
           type: string
-    IdentityDocumentLocationTypeDataSet:
-      type: object
-      properties:
-        identityDocumentLocationTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityDocumentLocationType'
     SearchParameterCollection:
       type: object
       description: This object containing various search filter parameters that are available to the User.
@@ -871,34 +1186,93 @@ components:
           availableIds:
           - id: groupId
             label: Group Name
-    IdentityDocument:
+    PepDetailsResponse:
       type: object
+      description: Retrieves detailed information for "Politically Exposed Person (PEP)" category by given record ID.
       properties:
-        entity:
-          $ref: '#/components/schemas/Entity'
-        expiryDate:
+        sort:
+          description: The sort criteria applied to the response.
+          $ref: '#/components/schemas/SortCriterion'
+        pepStatus:
           type: string
-        issueDate:
+          description: 'Enumeration of available PEP status types relating to individuals.
+
+            '
+          enum:
+          - ACTIVE
+          - INACTIVE
+          - UNKNOWN
+          - NOT_AVAILABLE
+        updatedDates:
+          description: PEP details' state change dates.
+          $ref: '#/components/schemas/PepUpdatedDates'
+        roleDetails:
+          type: array
+          uniqueItems: true
+          description: Role detail set.
+          items:
+            $ref: '#/components/schemas/RoleDetails'
+      example:
+        sort:
+          columnName: roleTermStartDate
+          order: ASCENDING
+        pepStatus: ACTIVE
+        updatedDates:
+          pepStatusUpdated: '2011-01-04'
+          pepRolesUpdated: '2021-01-04'
+        roleDetails:
+        - title: Title_1
+          level: Level_1
+          position: Position_1
+          biography: Biography_1
+          status: UNKNOWN
+          roleTermStartDate: '2011-01-04'
+          roleTermEndDate: '2020-01-04'
+        - title: Title_2
+          level: Level_2
+          position: Position_2
+          biography: Biography_2
+          status: FORMER
+          roleTermStartDate: '2021-01-04'
+          roleTermEndDate: null
+    SortCriterion:
+      type: object
+      description: Sort specification
+      properties:
+        columnName:
           type: string
-        issuer:
+          description: The field to sort on
+        order:
           type: string
-        locationType:
-          $ref: '#/components/schemas/IdentityDocumentLocationType'
-        number:
+          description: The sort order
+          enum:
+          - ASCENDING
+          - DESCENDING
+    RoleStatusType:
+      type: string
+      description: Enumeration of available role status types.
+      enum:
+      - CURRENT
+      - FORMER
+      - UNKNOWN
+    IdentityDocumentLocationType:
+      type: object
+      description: 'Represents the type of identity document location that includes the type of document, name, country
+
+        and what type of entity it belongs to.
+
+        '
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        name:
           type: string
         type:
           type: string
-    ProviderDetail:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Provider'
-      - type: object
-        properties:
-          sources:
-            type: array
-            description: Sources that belong to this provider.
-            items:
-              $ref: '#/components/schemas/ProviderSource'
+        entityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityType'
     AbstractAssociate:
       type: object
       description: 'The `AbstractAssociate` subclasses corresponding to each type of entity are:
@@ -1058,73 +1432,6 @@ components:
           uniqueItems: true
           items:
             type: string
-    QuerySearchParameter:
-      type: object
-      description: Represents free text query parameters. Inherits from [AbstractSearchParameter](#AbstractSearchParameter).
-      allOf:
-      - $ref: '#/components/schemas/AbstractSearchParameter'
-    ProviderSourceTypeCategoryDetail:
-      type: object
-      properties:
-        description:
-          type: string
-        identifier:
-          type: string
-          maxLength: 255
-        name:
-          type: string
-          maxLength: 255
-    SearchParameterType:
-      type: string
-      description: An enumeration of search parameter types used to categorize parameters.
-      enum:
-      - QUERY
-      - FILTER
-    CountryLink:
-      type: object
-      required:
-      - country
-      - type
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
-        countryText:
-          type: string
-        type:
-          type: string
-          description: Country Link Type Enumeration
-          enum:
-          - NATIONALITY
-          - OPERATESIN
-          - POB
-          - POD
-          - REGISTEREDIN
-          - RESIDENT
-          - VESSELFLAG
-          - LOCATION
-    ProviderSourceType:
-      type: object
-      properties:
-        category:
-          $ref: '#/components/schemas/ProviderSourceTypeCategoryDetail'
-        identifier:
-          type: string
-        name:
-          type: string
-    SearchParameterValueType:
-      type: string
-      description: An enumeration of data types used for filter selected values.
-      enum:
-      - STRING
-      - DATE_TIME
-      - BOOLEAN
-    RoleStatusType:
-      type: string
-      description: Enumeration of available role status types.
-      enum:
-      - CURRENT
-      - FORMER
-      - UNKNOWN
     Weblink:
       type: object
       properties:
@@ -1137,6 +1444,79 @@ components:
           description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
           items:
             type: string
+    ActionDetail:
+      type: object
+      required:
+      - actionType
+      properties:
+        actionId:
+          type: string
+        actionType:
+          type: string
+          description: Action Detail Type Enumeration
+          enum:
+          - CIVIL_ACTION
+          - CRIMINAL_CONVICTION
+          - ENFORCEMENT
+          - SANCTION
+        comment:
+          type: string
+        endDate:
+          type: string
+          format: date-time
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMeta'
+        publicationType:
+          type: string
+        published:
+          type: string
+        reference:
+          type: string
+        source:
+          $ref: '#/components/schemas/ProviderSource'
+        startDate:
+          type: string
+          format: date-time
+        text:
+          type: string
+        title:
+          type: string
+    IdentityDocumentLocationTypeDataSet:
+      type: object
+      properties:
+        identityDocumentLocationTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityDocumentLocationType'
+    FileMeta:
+      type: object
+      required:
+      - caption
+      - uri
+      properties:
+        caption:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          items:
+            type: string
+    Provider:
+      type: object
+      properties:
+        code:
+          type: string
+        identifier:
+          type: string
+        master:
+          type: boolean
+          default: false
+        name:
+          type: string
     FilterSearchParameter:
       type: object
       description: 'Represents filter configuration and values available for filtering cases with specific values.
@@ -1159,127 +1539,38 @@ components:
             description: An array of objects containing key-label pairs where the keys are used as values to search against a specific field.
             additionalProperties:
               type: string
-    FileMeta:
+    Address:
       type: object
-      required:
-      - caption
-      - uri
       properties:
-        caption:
+        city:
           type: string
-        uri:
+        country:
+          $ref: '#/components/schemas/Country'
+        postCode:
           type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
-          items:
-            type: string
-    EntityType:
-      type: string
-      description: Entity type of the case.
-      enum:
-      - INDIVIDUAL
-      - ORGANISATION
-      - VESSEL
-      - COUNTRY
-    ProviderSource:
+        region:
+          type: string
+        street:
+          type: string
+    ProviderSourceTypeCategoryDetail:
       type: object
-      required:
-      - abbreviation
-      - identifier
-      - name
-      - providerSourceStatus
-      - type
       properties:
-        abbreviation:
-          type: string
-          description: Abbreviated form of this source's `name`.
-        creationDate:
-          type: string
-          format: date-time
-        identifier:
-          type: string
-          description: An alphanumeric value
-        importIdentifier:
-          type: string
-        name:
-          type: string
-          description: Full name of this source.
-          maxLength: 255
-        provider:
-          description: Provider for this source.
-          $ref: '#/components/schemas/Provider'
-        providerSourceStatus:
-          type: string
-          description: Provider Source Status Enumeration
-          enum:
-          - ACTIVE
-          - DELETED
-          - HIDDEN
-        regionOfAuthority:
-          type: string
-        subscriptionCategory:
-          type: string
-          description: Subscription Category Type Enumeration
-          default: STANDARD
-          enum:
-          - PREMIUM
-          - STANDARD
-        modificationDate:
-          type: string
-          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
-          format: date-time
         description:
           type: string
-          description: Description of the source.
-        type:
-          $ref: '#/components/schemas/ProviderSourceType'
-    IdentityDocumentLocationType:
-      type: object
-      description: 'Represents the type of identity document location that includes the type of document, name, country
-
-        and what type of entity it belongs to.
-
-        '
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
+        identifier:
+          type: string
+          maxLength: 255
         name:
           type: string
-        type:
-          type: string
-        entityTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityType'
-    ContactDetail:
+          maxLength: 255
+    ProviderSourceType:
       type: object
-      required:
-      - contactDetailType
       properties:
-        contactDetailType:
+        category:
+          $ref: '#/components/schemas/ProviderSourceTypeCategoryDetail'
+        identifier:
           type: string
-          description: Contact Detail Type Enumeration
-          enum:
-          - EMAIL
-          - FAX
-          - URL
-          - VOICE
-        country:
-          $ref: '#/components/schemas/Country'
-        detail:
-          type: string
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
+        name:
           type: string
     EntityUpdatedDates:
       type: object
@@ -1371,326 +1662,57 @@ components:
         sicUpdated:
           type: string
           format: date-time
-    ActionDetail:
+    CountryLink:
       type: object
       required:
-      - actionType
-      properties:
-        actionId:
-          type: string
-        actionType:
-          type: string
-          description: Action Detail Type Enumeration
-          enum:
-          - CIVIL_ACTION
-          - CRIMINAL_CONVICTION
-          - ENFORCEMENT
-          - SANCTION
-        comment:
-          type: string
-        endDate:
-          type: string
-          format: date-time
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileMeta'
-        publicationType:
-          type: string
-        published:
-          type: string
-        reference:
-          type: string
-        source:
-          $ref: '#/components/schemas/ProviderSource'
-        startDate:
-          type: string
-          format: date-time
-        text:
-          type: string
-        title:
-          type: string
-    TranslatedEntity:
-      type: object
-      description: Representation of translated entity.
-      properties:
-        translationDisclaimer:
-          type: string
-          description: Disclaimer for Translation Response.
-        details:
-          type: array
-          description: A collection of translated entity details.
-          items:
-            $ref: '#/components/schemas/Detail'
-    Country:
-      type: object
-      required:
-      - code
-      - name
-      properties:
-        code:
-          type: string
-        name:
-          type: string
-    PepUpdatedDates:
-      type: object
-      description: Represents PEP details' state change dates.
-      properties:
-        pepStatusUpdated:
-          type: string
-          format: date
-          description: Last update date for PEP status.
-        pepRolesUpdated:
-          type: string
-          format: date
-          description: Last update date for PEP roles.
-      example:
-        pepStatusUpdated: '2011-01-04'
-        pepRolesUpdated: '2021-01-04'
-    PepDetailsRequest:
-      type: object
-      description: A request containing defined the sort order for retrieved PEP roles details.
-      properties:
-        sort:
-          description: 'The sort criteria to apply to the response.
-
-
-            The list of supported fields:
-
-
-            * `status`
-
-            * `roleTermStartDate`
-
-            * `roleTermEndDate`
-
-            '
-          $ref: '#/components/schemas/SortCriterion'
-      example:
-        sort:
-          columnName: roleTermStartDate
-          order: ASCENDING
-    Provider:
-      type: object
-      properties:
-        code:
-          type: string
-        identifier:
-          type: string
-        master:
-          type: boolean
-          default: false
-        name:
-          type: string
-    RoleDetails:
-      type: object
-      description: Represents the role details.
-      properties:
-        title:
-          type: string
-          description: Role title.
-        level:
-          type: string
-          description: Role level.
-        position:
-          type: string
-          description: Individuals position.
-        biography:
-          type: string
-          description: Individuals biography.
-        status:
-          description: Role status.
-          $ref: '#/components/schemas/RoleStatusType'
-        roleTermStartDate:
-          type: string
-          format: date
-          description: Representation of term start date.
-        roleTermEndDate:
-          type: string
-          format: date
-          description: Representation of term end date.
-      example:
-        pepStatusUpdated: '2011-01-04'
-        pepRolesUpdated: '2021-01-04'
-    PepDetailsResponse:
-      type: object
-      description: Retrieves detailed information for "Politically Exposed Person (PEP)" category by given record ID.
-      properties:
-        sort:
-          description: The sort criteria applied to the response.
-          $ref: '#/components/schemas/SortCriterion'
-        pepStatus:
-          type: string
-          description: 'Enumeration of available PEP status types relating to individuals.
-
-            '
-          enum:
-          - ACTIVE
-          - INACTIVE
-          - UNKNOWN
-          - NOT_AVAILABLE
-        updatedDates:
-          description: PEP details' state change dates.
-          $ref: '#/components/schemas/PepUpdatedDates'
-        roleDetails:
-          type: array
-          uniqueItems: true
-          description: Role detail set.
-          items:
-            $ref: '#/components/schemas/RoleDetails'
-      example:
-        sort:
-          columnName: roleTermStartDate
-          order: ASCENDING
-        pepStatus: ACTIVE
-        updatedDates:
-          pepStatusUpdated: '2011-01-04'
-          pepRolesUpdated: '2021-01-04'
-        roleDetails:
-        - title: Title_1
-          level: Level_1
-          position: Position_1
-          biography: Biography_1
-          status: UNKNOWN
-          roleTermStartDate: '2011-01-04'
-          roleTermEndDate: '2020-01-04'
-        - title: Title_2
-          level: Level_2
-          position: Position_2
-          biography: Biography_2
-          status: FORMER
-          roleTermStartDate: '2021-01-04'
-          roleTermEndDate: null
-    AbstractSearchParameter:
-      type: object
-      description: "An abstract search parameter object that serves as the base for specific parameter types. \nIt has a discriminator based on the type field to distinguish between different parameter types.\n"
-      discriminator:
-        propertyName: type
-      required:
-      - fields
-      - type
-      - valueType
-      properties:
-        fields:
-          type: array
-          description: An array of field identifiers to which the configuration applies.
-          items:
-            type: string
-        type:
-          $ref: '#/components/schemas/SearchParameterType'
-        valueType:
-          $ref: '#/components/schemas/SearchParameterValueType'
-    SortCriterion:
-      type: object
-      description: Sort specification
-      properties:
-        columnName:
-          type: string
-          description: The field to sort on
-        order:
-          type: string
-          description: The sort order
-          enum:
-          - ASCENDING
-          - DESCENDING
-    Name:
-      type: object
-      required:
-      - fullName
+      - country
       - type
       properties:
-        fullName:
-          type: string
-        givenName:
-          type: string
-        languageCode:
-          $ref: '#/components/schemas/LanguageCode'
-        lastName:
-          type: string
-        originalScript:
-          type: string
-        prefix:
-          type: string
-        suffix:
-          type: string
-        type:
-          type: string
-          description: Watchlist Profile Name Type enumeration
-          enum:
-          - PRIMARY
-          - AKA
-          - AKAENHANCED
-          - FKA
-          - DBA
-          - MAIDEN
-          - LANG_VARIATION
-          - PREVIOUS
-          - VEHICLE_ID
-          - LOW_QUALITY_AKA
-          - NATIVE_AKA
-    Detail:
-      type: object
-      properties:
-        detailType:
-          type: string
-          description: Detail Type Enumeration
-          default: UNKNOWN
-          enum:
-          - BIOGRAPHY
-          - FUNDING
-          - IDENTIFICATION
-          - NOTE
-          - REPORTS
-          - REGULATION
-          - SANCTION
-          - UNKNOWN
-        text:
-          type: string
-        title:
-          type: string
-          maxLength: 255
-    Image:
-      type: object
-      required:
-      - uri
-      properties:
-        caption:
-          type: string
-        height:
-          type: integer
-          format: int32
-        imageUseCode:
-          type: string
-        uri:
-          type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
-          items:
-            type: string
-        width:
-          type: integer
-          format: int32
-    Address:
-      type: object
-      properties:
-        city:
-          type: string
         country:
           $ref: '#/components/schemas/Country'
-        postCode:
+        countryText:
           type: string
-        region:
+        type:
           type: string
-        street:
-          type: string
+          description: Country Link Type Enumeration
+          enum:
+          - NATIONALITY
+          - OPERATESIN
+          - POB
+          - POD
+          - REGISTEREDIN
+          - RESIDENT
+          - VESSELFLAG
+          - LOCATION
   responses:
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    InactiveResource:
+      description: For requests to a resource that is no longer available.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     UnexpectedError:
       description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    CannotReturnResponse:
+      description: Cannot return response
       content:
         application/json:
           schema:
@@ -1715,34 +1737,12 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    InactiveResource:
-      description: For requests to a resource that is no longer available.
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    CannotReturnResponse:
-      description: Cannot return response
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
