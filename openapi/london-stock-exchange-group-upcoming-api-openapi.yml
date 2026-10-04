@@ -173,6 +173,39 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   schemas:
+    ReportType:
+      type: string
+      description: The type of report.
+      enum:
+      - CASE_DOSSIER
+    ReportError:
+      type: object
+      required:
+      - objectId
+      - objectType
+      - errorDescription
+      properties:
+        objectId:
+          type: string
+          description: Id of the object which has failed to process.
+        objectType:
+          type: string
+          description: The type of the object that failed to process.
+        errorDescription:
+          type: string
+          description: The details about the error.
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
     ReportStatus:
       type: object
       required:
@@ -219,34 +252,31 @@ components:
         summary:
           processedCount: 13.0
           progressPercentage: 50.0
-    ReportError:
-      type: object
-      required:
-      - objectId
-      - objectType
-      - errorDescription
-      properties:
-        objectId:
-          type: string
-          description: Id of the object which has failed to process.
-        objectType:
-          type: string
-          description: The type of the object that failed to process.
-        errorDescription:
-          type: string
-          description: The details about the error.
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
+    ReportProgressStatus:
+      type: string
+      description: 'The real-time progress status of report during download.
+
+
+        - COMPLETED - Report is successfully generated.
+
+        - IN_PROGRESS - Report generation is in progress.
+
+        - FAILED - Report failed to generate. Contact helpdesk for more details.
+
+        - WAITING - Report is waiting in queue and yet to be processed.
+
+        - UNKNOWN - Report status is unknown. Contact helpdesk for more details.
+
+        - CANCELLED - Report request has been cancelled.
+
+        '
+      enum:
+      - COMPLETED
+      - IN_PROGRESS
+      - FAILED
+      - WAITING
+      - UNKNOWN
+      - CANCELLED
     PaginatedReportStatusesResponse:
       type: object
       required:
@@ -275,45 +305,6 @@ components:
           summary:
             processedCount: 13.0
             progressPercentage: 50.0
-    ReportProgressStatus:
-      type: string
-      description: 'The real-time progress status of report during download.
-
-
-        - COMPLETED - Report is successfully generated.
-
-        - IN_PROGRESS - Report generation is in progress.
-
-        - FAILED - Report failed to generate. Contact helpdesk for more details.
-
-        - WAITING - Report is waiting in queue and yet to be processed.
-
-        - UNKNOWN - Report status is unknown. Contact helpdesk for more details.
-
-        - CANCELLED - Report request has been cancelled.
-
-        '
-      enum:
-      - COMPLETED
-      - IN_PROGRESS
-      - FAILED
-      - WAITING
-      - UNKNOWN
-      - CANCELLED
-    ReportSummary:
-      type: object
-      required:
-      - processedCount
-      - progressPercentage
-      properties:
-        processedCount:
-          type: integer
-          description: Represents number of records processed.
-          format: int32
-        progressPercentage:
-          type: integer
-          description: Represents progress percentage of records processed.
-          format: int32
     ReportErrorResponse:
       type: object
       required:
@@ -328,6 +319,20 @@ components:
         - objectId: Error ID
           objectType: Error Type
           errorDescription: Error Description
+    ReportSummary:
+      type: object
+      required:
+      - processedCount
+      - progressPercentage
+      properties:
+        processedCount:
+          type: integer
+          description: Represents number of records processed.
+          format: int32
+        progressPercentage:
+          type: integer
+          description: Represents progress percentage of records processed.
+          format: int32
     PaginationDetails:
       type: object
       required:
@@ -347,16 +352,22 @@ components:
           type: integer
           description: Represents the total item count in case dossier report.
           format: int64
-    ReportType:
-      type: string
-      description: The type of report.
-      enum:
-      - CASE_DOSSIER
   responses:
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
     UnexpectedError:
       description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
       content:
         application/json:
           schema:
@@ -381,23 +392,12 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
     Unauthorized:
       description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
-    BadRequest:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api

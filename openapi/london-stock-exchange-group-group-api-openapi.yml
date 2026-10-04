@@ -373,6 +373,47 @@ paths:
           $ref: '#/components/responses/UnexpectedError'
 components:
   schemas:
+    AbstractField:
+      type: object
+      description: Generic Field representing a Custom Field or a Secondary Field.
+      required:
+      - typeId
+      properties:
+        typeId:
+          type: string
+          description: Type Identifier of this Field
+          maxLength: 255
+    GroupScreeningType:
+      type: string
+      description: Group screening type enumeration
+      enum:
+      - CASE_MANAGEMENT_AUDIT
+      - ZERO_FOOTPRINT
+    StatusRule:
+      type: object
+      description: Represents the rules that should be applied when resolving a Result with a specific Status.
+      required:
+      - reasons
+      - remarkRequired
+      - reasonRequired
+      - risks
+      properties:
+        reasons:
+          type: array
+          description: The IDs for the Reasons that can be used when resolving a Result with a specific Status.
+          items:
+            type: string
+        remarkRequired:
+          type: boolean
+          description: Flag indicating whether a remark is required when resolving a Result with a specific Status.
+        reasonRequired:
+          type: boolean
+          description: Flag indicating whether a reason is required when resolving a Result with a specific Status.
+        risks:
+          type: array
+          description: The IDs for the Risks that can be used when resolving a Result with a specific Status.
+          items:
+            type: string
     Group:
       type: object
       description: Structure of Groups accessible by user
@@ -409,88 +450,6 @@ components:
         hasChildren: true
         children: []
         status: ACTIVE
-    ResolutionFields:
-      type: object
-      description: Describes all resolution fields (statuses, risks and reasons) in detail.
-      required:
-      - statuses
-      - risks
-      - reasons
-      properties:
-        statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-        risks:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-        reasons:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResolutionField'
-    TypeAvailableSelected:
-      type: object
-      description: Represents a type and also tells whether it is available and whether it should be selected by default
-      properties:
-        selected:
-          type: boolean
-          default: false
-        type:
-          type: string
-        available:
-          type: boolean
-          default: false
-    ResolutionField:
-      type: object
-      description: Represents the ID, label and type for a Status, a Risk or a Reason.
-      required:
-      - id
-      - label
-      properties:
-        id:
-          type: string
-          description: The ID for the resolution label.
-        label:
-          type: string
-          description: The label for the resolution label.
-        type:
-          $ref: '#/components/schemas/ResolutionStatusType'
-    AbstractField:
-      type: object
-      description: Generic Field representing a Custom Field or a Secondary Field.
-      required:
-      - typeId
-      properties:
-        typeId:
-          type: string
-          description: Type Identifier of this Field
-          maxLength: 255
-    StatusRule:
-      type: object
-      description: Represents the rules that should be applied when resolving a Result with a specific Status.
-      required:
-      - reasons
-      - remarkRequired
-      - reasonRequired
-      - risks
-      properties:
-        reasons:
-          type: array
-          description: The IDs for the Reasons that can be used when resolving a Result with a specific Status.
-          items:
-            type: string
-        remarkRequired:
-          type: boolean
-          description: Flag indicating whether a remark is required when resolving a Result with a specific Status.
-        reasonRequired:
-          type: boolean
-          description: Flag indicating whether a reason is required when resolving a Result with a specific Status.
-        risks:
-          type: array
-          description: The IDs for the Risks that can be used when resolving a Result with a specific Status.
-          items:
-            type: string
     Error:
       type: object
       required:
@@ -503,13 +462,18 @@ components:
           type: string
         objectId:
           type: string
-    StatusType:
-      type: string
-      description: Enumeration of Status types
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DELETED
+    TypeAvailableSelected:
+      type: object
+      description: Represents a type and also tells whether it is available and whether it should be selected by default
+      properties:
+        selected:
+          type: boolean
+          default: false
+        type:
+          type: string
+        available:
+          type: boolean
+          default: false
     FieldDefinition:
       type: object
       description: 'Secondary or Custom Field metadata describing the rules for populating the corresponding
@@ -538,6 +502,58 @@ components:
             type: string
             description: Optional regular expression which applies to fields where fieldValueType is TEXT
             maxLength: 255
+    ResolutionFields:
+      type: object
+      description: Describes all resolution fields (statuses, risks and reasons) in detail.
+      required:
+      - statuses
+      - risks
+      - reasons
+      properties:
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
+        risks:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
+        reasons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResolutionField'
+    FieldValueType:
+      type: string
+      description: 'Enumerated value formats for a secondary / custom field.
+
+
+        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
+
+        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
+
+        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
+
+        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
+
+        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
+
+        - TEXT is a string.
+
+        '
+      enum:
+      - COUNTRY
+      - DATE
+      - GENDER
+      - PASSPORT_DOCUMENT_TYPE
+      - STATE
+      - TEXT
+    StatusType:
+      type: string
+      description: Enumeration of Status types
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DELETED
     CaseTemplateResponse:
       type: object
       description: Case template, containing metadata required by the client to construct a valid Case
@@ -606,51 +622,6 @@ components:
                 fieldFormat: GENDER
               - typeId: PASSPORT_ID_NUMBER
                 fieldFormat: TEXT
-    ResolutionRules:
-      type: object
-      description: A collection of [StatusRules] (#StatusRule) keyed by Status ID.
-      additionalProperties:
-        type: object
-        $ref: '#/components/schemas/StatusRule'
-    GroupScreeningType:
-      type: string
-      description: Group screening type enumeration
-      enum:
-      - CASE_MANAGEMENT_AUDIT
-      - ZERO_FOOTPRINT
-    FieldValueType:
-      type: string
-      description: 'Enumerated value formats for a secondary / custom field.
-
-
-        - GENDER can be one of enumerated values in `GenderType.UKNOWN/MALE/FEMALE`.
-
-        - DATE is a Date in ISO 8601 format excluding Week and Ordinal dates.
-
-        - COUNTRY is a ISO_3166-1_alpha-3 Country Code. All supported country codes can be obtained via `/reference/countries`.
-
-        - PASSPORT_DOCUMENT_TYPE can be screened by `ProviderType.PASSPORT_CHECK`.
-
-        - STATE - a State/Country type used by `ProviderType.PASSPORT_CHECK` for nationality and passport issuing state.
-
-        - TEXT is a string.
-
-        '
-      enum:
-      - COUNTRY
-      - DATE
-      - GENDER
-      - PASSPORT_DOCUMENT_TYPE
-      - STATE
-      - TEXT
-    ProviderType:
-      type: string
-      description: Provider Type Enumeration
-      enum:
-      - WATCHLIST
-      - PASSPORT_CHECK
-      - CLIENT_WATCHLIST
-      - MEDIA_CHECK
     ResolutionToolkitResponse:
       type: object
       description: Resolution toolkit settings applicable for a Group.
@@ -734,6 +705,21 @@ components:
             risks:
             - RISK_ID_4: null
             - RISK_ID_2: null
+    ResolutionField:
+      type: object
+      description: Represents the ID, label and type for a Status, a Risk or a Reason.
+      required:
+      - id
+      - label
+      properties:
+        id:
+          type: string
+          description: The ID for the resolution label.
+        label:
+          type: string
+          description: The label for the resolution label.
+        type:
+          $ref: '#/components/schemas/ResolutionStatusType'
     SecondaryFieldsByEntity:
       type: object
       description: Wrapper which contains secondary fields grouped by CaseEntityType.
@@ -746,6 +732,14 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/FieldDefinition'
+    ProviderType:
+      type: string
+      description: Provider Type Enumeration
+      enum:
+      - WATCHLIST
+      - PASSPORT_CHECK
+      - CLIENT_WATCHLIST
+      - MEDIA_CHECK
     ResolutionStatusType:
       type: string
       description: Enumeration of resolution Status types.
@@ -754,20 +748,15 @@ components:
       - POSSIBLE
       - 'FALSE'
       - UNSPECIFIED
+    ResolutionRules:
+      type: object
+      description: A collection of [StatusRules] (#StatusRule) keyed by Status ID.
+      additionalProperties:
+        type: object
+        $ref: '#/components/schemas/StatusRule'
   responses:
-    UnexpectedError:
-      description: Unexpected error
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
+    UnsupportedMediaType:
+      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
     CannotReturnResponse:
       description: Cannot return response
       content:
@@ -796,8 +785,19 @@ components:
               $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
-    UnsupportedMediaType:
-      description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
     Unauthorized:
       description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
 externalDocs:
