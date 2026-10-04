@@ -247,6 +247,9 @@ apis:
       - type: Overlay
         url: overlays/london-stock-exchange-group-api-info-api-overlay.yaml
 common:
+  - type: CapabilityMap
+    url: capabilities/london-stock-exchange-group-capability-edges.yml
+    name: London Stock Exchange Group Business Capability Map
   - type: Website
     url: https://www.lseg.com/
   - type: DeveloperPortal

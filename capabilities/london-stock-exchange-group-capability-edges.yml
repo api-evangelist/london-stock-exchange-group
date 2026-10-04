@@ -1,0 +1,47 @@
+slug: london-stock-exchange-group
+provider: London Stock Exchange Group
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Case
+  spec_file: london-stock-exchange-group-case-api-openapi.yml
+  capability_id: BC-130
+  capability_id_l1: BC-130
+  capability_name: Compliance Management
+  confidence: 0.78
+  evidence: 'POST /cases/screeningRequest  screen  Perform synchronous screening for a new case; PUT /cases/{caseSystemId}/ongoingScreening  enableOngoingScreening;
+    description: ''help streamline the processes for on-boarding, KYC and third party due diligence'''
+  reason: Screening case lifecycle for KYC/sanctions due diligence — a compliance capability. Ambiguous
+    between Regulatory Compliance Management and Anti-Bribery/third-party due diligence, so only L1 asserted.
+- tag: Zfs
+  spec_file: london-stock-exchange-group-zfs-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.72
+  evidence: POST /cases/screeningRequest screen — 'Perform synchronous screening for a new case'; POST
+    /reference/watchlist 'Maintain your Watchlist data'
+  reason: This tag bundles the actual screening call against watchlist/provider sources for a new case,
+    which is the core KYC/AML due-diligence screening act and maps to regulatory compliance management.
+    Some of the bundled operations are reference/config lookups, so confidence is not maximal.
+- tag: Media-Check
+  spec_file: london-stock-exchange-group-media-check-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: POST /cases/{caseSystemId}/mediacheck/results getMediaCheckDetails — 'Retrieve MediaCheck
+    results'; GET /mediacheck/risks — 'Retrieve mediacheck risk definitions'
+  reason: Adverse-media screening of a case against risk definitions, with article review and attachment
+    to the case file, is classic KYC/AML due-diligence evidence gathering — regulatory compliance management.
+    Not mapped to marketing/media capabilities, which would be a homograph error.
