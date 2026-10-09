@@ -7,14 +7,18 @@ front_door_ai:
   probed_at: '2026-09-17'
   host: www.lseg.com
   final_host: www.lseg.com
-  ownership: unresolved
-  owner: null
+  ownership: shared
+  owner: lseg
   shares_host_with:
   - acadiasoft
+  - lseg
   - refinitiv-eikon
   inherited_from: null
+  alias_of: null
   verdict: scored
   score: null
+  band: null
+  band_label: null
   host_score: 3
   density: null
   words: 624

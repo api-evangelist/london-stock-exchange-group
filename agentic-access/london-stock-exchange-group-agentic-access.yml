@@ -1,19 +1,26 @@
-generated: '2026-07-15'
+generated: '2026-09-23'
 method: generated
-source: openapi/lseg-world-check-one-openapi-original.yml
+source: openapi/london-stock-exchange-group-api-info-api-openapi.yml, openapi/london-stock-exchange-group-audit-api-openapi.yml,
+  openapi/london-stock-exchange-group-case-api-openapi.yml, openapi/london-stock-exchange-group-case-rating-api-openapi.yml,
+  openapi/london-stock-exchange-group-client-watchlist-api-openapi.yml, openapi/london-stock-exchange-group-group-api-openapi.yml,
+  openapi/london-stock-exchange-group-linked-cases-api-openapi.yml, openapi/london-stock-exchange-group-media-check-api-openapi.yml,
+  openapi/london-stock-exchange-group-passport-check-api-openapi.yml, openapi/london-stock-exchange-group-reference-api-openapi.yml,
+  openapi/london-stock-exchange-group-reporting-api-openapi.yml, openapi/london-stock-exchange-group-smart-filter-api-openapi.yml,
+  openapi/london-stock-exchange-group-upcoming-api-openapi.yml, openapi/london-stock-exchange-group-user-api-openapi.yml,
+  openapi/london-stock-exchange-group-zfs-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 78
+  operations: 86
   by_action_class:
-    connected: 30
-    acting: 48
+    connected: 46
+    acting: 40
   by_consequence:
-    read: 30
-    write: 43
+    read: 46
+    write: 36
     safety-critical: 2
-    physical: 3
+    physical: 2
   human_in_the_loop_required: 2
 operations:
 - path: /apiInfo
@@ -26,9 +33,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /groups
-  method: get
-  operationId: getGroups
+- path: /cases/{caseSystemId}/auditEvents
+  method: post
+  operationId: getCaseAuditEventsByCaseSystemId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -36,49 +43,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /groups/{groupId}
+- path: /cases/{caseSystemId}/auditEvents/{auditEventId}
   method: get
-  operationId: getGroupById
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /groups/{groupId}/caseTemplate
-  method: get
-  operationId: getCaseTemplateForGroup
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /groups/{groupId}/resolutionToolkit
-  method: get
-  operationId: getResolutionToolkitForGroup
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /groups/{groupId}/resolutionToolkits
-  method: get
-  operationId: getResolutionToolkitsForGroup
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /groups/{groupId}/resolutionToolkits/{providerType}
-  method: get
-  operationId: getResolutionToolkitForGroupWithProviderType
+  operationId: retrieveCaseAuditEvent
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -414,32 +381,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /cases/{caseSystemId}/auditEvents
-  method: post
-  operationId: getCaseAuditEventsByCaseSystemId
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/auditEvents/{auditEventId}
-  method: get
-  operationId: retrieveCaseAuditEvent
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /cases/ongoingScreeningUpdates
   method: post
   operationId: getOngoingScreeningUpdates
@@ -492,34 +433,22 @@ operations:
   method: post
   operationId: searchCases
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /cases/summaries
   method: post
   operationId: retrieveCaseSummaries
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /cases/summaries/cursor
   method: post
   operationId: scrollCaseSummaries
@@ -536,38 +465,222 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /cases/saveAndScreen
+  method: post
+  operationId: saveAndScreenCases
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cases/screeningStatus
+  method: post
+  operationId: screeningStatus
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cases/{caseSystemId}/rating
+  method: get
+  operationId: retrieveCaseRating
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cases/{caseSystemId}/rating
+  method: put
+  operationId: saveCaseRating
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /reference/providers/sources/{identifier}
+  method: put
+  operationId: createOrUpdateProviderSource
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /reference/watchlist
+  method: post
+  operationId: saveWatchlist
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /groups
+  method: get
+  operationId: getGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}
+  method: get
+  operationId: getGroupById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}/caseTemplate
+  method: get
+  operationId: getCaseTemplateForGroup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}/resolutionToolkit
+  method: get
+  operationId: getResolutionToolkitForGroup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}/resolutionToolkits
+  method: get
+  operationId: getResolutionToolkitsForGroup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}/resolutionToolkits/{providerType}
+  method: get
+  operationId: getResolutionToolkitForGroupWithProviderType
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cases/{caseSystemId}/relationship/{relationshipType}
+  method: post
+  operationId: getRelationshipIdentifiers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cases/{caseSystemId}/relationship/{relationshipType}
+  method: put
+  operationId: linkingCases
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cases/{caseSystemId}/relationship/{relationshipType}
+  method: delete
+  operationId: unlinkingCases
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
 - path: /cases/{caseSystemId}/mediacheck/results
   method: post
   operationId: getMediaCheckDetails
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /cases/{caseSystemId}/mediacheck/results/metadata
   method: post
   operationId: getMediaCheckArticlesMetadata
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /cases/{caseSystemId}/mediacheck/results/{articleId}/metadata
   method: get
   operationId: getMediaCheckSingleArticleMetadata
@@ -582,18 +695,12 @@ operations:
   method: post
   operationId: getMediaCheckResultsContent
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /cases/{caseSystemId}/mediacheck/results/{articleId}/content
   method: get
   operationId: getSingleArticleMediaCheckContent
@@ -678,38 +785,36 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /cases/saveAndScreen
-  method: post
-  operationId: saveAndScreenCases
+- path: /mediacheck/risks
+  method: get
+  operationId: getMediaCheckRisks
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/screeningStatus
+      max-ttl: 3600
+    audit: none
+- path: /cases/{caseSystemId}/mediacheck/results/duplicates
   method: post
-  operationId: screeningStatus
+  operationId: retrieveMediaCheckDuplicates
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
+- path: /passportcheck/mrz
+  method: post
+  operationId: getMrzData
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /reference/countries
   method: get
   operationId: getCountries
@@ -742,6 +847,7 @@ operations:
     audit: none
 - path: /reference/identityDocumentLocationTypes
   method: get
+  operationId: getReferenceIdentityDocumentLocationTypes
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -783,53 +889,25 @@ operations:
   method: post
   operationId: retrieveProfilePepDetails
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
+      max-ttl: 3600
+    audit: none
 - path: /reference/records/{id}/pep
   method: post
   operationId: retrievePepDetails
   x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
+    action-class: connected
+    consequence: read
+    subject: optional
     token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /reference/providers/sources/{identifier}
-  method: put
-  operationId: createOrUpdateProviderSource
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /reference/watchlist
+      max-ttl: 3600
+    audit: none
+- path: /reports
   method: post
-  operationId: saveWatchlist
+  operationId: submitRequestForAsyncReport
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -843,9 +921,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /users
+- path: /reports/{reportId}/status
   method: get
-  operationId: getUsers
+  operationId: getSingleReportStatusByReportId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -853,9 +931,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /mediacheck/risks
+- path: /reports/{reportId}
   method: get
-  operationId: getMediaCheckRisks
+  operationId: getReportDataByReportId
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -863,118 +941,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /passportcheck/mrz
-  method: post
-  operationId: getMrzData
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/mediacheck/results/duplicates
-  method: post
-  operationId: retrieveMediaCheckDuplicates
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/relationship/{relationshipType}
-  method: post
-  operationId: getRelationshipIdentifiers
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/relationship/{relationshipType}
-  method: put
-  operationId: linkingCases
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/relationship/{relationshipType}
-  method: delete
-  operationId: unlinkingCases
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /cases/{caseSystemId}/rating
-  method: get
-  operationId: retrieveCaseRating
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /cases/{caseSystemId}/rating
-  method: put
-  operationId: saveCaseRating
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /cases/{caseSystemId}/mediacheck/smartFilter
   method: get
   operationId: getMediaCheckSmartFilter
@@ -1017,32 +983,6 @@ operations:
     escalation:
       human-in-the-loop: required
     audit: required
-- path: /reports
-  method: post
-  operationId: submitRequestForAsyncReport
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /reports/{reportId}/status
-  method: get
-  operationId: getSingleReportStatusByReportId
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /reports/status
   method: get
   operationId: getPaginatedMultipleReportStatus
@@ -1064,8 +1004,24 @@ operations:
       max-ttl: 3600
     audit: none
 - path: /reports/{reportId}
+  method: delete
+  operationId: cancelReportByReportId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /users
   method: get
-  operationId: getReportDataByReportId
+  operationId: getUsers
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -1073,9 +1029,91 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /reports/{reportId}
-  method: delete
-  operationId: cancelReportByReportId
+- path: /groups
+  method: get
+  operationId: getGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}
+  method: get
+  operationId: getGroupById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /groups/{groupId}/caseTemplate
+  method: get
+  operationId: getCaseTemplateForGroup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cases/screeningRequest
+  method: post
+  operationId: screen
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /reference/countries
+  method: get
+  operationId: getCountries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /reference/records/{id}
+  method: get
+  operationId: getRecord
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /reference/providers/sources/{identifier}
+  method: put
+  operationId: createOrUpdateProviderSource
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /reference/watchlist
+  method: post
+  operationId: saveWatchlist
   x-agentic-access:
     action-class: acting
     consequence: write
