@@ -171,6 +171,173 @@ paths:
         required: true
 components:
   schemas:
+    CountryLink:
+      type: object
+      required:
+      - country
+      - type
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        countryText:
+          type: string
+        type:
+          type: string
+          description: Country Link Type Enumeration
+          enum:
+          - NATIONALITY
+          - OPERATESIN
+          - POB
+          - POD
+          - REGISTEREDIN
+          - RESIDENT
+          - VESSELFLAG
+          - LOCATION
+    Entity:
+      type: object
+      description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
+
+        as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
+
+
+        The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
+
+
+        * `COUNTRY` : `CountryEntity`
+
+        * `INDIVIDUAL` : `IndividualEntity`
+
+        * `ORGANISATION` : `OrganisationEntity`
+
+        * `VESSEL` : `VesselEntity`
+
+
+        Notes for Client Watchlist usage:
+
+
+        * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
+
+        * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
+
+        * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
+
+        * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
+
+        '
+      discriminator:
+        propertyName: entityType
+      required:
+      - entityId
+      - creationDate
+      - names
+      - sources
+      - externalImportId
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionDetail'
+        active:
+          type: boolean
+          default: false
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        associates:
+          type: array
+          items:
+            $ref: '#/components/schemas/AbstractAssociate'
+        category:
+          type: string
+        comments:
+          type: string
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactDetail'
+        countryLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryLink'
+        creationDate:
+          type: string
+          format: date-time
+        deletionDate:
+          type: string
+          format: date-time
+        description:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Detail'
+        entityId:
+          type: string
+          description: An alphanumeric value including "_"
+        externalImportId:
+          type: string
+          description: An alphanumeric value including "_"
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMeta'
+        identityDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentityDocument'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        lastAdjunctChangeDate:
+          type: string
+          format: date-time
+        modificationDate:
+          type: string
+          format: date-time
+        names:
+          type: array
+          items:
+            $ref: '#/components/schemas/Name'
+        previousCountryLinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryLink'
+        provider:
+          $ref: '#/components/schemas/Provider'
+        sourceDescription:
+          type: string
+        sourceUris:
+          type: array
+          items:
+            type: string
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProviderSource'
+        subCategory:
+          type: string
+        updateCategory:
+          type: string
+          description: Entity Update Category Enumeration
+          enum:
+          - C1
+          - C2
+          - C3
+          - C4
+          - C6
+          - UNKNOWN
+        updatedDates:
+          $ref: '#/components/schemas/EntityUpdatedDates'
+        weblinks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weblink'
+        translatedEntity:
+          allOf:
+          - $ref: '#/components/schemas/TranslatedEntity'
+          x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
     ProviderSourceType:
       type: object
       properties:
@@ -192,6 +359,231 @@ components:
           description: A collection of translated entity details.
           items:
             $ref: '#/components/schemas/Detail'
+    ProviderSourceTypeCategoryDetail:
+      type: object
+      properties:
+        description:
+          type: string
+        identifier:
+          type: string
+          maxLength: 255
+        name:
+          type: string
+          maxLength: 255
+    WatchlistResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    IdentityDocumentLocationType:
+      type: object
+      description: 'Represents the type of identity document location that includes the type of document, name, country
+
+        and what type of entity it belongs to.
+
+        '
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        name:
+          type: string
+        type:
+          type: string
+        entityTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityType'
+    Image:
+      type: object
+      required:
+      - uri
+      properties:
+        caption:
+          type: string
+        height:
+          type: integer
+          format: int32
+        imageUseCode:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
+          items:
+            type: string
+        width:
+          type: integer
+          format: int32
+    ProviderSource:
+      type: object
+      required:
+      - abbreviation
+      - identifier
+      - name
+      - providerSourceStatus
+      - type
+      properties:
+        abbreviation:
+          type: string
+          description: Abbreviated form of this source's `name`.
+        creationDate:
+          type: string
+          format: date-time
+        identifier:
+          type: string
+          description: An alphanumeric value
+        importIdentifier:
+          type: string
+        name:
+          type: string
+          description: Full name of this source.
+          maxLength: 255
+        provider:
+          description: Provider for this source.
+          $ref: '#/components/schemas/Provider'
+        providerSourceStatus:
+          type: string
+          description: Provider Source Status Enumeration
+          enum:
+          - ACTIVE
+          - DELETED
+          - HIDDEN
+        regionOfAuthority:
+          type: string
+        subscriptionCategory:
+          type: string
+          description: Subscription Category Type Enumeration
+          default: STANDARD
+          enum:
+          - PREMIUM
+          - STANDARD
+        modificationDate:
+          type: string
+          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
+          format: date-time
+        description:
+          type: string
+          description: Description of the source.
+        type:
+          $ref: '#/components/schemas/ProviderSourceType'
+    Name:
+      type: object
+      required:
+      - fullName
+      - type
+      properties:
+        fullName:
+          type: string
+        givenName:
+          type: string
+        languageCode:
+          $ref: '#/components/schemas/LanguageCode'
+        lastName:
+          type: string
+        originalScript:
+          type: string
+        prefix:
+          type: string
+        suffix:
+          type: string
+        type:
+          type: string
+          description: Watchlist Profile Name Type enumeration
+          enum:
+          - PRIMARY
+          - AKA
+          - AKAENHANCED
+          - FKA
+          - DBA
+          - MAIDEN
+          - LANG_VARIATION
+          - PREVIOUS
+          - VEHICLE_ID
+          - LOW_QUALITY_AKA
+          - NATIVE_AKA
+    Weblink:
+      type: object
+      properties:
+        caption:
+          type: string
+        uri:
+          type: string
+        tags:
+          type: array
+          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
+          items:
+            type: string
+    Error:
+      type: object
+      required:
+      - error
+      - cause
+      properties:
+        error:
+          type: string
+        cause:
+          type: string
+        objectId:
+          type: string
+    IdentityDocument:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/Entity'
+        expiryDate:
+          type: string
+        issueDate:
+          type: string
+        issuer:
+          type: string
+        locationType:
+          $ref: '#/components/schemas/IdentityDocumentLocationType'
+        number:
+          type: string
+        type:
+          type: string
+    ContactDetail:
+      type: object
+      required:
+      - contactDetailType
+      properties:
+        contactDetailType:
+          type: string
+          description: Contact Detail Type Enumeration
+          enum:
+          - EMAIL
+          - FAX
+          - URL
+          - VOICE
+        country:
+          $ref: '#/components/schemas/Country'
+        detail:
+          type: string
+    EntitySupersede:
+      type: object
+      required:
+      - entityId
+      - supersedingEntityId
+      properties:
+        entityId:
+          type: string
+        supersedingEntityId:
+          type: string
+    Country:
+      type: object
+      required:
+      - code
+      - name
+      properties:
+        code:
+          type: string
+        name:
+          type: string
     ActionDetail:
       type: object
       required:
@@ -231,21 +623,6 @@ components:
           type: string
         title:
           type: string
-    FileMeta:
-      type: object
-      required:
-      - caption
-      - uri
-      properties:
-        caption:
-          type: string
-        uri:
-          type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
-          items:
-            type: string
     EntityUpdatedDates:
       type: object
       properties:
@@ -336,122 +713,12 @@ components:
         sicUpdated:
           type: string
           format: date-time
-    ContactDetail:
+    EntityDelete:
       type: object
       required:
-      - contactDetailType
+      - entityId
       properties:
-        contactDetailType:
-          type: string
-          description: Contact Detail Type Enumeration
-          enum:
-          - EMAIL
-          - FAX
-          - URL
-          - VOICE
-        country:
-          $ref: '#/components/schemas/Country'
-        detail:
-          type: string
-    ProviderSource:
-      type: object
-      required:
-      - abbreviation
-      - identifier
-      - name
-      - providerSourceStatus
-      - type
-      properties:
-        abbreviation:
-          type: string
-          description: Abbreviated form of this source's `name`.
-        creationDate:
-          type: string
-          format: date-time
-        identifier:
-          type: string
-          description: An alphanumeric value
-        importIdentifier:
-          type: string
-        name:
-          type: string
-          description: Full name of this source.
-          maxLength: 255
-        provider:
-          description: Provider for this source.
-          $ref: '#/components/schemas/Provider'
-        providerSourceStatus:
-          type: string
-          description: Provider Source Status Enumeration
-          enum:
-          - ACTIVE
-          - DELETED
-          - HIDDEN
-        regionOfAuthority:
-          type: string
-        subscriptionCategory:
-          type: string
-          description: Subscription Category Type Enumeration
-          default: STANDARD
-          enum:
-          - PREMIUM
-          - STANDARD
-        modificationDate:
-          type: string
-          description: "Modification date of source. This field is updated only when there is a change in either source name \nor description. This field does not capture any updates to the underlying records that are added/deleted \nto/from the source.\n"
-          format: date-time
-        description:
-          type: string
-          description: Description of the source.
-        type:
-          $ref: '#/components/schemas/ProviderSourceType'
-    Detail:
-      type: object
-      properties:
-        detailType:
-          type: string
-          description: Detail Type Enumeration
-          default: UNKNOWN
-          enum:
-          - BIOGRAPHY
-          - FUNDING
-          - IDENTIFICATION
-          - NOTE
-          - REPORTS
-          - REGULATION
-          - SANCTION
-          - UNKNOWN
-        text:
-          type: string
-        title:
-          type: string
-          maxLength: 255
-    IdentityDocument:
-      type: object
-      properties:
-        entity:
-          $ref: '#/components/schemas/Entity'
-        expiryDate:
-          type: string
-        issueDate:
-          type: string
-        issuer:
-          type: string
-        locationType:
-          $ref: '#/components/schemas/IdentityDocumentLocationType'
-        number:
-          type: string
-        type:
-          type: string
-    Country:
-      type: object
-      required:
-      - code
-      - name
-      properties:
-        code:
-          type: string
-        name:
+        entityId:
           type: string
     EntityType:
       type: string
@@ -461,86 +728,6 @@ components:
       - ORGANISATION
       - VESSEL
       - COUNTRY
-    Address:
-      type: object
-      properties:
-        city:
-          type: string
-        country:
-          $ref: '#/components/schemas/Country'
-        postCode:
-          type: string
-        region:
-          type: string
-        street:
-          type: string
-    Error:
-      type: object
-      required:
-      - error
-      - cause
-      properties:
-        error:
-          type: string
-        cause:
-          type: string
-        objectId:
-          type: string
-    CountryLink:
-      type: object
-      required:
-      - country
-      - type
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
-        countryText:
-          type: string
-        type:
-          type: string
-          description: Country Link Type Enumeration
-          enum:
-          - NATIONALITY
-          - OPERATESIN
-          - POB
-          - POD
-          - REGISTEREDIN
-          - RESIDENT
-          - VESSELFLAG
-          - LOCATION
-    ProviderSourceTypeCategoryDetail:
-      type: object
-      properties:
-        description:
-          type: string
-        identifier:
-          type: string
-          maxLength: 255
-        name:
-          type: string
-          maxLength: 255
-    EntityPurge:
-      type: object
-      required:
-      - entityId
-      properties:
-        entityId:
-          type: string
-        purgedDate:
-          type: string
-          format: date-time
-    Weblink:
-      type: object
-      properties:
-        caption:
-          type: string
-        uri:
-          type: string
-        tags:
-          type: array
-          description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n  - DATE indicates the date when the uri was added to the record.\n"
-          items:
-            type: string
     WatchlistDataSet:
       type: object
       properties:
@@ -572,92 +759,27 @@ components:
           default: false
         name:
           type: string
-    LanguageCode:
+    Detail:
       type: object
       properties:
-        code:
+        detailType:
           type: string
-        name:
-          type: string
-    EntityDelete:
-      type: object
-      required:
-      - entityId
-      properties:
-        entityId:
-          type: string
-    IdentityDocumentLocationType:
-      type: object
-      description: 'Represents the type of identity document location that includes the type of document, name, country
-
-        and what type of entity it belongs to.
-
-        '
-      properties:
-        country:
-          $ref: '#/components/schemas/Country'
-        name:
-          type: string
-        type:
-          type: string
-        entityTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntityType'
-    EntitySupersede:
-      type: object
-      required:
-      - entityId
-      - supersedingEntityId
-      properties:
-        entityId:
-          type: string
-        supersedingEntityId:
-          type: string
-    WatchlistResponse:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    Name:
-      type: object
-      required:
-      - fullName
-      - type
-      properties:
-        fullName:
-          type: string
-        givenName:
-          type: string
-        languageCode:
-          $ref: '#/components/schemas/LanguageCode'
-        lastName:
-          type: string
-        originalScript:
-          type: string
-        prefix:
-          type: string
-        suffix:
-          type: string
-        type:
-          type: string
-          description: Watchlist Profile Name Type enumeration
+          description: Detail Type Enumeration
+          default: UNKNOWN
           enum:
-          - PRIMARY
-          - AKA
-          - AKAENHANCED
-          - FKA
-          - DBA
-          - MAIDEN
-          - LANG_VARIATION
-          - PREVIOUS
-          - VEHICLE_ID
-          - LOW_QUALITY_AKA
-          - NATIVE_AKA
+          - BIOGRAPHY
+          - FUNDING
+          - IDENTIFICATION
+          - NOTE
+          - REPORTS
+          - REGULATION
+          - SANCTION
+          - UNKNOWN
+        text:
+          type: string
+        title:
+          type: string
+          maxLength: 255
     AbstractAssociate:
       type: object
       description: 'The `AbstractAssociate` subclasses corresponding to each type of entity are:
@@ -817,17 +939,43 @@ components:
           uniqueItems: true
           items:
             type: string
-    Image:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        country:
+          $ref: '#/components/schemas/Country'
+        postCode:
+          type: string
+        region:
+          type: string
+        street:
+          type: string
+    LanguageCode:
+      type: object
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+    EntityPurge:
       type: object
       required:
+      - entityId
+      properties:
+        entityId:
+          type: string
+        purgedDate:
+          type: string
+          format: date-time
+    FileMeta:
+      type: object
+      required:
+      - caption
       - uri
       properties:
         caption:
-          type: string
-        height:
-          type: integer
-          format: int32
-        imageUseCode:
           type: string
         uri:
           type: string
@@ -836,170 +984,11 @@ components:
           description: "Label(s) for the corresponding uri. For example,\n  - PHOTO indicates the page represented by the uri contains images.\n  - PDF indicates the page represented by the uri contains PDFs.\n"
           items:
             type: string
-        width:
-          type: integer
-          format: int32
-    Entity:
-      type: object
-      description: 'Represents a specific entity - usually corresponding to an individual or an organisation - that can appear
-
-        as a potential screening result against a `Case`. Synonyms for this concept include "Profile".
-
-
-        The `Entity` subclasses corresponding to each type of entity (designated by the `entityType` field below) are:
-
-
-        * `COUNTRY` : `CountryEntity`
-
-        * `INDIVIDUAL` : `IndividualEntity`
-
-        * `ORGANISATION` : `OrganisationEntity`
-
-        * `VESSEL` : `VesselEntity`
-
-
-        Notes for Client Watchlist usage:
-
-
-        * to add Date of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH"
-
-        * to add Place of Birth to an Individual entity, please use the `events` array with the "type":"BIRTH" and populate the `Region` field as part of the event `address` object
-
-        * to add Registered Country to a Vessel entity, please use  the `countryLinks` array with the "type":"VESSELFLAG"
-
-        * to add Registered Country to an Organisation entity, please use the `countryLinks` array with the "type": "REGISTEREDIN"
-
-        '
-      discriminator:
-        propertyName: entityType
-      required:
-      - entityId
-      - creationDate
-      - names
-      - sources
-      - externalImportId
-      properties:
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ActionDetail'
-        active:
-          type: boolean
-          default: false
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
-        associates:
-          type: array
-          items:
-            $ref: '#/components/schemas/AbstractAssociate'
-        category:
-          type: string
-        comments:
-          type: string
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactDetail'
-        countryLinks:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryLink'
-        creationDate:
-          type: string
-          format: date-time
-        deletionDate:
-          type: string
-          format: date-time
-        description:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/Detail'
-        entityId:
-          type: string
-          description: An alphanumeric value including "_"
-        externalImportId:
-          type: string
-          description: An alphanumeric value including "_"
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileMeta'
-        identityDocuments:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdentityDocument'
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        lastAdjunctChangeDate:
-          type: string
-          format: date-time
-        modificationDate:
-          type: string
-          format: date-time
-        names:
-          type: array
-          items:
-            $ref: '#/components/schemas/Name'
-        previousCountryLinks:
-          type: array
-          items:
-            $ref: '#/components/schemas/CountryLink'
-        provider:
-          $ref: '#/components/schemas/Provider'
-        sourceDescription:
-          type: string
-        sourceUris:
-          type: array
-          items:
-            type: string
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProviderSource'
-        subCategory:
-          type: string
-        updateCategory:
-          type: string
-          description: Entity Update Category Enumeration
-          enum:
-          - C1
-          - C2
-          - C3
-          - C4
-          - C6
-          - UNKNOWN
-        updatedDates:
-          $ref: '#/components/schemas/EntityUpdatedDates'
-        weblinks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Weblink'
-        translatedEntity:
-          allOf:
-          - $ref: '#/components/schemas/TranslatedEntity'
-          x-wc1-field-extra-annotations: '@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)'
   responses:
+    TooManyRequests:
+      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
     UnsupportedMediaType:
       description: For requests with payloads, an unsupported Content-Type was specified. The World-Check One API only supports a content type of application/json.
-    CannotReturnResponse:
-      description: Cannot return response
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
-        application/octet-stream:
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad request
       content:
@@ -1013,8 +1002,8 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: The API client is making too many concurrent requests, and some are being throttled. Throttled requests can be retried (with an updated request Date and HTTP signature) after a short delay.
+    Unauthorized:
+      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
     UnexpectedError:
       description: Unexpected error
       content:
@@ -1028,8 +1017,19 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: The request has failed an authorisation check. This can happen for a variety of reasons, such as an invalid or expired API key, an invalid HMAC signature or a request timing issue/problem with the Date header value. The API client should ensure a correctly synchronised clock is used to generate request timestamps.
+    CannotReturnResponse:
+      description: Cannot return response
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
+        application/octet-stream:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Error'
 externalDocs:
   description: Refer to the LSEG Developer Portal for additional documentation on the World-Check One API.
   url: https://developers.lseg.com/en/api-catalog/customer-and-third-party-screening/world-check-one-api
